@@ -24,7 +24,7 @@ with open("../data/MobileSensorRegId.csv") as csvfile:
             sen.append(row[1])      # sensor id
             sen.append(row[3])      # value
             regionid[row[2]].append(sen)
-            
+
 # print(regionid)
 for key, value in regionid.items():
     filename = "../data/Region" + key + "-MobileSensor.csv"
