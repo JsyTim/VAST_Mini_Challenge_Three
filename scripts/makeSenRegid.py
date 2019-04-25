@@ -15,6 +15,7 @@ def findRegId(long, lat, map):
     point = (long, lat)
     for region in map:
         p = path.Path(region["coordinates"])
+        print(p.contains_points([point])[0])
         if(p.contains_points([point])[0] == True):
             return region["id"]
             break
@@ -30,8 +31,7 @@ with open("../data/StHimark.geojson") as geojson:
         map.append(region)
 # print(map)
 
-# findRegId(-119.83035, 0.14007, map)
-
+# findRegId(-119.920136, 0.16037, map)
 with open("../../MC2/data/MobileSensorReadings.csv") as sensorcsv:
     sensor = csv.reader(sensorcsv, delimiter=',')
     # read from sencond row
@@ -40,7 +40,6 @@ with open("../../MC2/data/MobileSensorReadings.csv") as sensorcsv:
     FirstRow[0].append(row1[1])
     FirstRow[0].append("Region-id")
     FirstRow[0].append(row1[4])
-    FirstRow[0].append(row1[5])
     for row in sensor:
         sen = []
         regionid = str(findRegId(row[2], row[3], map))
@@ -48,12 +47,11 @@ with open("../../MC2/data/MobileSensorReadings.csv") as sensorcsv:
         sen.append(row[1])      # sensor id
         sen.append(regionid)    # region id
         sen.append(row[4])      # value
-        sen.append(row[5])
         MobileSensorRegId.append(sen)
 
 # print(MobileSensorRegId)
 
-with open("../data/MobileSensorRegId.csv", "w") as updatecsv:
+with open("../data/MobileSensorRegId.csv", "w", newline="") as updatecsv:
     writer = csv.writer(updatecsv)
     writer.writerows(FirstRow)
     writer.writerows(MobileSensorRegId)
