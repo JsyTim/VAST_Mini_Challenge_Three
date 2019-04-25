@@ -15,7 +15,7 @@ def findRegId(long, lat, map):
     point = (long, lat)
     for region in map:
         p = path.Path(region["coordinates"])
-        print(p.contains_points([point])[0])
+        # print(p.contains_points([point])[0])
         if(p.contains_points([point])[0] == True):
             return region["id"]
             break
