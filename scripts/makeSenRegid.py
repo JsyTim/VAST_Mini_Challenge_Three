@@ -31,22 +31,27 @@ with open("../data/StHimark.geojson") as geojson:
         map.append(region)
 # print(map)
 
-# findRegId(-119.920136, 0.16037, map)
+findRegId(-119.920136, 0.16037, map)
+
 with open("../../MC2/data/MobileSensorReadings.csv") as sensorcsv:
     sensor = csv.reader(sensorcsv, delimiter=',')
     # read from sencond row
     row1 = next(sensor)
     FirstRow[0].append(row1[0])
     FirstRow[0].append(row1[1])
-    FirstRow[0].append("Region-id")
+    FirstRow[0].append(row1[2])
+    FirstRow[0].append(row1[3])
     FirstRow[0].append(row1[4])
+    FirstRow[0].append("Region-id")
     for row in sensor:
         sen = []
         regionid = str(findRegId(row[2], row[3], map))
         sen.append(row[0])      # timestamp
         sen.append(row[1])      # sensor id
-        sen.append(regionid)    # region id
+        sen.append(row[2])      # long
+        sen.append(row[3])      # lat
         sen.append(row[4])      # value
+        sen.append(regionid)    # region id
         MobileSensorRegId.append(sen)
 
 # print(MobileSensorRegId)
