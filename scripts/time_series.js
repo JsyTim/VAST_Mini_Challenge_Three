@@ -1,3 +1,5 @@
+
+
 // Set the dimensions of the canvas / graph
 const margin = {top: 80, right: 90, bottom: 150, left: 80},
     width = 900 - margin.left - margin.right,
@@ -25,16 +27,16 @@ svg.append("defs").append("clipPath")
 // .attr("y", 0);
 
 
-// Parse the date / time
-var parse = d3.time.format("%Y").parse;
+// Parse the Timestamp / Timestamp
+var parse = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
 // Set the ranges
 const x = d3.time.scale().range([0, width]);
-const y = d3.scale.linear().range([height-20, 0]);
+const y = d3.scale.linear().range([height, 0]);
 const color = d3.scale.category10();
 // Set the ranges of zoomed x and y
 const xZoom = d3.time.scale().range([0, width]);
-const yZoom = d3.scale.linear().range([heightZoom -10, 0]);
+const yZoom = d3.scale.linear().range([heightZoom, 0]);
 
 // Define the axes
 const xAxis = d3.svg.axis().scale(x).orient("bottom").ticks(6);
@@ -50,17 +52,17 @@ var brush = d3.svg.brush()
 // Define main graph line
 const valueline = d3.svg.line()
 // .interpolate("basis")
-    .defined(function(d) { return !isNaN(d.value); })
+    .defined(function(d) { return !isNaN(d.Value); })
     .interpolate("cubic")
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.value); });
+    .x(function(d) { return x(d.Timestamp); })
+    .y(function(d) { return y(d.Value); });
 
 // Define zoomed line
 const valuelineZoom = d3.svg.line()
-    .defined(function(d) { return !isNaN(d.value); })
+    .defined(function(d) { return !isNaN(d.Value); })
     .interpolate("cubic")
-    .x(function(d){return xZoom(d.date)})
-    .y(function(d){return yZoom(d.value)});
+    .x(function(d){return xZoom(d.Timestamp)})
+    .y(function(d){return yZoom(d.Value)});
 
 
 // add main graph area
@@ -73,39 +75,37 @@ var context = svg.append("g")
     .attr("class", "context")
     .attr("transform", "translate(" + marginZoom.left + "," + marginZoom.top + ")");
 
-var div = d3.select("body").append("div")
+var tip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
 //========================== data processing  ==================================
 // Load the data
-d3.csv("data/Region1-MobileSensor.csv", function(error, data) {
+d3.csv("data/SortbyRegid/Region1-MobileSensor.csv", function(error, data) {
+    // d3.csv("data/SortbySenid/Sensor1-MobileSensor.csv", function(error, data) {
+
     data.forEach(function (d) {
-        d.date = parse(d.year);
-        d.value = +d.Value;
+        d.Timestamp = parse(d.Timestamp);
+        d.Value = +d.Value;
     });
 
     // sort data by year in ascending order
     data.sort(function (a, b) {
-        if (a.date < b.date)
+        if (a.Timestamp < b.Timestamp)
             return -1;
-        else if (a.date > b.date)
+        else if (a.Timestamp > b.Timestamp)
             return 1;
         else
             return 0;
     });
 
     // group the entries by age groups
-    let newData = d3.nest().key(item => item.age).entries(data);
-    const ages = d3.keys(newData[0]).splice(1);
+    let newData = d3.nest().key(item => item["Sensor-id"]).entries(data);
 
     // Domain of the data
-    x.domain(d3.extent(data, function (d) {
-        return d.date;
-    }));
-    y.domain([0, d3.max(data, function (d) {
-        return d.birthRate;
-    })]).nice();
+    x.domain(d3.extent(data, function (d) {return d.Timestamp;}));
+    y.domain([0, d3.max(data, function (d) {return d.Value;})]).nice();
+    debugger
 
     //Domain of the zoomed data
     xZoom.domain(x.domain());
@@ -144,10 +144,10 @@ d3.csv("data/Region1-MobileSensor.csv", function(error, data) {
                     else
                         return 1.5;
                 })
-            div.transition()
+            tip.transition()
                 .duration(200)
                 .style("opacity", 1.0);
-            div.html(d1.key)
+            tip.html(d1.key)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px")
         })
@@ -155,12 +155,12 @@ d3.csv("data/Region1-MobileSensor.csv", function(error, data) {
             focus.selectAll(".line")
                 .style("stroke-opacity", "1")
                 .style("stroke-width", 1.5)
-            div.transition()
+            tip.transition()
                 .duration(500)
                 .style("opacity", 0)
         });
 
-
+    debugger
 
     focus.append("g")
         .attr("class", "x axis")
@@ -243,7 +243,7 @@ d3.csv("data/Region1-MobileSensor.csv", function(error, data) {
     svg.append("text")
         .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 30) + ")")
         .style("text-anchor", "middle")
-        .text("Year");
+        .text("Time");
 
     // label for y axis
     svg.append("text")
@@ -252,7 +252,7 @@ d3.csv("data/Region1-MobileSensor.csv", function(error, data) {
         .attr("x", 0 - ((height+ heightZoom) / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Number of birth per 1000 females in different age groups");
+        .text("Value");
 
 
     // debugger;
@@ -273,5 +273,3 @@ function brush() {
     focus.select(".x.axis").call(xAxis);
     focus.select(".y.axis").call(yAxis);
 }
-
-
