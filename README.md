@@ -6,9 +6,7 @@ The goal of the project was to engage the community in St Highmark city and demo
 
 Our task is to help St. Himark’s emergency management team combine data from the government-operated stationary monitors with data from citizen-operated mobile sensors to help them better understand conditions in the city and identify likely locations that will require further monitoring, cleanup, or even evacuation. 
 
-We aim to use visual analytics to find if data from citizen scientists clarify the situation or make it more uncertain. And using visualization, we will answer the  following questions provided by mini challenge 2:
-
-1.Visualize radiation measurements over time from both static and mobile sensors to identify areas where radiation over background is detected. Characterize changes over time.
+We aim to use visual analytics to find if data from citizen scientists clarify the situation or make it more uncertain. And using visualization, we will answer the questions provided by mini challenge 2.
 
 
 
