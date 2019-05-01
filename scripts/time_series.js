@@ -41,7 +41,7 @@ const xAxisZoom = d3.axisBottom(xZoom).ticks(6);
 // set brush effect
 var brush = d3.brushX()
     .extent([[0,0],[width,heightZoom]])
-    .on("brush", brushed);
+    .on("end", brushed);
 
 // Define main graph line
 const valueline = d3.line()
@@ -81,13 +81,13 @@ var tip = d3.select("body").append("div")
     // d3.csv("data/SortbySenid/Sensor1-MobileSensor.csv", function(error, data) {
 
 // =====test======
-// var dt = d3.csv("data/SortbyRegid/Region1-MobileSensor.csv").then(function(data){
-//     data.forEach(function (d) {
-//     d.Timestamp = parse(d.Timestamp);
-//     d.Value = +d.Value;
-//     });
-//     draw_timeSeries(data);
-// });
+var dt = d3.csv("data/SortbyRegid/Region1-MobileSensor.csv").then(function(data){
+    data.forEach(function (d) {
+    d.Timestamp = parse(d.Timestamp);
+    d.Value = +d.Value;
+    });
+    draw_timeSeries(data);
+});
 // ====end test===
 
 
@@ -281,24 +281,31 @@ debugger
 
 function brushed() {
     // x.domain(brush.empty() ? xZoom.domain() : brush.extent());
-    x.domain(!d3.event.selection ? xZoom.domain() : d3.event.selection.map(xZoom.invert,xZoom));
-    focus.selectAll(".line")
-        // .attr("d",  function(d) {return valueline(d.values)});
-        .attr("d",  valueline);
+    x.domain(!d3.event.selection ? xZoom.domain() : d3.event.selection.map(xZoom.invert));
+    focus.selectAll("path.line")
+        .transition()
+        .attr("d",  function(d) {return valueline(d.values)});
+    //     .attr("d", function(d){
+    //         return d.visible ? valueline(d.values) : null; // If d.visible is true then draw line for this d selection
+    // });
 
-    focus.select(".x.axis").call(xAxis);
-    focus.select(".y.axis").call(yAxis);
+    focus.select(".x.axis").transition().call(xAxis);
+    focus.select(".y.axis").transition().call(yAxis);
 }
 
 
 //
-// function brush() {
-//     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
-//     var s = d3.event.selection || x2.range();
-//     x.domain(s.map(x2.invert, x2));
-//     focus.select(".area").attr("d", area);
-//     focus.select(".axis--x").call(xAxis);
-//     svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
-//         .scale(width / (s[1] - s[0]))
-//         .translate(-s[0], 0));
+// function brushed() {
+//     if (!d3.event.sourceEvent) return; // Only transition after input.
+//     if (!d3.event.selection) return; // Ignore empty selections.
+//     var d0 = d3.event.selection.map(xZoom.invert),
+//         d1 = d0.map(d3.timeDay.round);
+//
+//     // If empty when rounded, use floor & ceil instead.
+//     if (d1[0] >= d1[1]) {
+//         d1[0] = d3.timeDay.floor(d0[0]);
+//         d1[1] = d3.timeDay.offset(d1[0]);
+//     }
+//
+//     d3.select(this).transition().call(d3.event.target.move, d1.map(xZoom));
 // }
