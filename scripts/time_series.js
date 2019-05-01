@@ -17,52 +17,48 @@ const svg = d3.select("body")
 // .append("g")
 // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// clip path
-svg.append("defs").append("clipPath")
-    .attr("id", "clip")
-    .append("rect")
-    .attr("width", width)
-    .attr("height", height);
-// .attr("x", 0)
-// .attr("y", 0);
 
 
-// Parse the Timestamp / Timestamp
-var parse = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
-// Set the ranges
-const x = d3.time.scale().range([0, width]);
-const y = d3.scale.linear().range([height, 0]);
-const color = d3.scale.category10();
-// Set the ranges of zoomed x and y
-const xZoom = d3.time.scale().range([0, width]);
-const yZoom = d3.scale.linear().range([heightZoom, 0]);
+// Parse the Timestamp
+var parse = d3.timeParse("%Y-%m-%d %H:%M:%S");
+
+// Set the scale and ranges of main chart x and y
+const x = d3.scaleTime().range([0, width]);
+const y = d3.scaleLinear().range([height, 0]);
+const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+// Set the scale and ranges of zoomed x and y
+const xZoom = d3.scaleTime().range([0, width]);
+const yZoom = d3.scaleLinear().range([heightZoom, 0]);
 
 // Define the axes
-const xAxis = d3.svg.axis().scale(x).orient("bottom").ticks(6);
-const yAxis = d3.svg.axis().scale(y).orient("left").ticks(8);
+const xAxis = d3.axisBottom(x).ticks(6);
+const yAxis = d3.axisLeft(y).ticks(8);
 // Define zoomed x axes
-const xAxisZoom = d3.svg.axis().scale(xZoom).orient("bottom").ticks(6);
+const xAxisZoom = d3.axisBottom(xZoom).ticks(6);
 
-// Brush function
-var brush = d3.svg.brush()
-    .x(xZoom)
-    .on("brush", brush);
+// set brush effect
+var brush = d3.brushX()
+    .extent([[0,0],[width,heightZoom]])
+    .on("brush", brushed);
 
 // Define main graph line
-const valueline = d3.svg.line()
+const valueline = d3.line()
 // .interpolate("basis")
     .defined(function(d) { return !isNaN(d.Value); })
-    .interpolate("cubic")
+    // .interpolate("cubic")
     .x(function(d) { return x(d.Timestamp); })
-    .y(function(d) { return y(d.Value); });
+    .y(function(d) { return y(d.Value); })
+    .curve(d3.curveMonotoneX);
 
 // Define zoomed line
-const valuelineZoom = d3.svg.line()
+const valuelineZoom = d3.line()
     .defined(function(d) { return !isNaN(d.Value); })
-    .interpolate("cubic")
+    // .interpolate("cubic")
     .x(function(d){return xZoom(d.Timestamp)})
-    .y(function(d){return yZoom(d.Value)});
+    .y(function(d){return yZoom(d.Value)})
+    .curve(d3.curveMonotoneX);
 
 
 // add main graph area
@@ -81,13 +77,22 @@ var tip = d3.select("body").append("div")
 
 //========================== data processing  ==================================
 // Load the data
-d3.csv("data/SortbyRegid/Region1-MobileSensor.csv", function(error, data) {
+// d3.csv("data/SortbyRegid/Region1-MobileSensor.csv", function(error, data) {
     // d3.csv("data/SortbySenid/Sensor1-MobileSensor.csv", function(error, data) {
 
-    data.forEach(function (d) {
-        d.Timestamp = parse(d.Timestamp);
-        d.Value = +d.Value;
-    });
+// =====test======
+// var dt = d3.csv("data/SortbyRegid/Region1-MobileSensor.csv").then(function(data){
+//     data.forEach(function (d) {
+//     d.Timestamp = parse(d.Timestamp);
+//     d.Value = +d.Value;
+//     });
+//     draw_timeSeries(data);
+// });
+// ====end test===
+
+
+function draw_timeSeries(data){
+
 
     // sort data by year in ascending order
     data.sort(function (a, b) {
@@ -113,7 +118,14 @@ d3.csv("data/SortbyRegid/Region1-MobileSensor.csv", function(error, data) {
 
     focus.selectAll(".line").remove();
     context.selectAll(".line").remove();
-
+// add clip path
+    svg.append("defs").append("clipPath")
+        .attr("id", "clip")
+        .append("rect")
+        .attr("width", width)
+        .attr("height", height);
+// .attr("x", 0)
+// .attr("y", 0);
 
 //========================= Draw main graph and zoomed area=================================
     // draw main graph and lines; mouseover and mouseout effect
@@ -189,24 +201,24 @@ d3.csv("data/SortbyRegid/Region1-MobileSensor.csv", function(error, data) {
         .call(xAxisZoom);
 
     context.append("g")
-        .attr("class", "x brush")
+        .attr("class", "brush")
         .call(brush)
         .selectAll("rect")
         .attr("y", -6)
         .attr("height", heightZoom + 7  );
 
-
+debugger
 //======================= Add legend and mouse click effect =============================
     //spacing for the legend
     // legendSpace = width / newData.length;
-    const legendSpace = (height+margin.top) / newData.length;
+    const legendSpace = (height) / (newData.length + 4);
 
     newData.forEach(function(d, i) {
         svg.append("text")
             .attr("x", width + margin.right + margin.left/ 2)
             // .attr("x", (legengendSpace / 2) + i * legendSpace) // spacing
             // .attr("y", (height + (margin.bottom / 2) + 15)
-            .attr("y", (legendSpace / 2) + i * legendSpace)
+            .attr("y", ((legendSpace + margin.top)/ 2) + i * legendSpace)
             .attr("class", "legend")    // style the legend
             .style("fill", function () { // dynamic colors
                 return d.color = color(d.key);
@@ -225,7 +237,7 @@ d3.csv("data/SortbyRegid/Region1-MobileSensor.csv", function(error, data) {
                 // Update whether or not the elements are active
                 d.active = active;
             })
-            .text(d.key);
+            .text("Sensor " + d.key);
 
     })
 
@@ -264,12 +276,29 @@ d3.csv("data/SortbyRegid/Region1-MobileSensor.csv", function(error, data) {
                 .style("opacity", +(toggle = !toggle))
         })
 
-});
+// });
+}
 
-function brush() {
-    x.domain(brush.empty() ? xZoom.domain() : brush.extent());
-    focus.selectAll("path.line")
-        .attr("d",  function(d) {return valueline(d.values)});
+function brushed() {
+    // x.domain(brush.empty() ? xZoom.domain() : brush.extent());
+    x.domain(!d3.event.selection ? xZoom.domain() : d3.event.selection.map(xZoom.invert,xZoom));
+    focus.selectAll(".line")
+        // .attr("d",  function(d) {return valueline(d.values)});
+        .attr("d",  valueline);
+
     focus.select(".x.axis").call(xAxis);
     focus.select(".y.axis").call(yAxis);
 }
+
+
+//
+// function brush() {
+//     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+//     var s = d3.event.selection || x2.range();
+//     x.domain(s.map(x2.invert, x2));
+//     focus.select(".area").attr("d", area);
+//     focus.select(".axis--x").call(xAxis);
+//     svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+//         .scale(width / (s[1] - s[0]))
+//         .translate(-s[0], 0));
+// }
