@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from functools import reduce
 
-for f in range(1, 20):
+for f in range(1, 2):
     timeStep = "2H"
     is_check = {}
     dfList = {}
@@ -16,11 +16,12 @@ for f in range(1, 20):
     df = pd.read_csv(infilename, parse_dates = True, index_col = "Timestamp")
 
     sensorIdSet = df['Sensor-id'].unique()
-    # print(sensorIdSet)
+    # print(sorted(sensorIdSet))
 
     timeIndex = pd.date_range(start = '2020-04-06 00:00:00', end = '2020-04-10 23:00:00', freq = timeStep)
 
-    for i, id in enumerate(sensorIdSet):
+    for i, id in enumerate(sorted(sensorIdSet)):
+        print(i,id)
         is_check[i] = df['Sensor-id'] == id
         dfList[i] = df[is_check[i]]
 
@@ -33,7 +34,7 @@ for f in range(1, 20):
         outDf.append(maxDf)
         # print(outDf[i].head(100))
 
-    df_final = reduce( lambda left,right: pd.merge(left, right, on='Timestamp'), outDf)
+    df_final = reduce( lambda df1, df2: df1.merge(df2, on='Timestamp', sort = True), outDf)
 
-    # print(df_final.shape)
-    df_final.to_csv(ourfilename, index=False)
+    print(df_final.head(5))
+    # df_final.to_csv(ourfilename, index=False)
