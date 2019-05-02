@@ -50,3 +50,8 @@ body {
 .footer .footer-copyright:focus {
   color: #ffbbbc !important;
 }
+
+#down{
+  postion:fixed;
+  top:50%;
+}
