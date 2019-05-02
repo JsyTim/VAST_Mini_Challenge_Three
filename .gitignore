@@ -2,3 +2,4 @@ scripts/env/
 data/*.csv
 data/raw_data/
 .idea/
+data/MobileSensorRegId/MobileSensorRegId.csv
