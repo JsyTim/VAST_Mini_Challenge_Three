@@ -3,19 +3,35 @@
   <head>
     <meta charset="utf-8">
     <title>VAST_mini_challenge_two</title>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <link rel="stylesheet" href="css/time_series.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
+      <!-- Navigation -->
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header my-header">VAST MINI CHALLENGE TWO</div>
+        </div>
+      </nav>
 
-  <!--time series container-->
-  <div id="timeSeries"></div>
-  <!--select/clear button-->
-  <div id="option">
-    <input name="updateButton" type="button" value="Select/Clear all lines" />
-  </div>
-  <script src="js/time_series.js"></script>
 
+      <!--time series container-->
+      <div id="timeSeries"></div>
+      <!--select/clear button-->
+      <div id="option">
+        <input name="updateButton" type="button" value="Select/Clear all lines" />
+      </div>
+      <script src="js/time_series.js"></script>
+
+      <!-- Footer -->
+      <footer class="footer">
+          <!-- Copyright -->
+          <div class="footer-copyright">© 2019 Copyright:
+            <a href="https://idatavisualizationlab.github.io/CS5331_Spring2019/">Visualization and Visual Analytics</a>
+          </div>
+      </footer>
   </body>
 </html>
