@@ -139,7 +139,7 @@ var region18 = [0.13, -119.84];
 var region19 = [0.13, -119.87];
 
 // location of different regions
-regionList = [[0.185, -119.97], [0.185, -119.928], [0.195, -119.86], [0.18, -119.81],  [0.12, -119.93], [0.153, -119.925], [0.11, -119.725], [0.045, -119.755], [0.055, -119.845], [0.055, -119.79], [0.075, -119.76], [0.12, -119.76], [0.115, -119.805], [0.16, -119.869], [0.16, -119.895], [0.132, -119.895], [0.09, -119.842], [0.13, -119.84], [0.13, -119.87]];
+regionList = [[0.18, -119.97], [0.185, -119.928], [0.193, -119.87], [0.18, -119.81],  [0.12, -119.93], [0.153, -119.925], [0.11, -119.727], [0.045, -119.755], [0.058, -119.845], [0.055, -119.79], [0.075, -119.769], [0.12, -119.76], [0.115, -119.805], [0.16, -119.869], [0.16, -119.895], [0.132, -119.895], [0.09, -119.842], [0.13, -119.84], [0.13, -119.87]];
 
 regionName = ['1 Palace Hills', '2 Northwest', '3 Old Town', '4 Safe Town', '5 Southwest', '6 Downtown', '7 Wilson Forest', '8_Scenic-Vista', '9 Broadview', '10 Chapparal', '11 Terrapin Springs', '12 Pepper Mill', '13 Cheddar-ford', '14 Easton', '15 Weston', '16 Southton', '17_Oak Willow', '18 East Parton', '19 West Parton'];
 
@@ -150,27 +150,18 @@ for(i = 0; i < 19; i++){
         html: regionName[i]
     }),
     draggable: false,
-    // zIndexOffset: 1000     // Make appear above other map features
+    zIndexOffset: 1000     // Make appear above other map features
     }).addTo(map);
 }
 
-// // add hospital
-// [0.180960, -119.959400]
-// [0.153120, -119.915900]
-// [0.151090, -119.909520]
-// [0.121800, -119.904300]
-// [0.134560, -119.883420]
-// [0.182990, -119.855580]
-// [0.041470, -119.828610]
-// [0.065250, -119.744800]
-
+// add hospital
 hospitalList = [[0.180960, -119.959400], [0.153120, -119.915900], [0.151090, -119.909520], [0.121800, -119.904300], [0.134560, -119.883420], [0.182990, -119.855580], [0.041470, -119.828610], [0.065250, -119.744800]];
 
 var hospitalIcon = L.icon({
-    iconUrl:'https://svgsilh.com/svg/2831364.svg',
+    iconUrl:'data/icon/hospital.svg',
     // iconUrl:'https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_for_hospital_ship_of_the_Regia_Marina.svg',
     iconSize: [25, 30], // size of the icon
-    popupAnchor: [-3, -25] // point from which the popup should open relative to the iconAnchor
+    popupAnchor: [0, -12] // point from which the popup should open relative to the iconAnchor
 });
 // L.marker([0.18, -119.959], {icon: hospitalIcon}).bindPopup('This is Hospital.').addTo(map);
 for(i = 0; i < 8; i++){
@@ -179,9 +170,9 @@ for(i = 0; i < 8; i++){
 
 // add radiation station
 var radiationIcon = L.icon({
-    iconUrl:'C:/Users/TIM58/Downloads/radiation.svg',
-    iconSize: [50, 100], // size of the icon
-    popupAnchor: [-3, -25] // point from which the popup should open relative to the iconAnchor
+    iconUrl:'data/icon/radiation.svg',
+    iconSize: [30, 35], // size of the icon
+    popupAnchor: [0, -12] // point from which the popup should open relative to the iconAnchor
 });
 var nuclear = L.marker([0.162679, -119.784825], {icon: radiationIcon}).addTo(map).bindPopup('<b>The Always Safe Nuclear plant.</b>');
 map.addLayer(nuclear);
