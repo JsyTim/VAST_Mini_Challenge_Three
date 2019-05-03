@@ -1,10 +1,8 @@
 #map{
-    width:750px;
-    height:750px;
-    position:relative;
+    width: 750px;
+    height: 700px;
     background-color: white;
-    /* display: inline-block; */
-    float: left;
+    position: fixed;
 }
 
 .info {
@@ -18,4 +16,51 @@
 .info h4 {
     margin: 0 0 5px;
     color: #777;
+}
+
+path{
+  stroke-width:1px;
+}
+
+.text-labels {
+   font-size: 1.6em;
+   font-weight: 700;
+}
+
+
+.text-labels6 {
+   font-weight: 1000;
+}
+
+.text-labels7{
+   font-weight: 1000;
+}
+
+.text-labels8{
+   font-weight: 1000;
+}
+
+.text-labels10 {
+   font-weight: 1000;
+}
+
+.text-labels11 {
+   font-weight: 1000;
+}
+
+.text-labels13 {
+   font-size: 1.4em;
+   font-weight: 1000;
+}
+
+.text-labels14 {
+   font-weight: 1000;
+}
+
+.text-labels15 {
+   font-weight: 1000;
+}
+
+.text-labels16 {
+   font-weight: 1000;
 }
