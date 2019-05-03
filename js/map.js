@@ -52,7 +52,7 @@ function getColor(d) {
          d == '4' ? '#EE82EE':
          d == '5' ? '#FFE4B5':
          d == '6' ? '#87CEFA':
-         d == '7' ? '#006d2c':
+         d == '7' ? '#66c2a4':
          d == '8' ? '#FFD700':
          d == '9' ? '#BA55D3':
          d == '10' ? '#00FFFF':
@@ -124,11 +124,11 @@ var geojson = L.geoJson(districts, {
 }).addTo(map);
 
 
-var region1 = [0.18623, -119.97];
-var region2 = [0.195, -119.92851];
-var region3 = [0.21, -119.87285];
-var region4 = [0.18326, -119.81];
-var region5 = [0.128, -119.93];
+var region1 = [0.185, -119.97];
+var region2 = [0.185, -119.92851];
+var region3 = [0.195, -119.86];
+var region4 = [0.18, -119.81];
+var region5 = [0.12, -119.93];
 var region6 = [0.153, -119.925];
 var region7 = [0.11, -119.725];
 var region8 = [0.045, -119.755];
@@ -141,7 +141,7 @@ var region14 = [0.16, -119.869];
 var region15 = [0.16, -119.895];
 var region16 = [0.132, -119.895];
 var region17 = [0.09, -119.842];
-var region18 = [0.135, -119.84];
+var region18 = [0.13, -119.84];
 var region19 = [0.13, -119.87];
 
 var regionLabel1 = L.marker(region1, {
@@ -191,7 +191,7 @@ var regionLabel5 = L.marker(region5, {
 
 var regionLabel6 = L.marker(region6, {
   icon: L.divIcon({
-      className: 'text-labels6',   // Set class for CSS styling
+      className: 'text-labels',   // Set class for CSS styling
       html: '6 Downtown'
   }),
   draggable: false,
@@ -200,7 +200,7 @@ var regionLabel6 = L.marker(region6, {
 
 var regionLabel7 = L.marker(region7, {
   icon: L.divIcon({
-      className: 'text-labels7',   // Set class for CSS styling
+      className: 'text-labels',   // Set class for CSS styling
       html: '7 Wilson Forest'
   }),
   draggable: false,
@@ -209,7 +209,7 @@ var regionLabel7 = L.marker(region7, {
 
 var regionLabel8 = L.marker(region8, {
   icon: L.divIcon({
-      className: 'text-labels8',   // Set class for CSS styling
+      className: 'text-labels',   // Set class for CSS styling
       html: '8_Scenic-Vista'
   }),
   draggable: false,
@@ -227,7 +227,7 @@ var regionLabel9 = L.marker(region9, {
 
 var regionLabel10 = L.marker(region10, {
   icon: L.divIcon({
-      className: 'text-labels10',   // Set class for CSS styling
+      className: 'text-labels',   // Set class for CSS styling
       html: '10 Chapparal'
   }),
   draggable: false,
@@ -236,7 +236,7 @@ var regionLabel10 = L.marker(region10, {
 
 var regionLabel11 = L.marker(region11, {
   icon: L.divIcon({
-      className: 'text-labels11',   // Set class for CSS styling
+      className: 'text-labels',   // Set class for CSS styling
       html: '11 Terrapin Springs'
   }),
   draggable: false,
@@ -254,7 +254,7 @@ var regionLabel12 = L.marker(region12, {
 
 var regionLabel13 = L.marker(region13, {
   icon: L.divIcon({
-      className: 'text-labels13',   // Set class for CSS styling
+      className: 'text-labels',   // Set class for CSS styling
       html: '13 Cheddar-ford'
   }),
   draggable: false,
@@ -272,7 +272,7 @@ var regionLabel14 = L.marker(region14, {
 
 var regionLabel15 = L.marker(region15, {
   icon: L.divIcon({
-      className: 'text-labels15',   // Set class for CSS styling
+      className: 'text-labels',   // Set class for CSS styling
       html: '15 Weston'
   }),
   draggable: false,
@@ -281,7 +281,7 @@ var regionLabel15 = L.marker(region15, {
 
 var regionLabel16 = L.marker(region16, {
   icon: L.divIcon({
-      className: 'text-labels16',   // Set class for CSS styling
+      className: 'text-labels',   // Set class for CSS styling
       html: '16 Southton'
   }),
   draggable: false,
