@@ -41,11 +41,6 @@ function merge_styles(base, new_styles){
 
 //set color palatte
 function getColor(d) {
-  // return   d > 80  ? '#006d2c' :
-  //          d > 60  ? '#2ca25f' :
-  //          d > 40  ? '#66c2a4' :
-  //          d > 20  ? '#99d8c9' :
-  //          d > 0   ? '#ccece6' : '#edf8fb'
   return d == '1' ? '#FFB6C1':
          d == '2' ? '#DA70D6':
          d == '3' ? '#FFFF00':
@@ -70,9 +65,7 @@ function getColor(d) {
 //attach color palatte to category
 function style(feature, color) {
     var target = style_target(feature);
-    console.log(target);
     var fillColor = (!color) ? getColor(target) : color;
-    console.log(fillColor);
     // var fillColor = fillColor;
     var default_style = {
         fillColor: fillColor,
@@ -124,8 +117,9 @@ var geojson = L.geoJson(districts, {
 }).addTo(map);
 
 
+// add region_Name label
 var region1 = [0.185, -119.97];
-var region2 = [0.185, -119.92851];
+var region2 = [0.185, -119.928];
 var region3 = [0.195, -119.86];
 var region4 = [0.18, -119.81];
 var region5 = [0.12, -119.93];
@@ -144,173 +138,50 @@ var region17 = [0.09, -119.842];
 var region18 = [0.13, -119.84];
 var region19 = [0.13, -119.87];
 
-var regionLabel1 = L.marker(region1, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '1 Palace Hills'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
+// location of different regions
+regionList = [[0.185, -119.97], [0.185, -119.928], [0.195, -119.86], [0.18, -119.81],  [0.12, -119.93], [0.153, -119.925], [0.11, -119.725], [0.045, -119.755], [0.055, -119.845], [0.055, -119.79], [0.075, -119.76], [0.12, -119.76], [0.115, -119.805], [0.16, -119.869], [0.16, -119.895], [0.132, -119.895], [0.09, -119.842], [0.13, -119.84], [0.13, -119.87]];
 
-var regionLabel2 = L.marker(region2, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '2 Northwest'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
+regionName = ['1 Palace Hills', '2 Northwest', '3 Old Town', '4 Safe Town', '5 Southwest', '6 Downtown', '7 Wilson Forest', '8_Scenic-Vista', '9 Broadview', '10 Chapparal', '11 Terrapin Springs', '12 Pepper Mill', '13 Cheddar-ford', '14 Easton', '15 Weston', '16 Southton', '17_Oak Willow', '18 East Parton', '19 West Parton'];
 
-var regionLabel3 = L.marker(region3, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '3 Old Town'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
+for(i = 0; i < 19; i++){
+    window["regionLabel" + i] = L.marker(regionList[i], {
+    icon: L.divIcon({
+        className: 'text-labels',   // Set class for css styling
+        html: regionName[i]
+    }),
+    draggable: false,
+    // zIndexOffset: 1000     // Make appear above other map features
+    }).addTo(map);
+}
 
-var regionLabel4 = L.marker(region4, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '4 Safe Town'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
+// // add hospital
+// [0.180960, -119.959400]
+// [0.153120, -119.915900]
+// [0.151090, -119.909520]
+// [0.121800, -119.904300]
+// [0.134560, -119.883420]
+// [0.182990, -119.855580]
+// [0.041470, -119.828610]
+// [0.065250, -119.744800]
 
-var regionLabel5 = L.marker(region5, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '5 Southwest'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
+hospitalList = [[0.180960, -119.959400], [0.153120, -119.915900], [0.151090, -119.909520], [0.121800, -119.904300], [0.134560, -119.883420], [0.182990, -119.855580], [0.041470, -119.828610], [0.065250, -119.744800]];
 
-var regionLabel6 = L.marker(region6, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '6 Downtown'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
+var hospitalIcon = L.icon({
+    iconUrl:'https://svgsilh.com/svg/2831364.svg',
+    // iconUrl:'https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_for_hospital_ship_of_the_Regia_Marina.svg',
+    iconSize: [25, 30], // size of the icon
+    popupAnchor: [-3, -25] // point from which the popup should open relative to the iconAnchor
+});
+// L.marker([0.18, -119.959], {icon: hospitalIcon}).bindPopup('This is Hospital.').addTo(map);
+for(i = 0; i < 8; i++){
+  window["hospitalLabel" + i] = L.marker(hospitalList[i], {icon: hospitalIcon}).addTo(map).bindPopup('<b>This is a Hospital.</b>');
+}
 
-var regionLabel7 = L.marker(region7, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '7 Wilson Forest'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel8 = L.marker(region8, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '8_Scenic-Vista'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel9 = L.marker(region9, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '9 Broadview'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel10 = L.marker(region10, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '10 Chapparal'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel11 = L.marker(region11, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '11 Terrapin Springs'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel12 = L.marker(region12, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '12 Pepper Mill'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel13 = L.marker(region13, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '13 Cheddar-ford'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel14 = L.marker(region14, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '14 Easton'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel15 = L.marker(region15, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '15 Weston'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel16 = L.marker(region16, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '16 Southton'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel17 = L.marker(region17, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '17_Oak Willow'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel18 = L.marker(region18, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '18 East Parton'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
-
-var regionLabel19 = L.marker(region19, {
-  icon: L.divIcon({
-      className: 'text-labels',   // Set class for CSS styling
-      html: '19 West Parton'
-  }),
-  draggable: false,
-  zIndexOffset: 1000     // Make appear above other map features
-}).addTo(map);
+// add radiation station
+var radiationIcon = L.icon({
+    iconUrl:'C:/Users/TIM58/Downloads/radiation.svg',
+    iconSize: [50, 100], // size of the icon
+    popupAnchor: [-3, -25] // point from which the popup should open relative to the iconAnchor
+});
+var nuclear = L.marker([0.162679, -119.784825], {icon: radiationIcon}).addTo(map).bindPopup('<b>The Always Safe Nuclear plant.</b>');
+map.addLayer(nuclear);
