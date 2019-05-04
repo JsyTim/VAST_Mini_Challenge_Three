@@ -3,8 +3,16 @@
   <head>
     <meta charset="utf-8">
     <title>VAST_mini_challenge_two</title>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.js"></script>
+    <script src="data/StHimark.geojson"></script>
+    <script src="js/leaflet.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/heatmap.css">
+    <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/map.css">
     <link rel="stylesheet" href="css/time_series.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/main.css">
@@ -17,13 +25,236 @@
         </div>
       </nav>
 
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-5">
+              <span id="map_title" style="text-align: center; display: block;">StHimark Map</span>
+              <div id="map"></div>
+              <script src="js/map.js"></script>
+          </div>
+          <div class="col-md-2">
+              <svg width="250" height="700">
+                <g transform = "translate(0,25)" id = "sensor-1">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF0000"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-1</text>
+                </g>
+                <g transform = "translate(0,50)" id = "sensor-2">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF0000"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-2</text>
+                </g>
+                <g transform = "translate(0,75)" id = "sensor-3">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF0000"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-3</text>
+                </g>
+                <g transform = "translate(0,100)" id = "sensor-4">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#F08080"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-4</text>
+                </g>
+                <g transform = "translate(0,125)" id = "sensor-5">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#BC8F8F"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-5</text>
+                </g>
+                <g transform = "translate(0,150)" id = "sensor-6">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#CD5C5C"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-6</text>
+                </g>
+                <g transform = "translate(0,175)" id = "sensor-7">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF0000"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-7</text>
+                </g>
+                <g transform = "translate(0,200)" id = "sensor-8">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#A52A2A"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-8</text>
+                </g>
+                <g transform = "translate(0,225)" id = "sensor-9">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#B22222"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-9</text>
+                </g>
+                <g transform = "translate(0,250)" id = "sensor-10">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#8B0000"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-10</text>
+                </g>
+                <g transform = "translate(0,275)" id = "sensor-11">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#800000"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-11</text>
+                </g>
+                <g transform = "translate(0,300)" id = "sensor-12">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FFA07A"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-12</text>
+                </g>
+                <g transform = "translate(0,325)" id = "sensor-13">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF7F50"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-13</text>
+                </g>
+                <g transform = "translate(0,350)" id = "sensor-14">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF4500"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-14</text>
+                </g>
+                <g transform = "translate(0,375)" id = "sensor-15">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#E9967A"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-15</text>
+                </g>
+                <g transform = "translate(0,400)" id = "sensor-16">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF6347"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-16</text>
+                </g>
+                <g transform = "translate(0,425)" id = "sensor-17">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#0000FF"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-17</text>
+                </g>
+                <g transform = "translate(0,450)" id = "sensor-18">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#0000CD"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-18</text>
+                </g>
+                <g transform = "translate(0,475)" id = "sensor-19">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#191970"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-19</text>
+                </g>
+                <g transform = "translate(0,500)" id = "sensor-20">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#00008B"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-20</text>
+                </g>
+                <g transform = "translate(0,525)" id = "sensor-21">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#000080"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-21</text>
+                </g>
+                <g transform = "translate(0,550)" id = "sensor-22">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#4169E1"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-22</text>
+                </g>
+                <g transform = "translate(0,575)" id = "sensor-23">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#6495ED"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-23</text>
+                </g>
+                <g transform = "translate(0,600)" id = "sensor-24">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#00FFFF"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-24</text>
+                </g>
+                <g transform = "translate(0,625)" id = "sensor-25">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#00FFFF"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-25</text>
+                </g>
+                <g transform = "translate(120,25)" id = "sensor-26">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#00CED1"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-26</text>
+                </g>
+                <g transform = "translate(120,50)" id = "sensor-27">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#2F4F4F"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-27</text>
+                </g>
+                <g transform = "translate(120,75)" id = "sensor-28">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#008B8B"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-28</text>
+                </g>
+                <g transform = "translate(120,100)" id = "sensor-29">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#008080"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-29</text>
+                </g>
+                <g transform = "translate(120,125)" id = "sensor-30">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#48D1CC"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-30</text>
+                </g>
+                <g transform = "translate(120,150)" id = "sensor-31">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#20B2AA"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-31</text>
+                </g>
+                <g transform = "translate(120,175)" id = "sensor-32">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#40E0D0"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-32</text>
+                </g>
+                <g transform = "translate(120,200)" id = "sensor-33">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#7FFFAA"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-33</text>
+                </g>
+                <g transform = "translate(120,225)" id = "sensor-34">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#00FA9A"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-34</text>
+                </g>
+                <g transform = "translate(120,250)" id = "sensor-35">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#00FF7F"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-35</text>
+                </g>
+                <g transform = "translate(120,275)" id = "sensor-36">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#DB7093"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-36</text>
+                </g>
+                <g transform = "translate(120,300)" id = "sensor-37">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF69B4"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-37</text>
+                </g>
+                <g transform = "translate(120,325)" id = "sensor-38">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF1493"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-38</text>
+                </g>
+                <g transform = "translate(120,350)" id = "sensor-39">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#C71585"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-39</text>
+                </g>
+                <g transform = "translate(120,375)" id = "sensor-40">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#DA70D6"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-40</text>
+                </g>
+                <g transform = "translate(120,400)" id = "sensor-41">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#D8BFD8"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-41</text>
+                </g>
+                <g transform = "translate(120,425)" id = "sensor-42">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#DDA0DD"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-42</text>
+                </g>
+                <g transform = "translate(120,450)" id = "sensor-43">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#EE82EE"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-43</text>
+                </g>
+                <g transform = "translate(120,475)" id = "sensor-44">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF00FF"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-44</text>
+                </g>
+                <g transform = "translate(120,500)" id = "sensor-45">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF00FF"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-45</text>
+                </g>
+                <g transform = "translate(120,525)" id = "sensor-46">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#8B008B"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-46</text>
+                </g>
+                <g transform = "translate(120,550)" id = "sensor-47">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#800080"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-47</text>
+                </g>
+                <g transform = "translate(120,575)" id = "sensor-48">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#BA55D3"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-48</text>
+                </g>
+                <g transform = "translate(120,600)" id = "sensor-49">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#9400D3"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-49</text>
+                </g>
+                <g transform = "translate(120,625)" id = "sensor-50">
+                   <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#9932CC"/>
+                   <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-50</text>
+                </g>
+              </svg>
+          </div>
+          <div class="col-md-5">
+              <div class="up" style="min-height:300px;">
+                <!--time series container-->
+                <div id="timeSeries"></div>
+                <!--select/clear button-->
+                <div id="option">
+                  <input name="updateButton" type="button" value="Select/Clear all lines" />
+                </div>
+                <!-- <script src="js/time_series.js"></script> -->
+              </div>
+              <div class="down">
+                  <div id="heatmap"></div>
+              </div>
+              <script src="js/heatmap.js"></script>
+          </div>
 
-      <!--time series container-->
-      <div id="timeSeries"></div>
-      <!--select/clear button-->
-      <div id="option">
-        <input name="updateButton" type="button" value="Select/Clear all lines" />
+        </div>
       </div>
+<<<<<<< HEAD
       <script src="js/time_series.js"></script>
 
       <!--&lt;!&ndash; Footer &ndash;&gt;-->
@@ -33,5 +264,14 @@
             <!--<a href="https://idatavisualizationlab.github.io/CS5331_Spring2019/">Visualization and Visual Analytics</a>-->
           <!--</div>-->
       <!--</footer>-->
+=======
+      <!-- Footer -->
+      <footer class="footer">
+          <!-- Copyright -->
+          <div class="footer-copyright">© 2019 Copyright:
+            <a href="https://idatavisualizationlab.github.io/CS5331_Spring2019/">Visualization and Visual Analytics</a>
+          </div>
+      </footer>
+>>>>>>> 2996e5cf4e944a7409a4f43cf5f94bcb2ba05562
   </body>
 </html>
