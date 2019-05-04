@@ -14,6 +14,31 @@ path {
   shape-rendering: crispEdges;
 }
 
+.axis--grid .domain {
+  fill: #bfbfbf;
+  opacity: 0.75;
+  stroke: none;
+}
+
+.axis--x .domain,
+.axis--grid .tick line {
+  stroke: #fff;
+  stroke-dasharray: 0;
+  stroke-width: 1px;
+}
+
+.axis--x .tick line {
+  stroke: #bfbfbf;
+  stroke-dasharray: 0;
+  stroke-opacity: 1;
+}
+
+.axis--grid .tick--minor line {
+  stroke-opacity: .5;
+  stroke-width: 0.5px;
+}
+
+
 .legend {
   font-size: 14px;
   font-weight: bold;
