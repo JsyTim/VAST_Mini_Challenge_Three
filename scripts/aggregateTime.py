@@ -3,38 +3,54 @@ import pandas as pd
 import numpy as np
 from functools import reduce
 
-for f in range(1, 2):
-    timeStep = "2H"
-    is_check = {}
-    dfList = {}
-    maxList = {}
-    meanList = {}
-    outDf = []
+f = 13
+# for f in range(1, 2):
+timeStep = "2H"
+mo_check = {}
+st_check = {}
+dfList = {}
+df2List = {}
+maxList = {}
+meanList = {}
+st_maxList = {}
+outDf = []
 
-    infilename = "../data/SortByRegid/Region"+ str(f) + "-MobileSensor.csv"
-    ourfilename = "../data/HeatmapData/Region" + str(f) + ".csv"
-    df = pd.read_csv(infilename, parse_dates = True, index_col = "Timestamp")
+infilename = "../data/SortByRegid/Region"+ str(f) + "-MobileSensor.csv"
+staticfile = "../data/StaticSortbyRegid/Region"+ str(f) + "-StaticSensor.csv"
 
-    sensorIdSet = df['Sensor-id'].unique()
-    # print(sorted(sensorIdSet))
+ourfilename = "../data/HeatmapData/Region" + str(f) + ".csv"
+df = pd.read_csv(infilename, parse_dates = True, index_col = "Timestamp")
+df2 = pd.read_csv(staticfile, parse_dates = True, index_col = "Timestamp")
 
-    timeIndex = pd.date_range(start = '2020-04-06 00:00:00', end = '2020-04-10 23:00:00', freq = timeStep)
+sensorIdSet = df['Sensor-id'].unique()
+staticIdSet = df2['Sensor-id'].unique()
+# print(sorted(sensorIdSet))
 
-    for i, id in enumerate(sorted(sensorIdSet)):
-        print(i,id)
-        is_check[i] = df['Sensor-id'] == id
-        dfList[i] = df[is_check[i]]
+timeIndex = pd.date_range(start = '2020-04-06 00:00:00', end = '2020-04-10 23:00:00', freq = timeStep)
 
-        # meanList[i] = dfList[i]['Value'].resample(timeStep).mean().reindex(timeIndex)
-        maxList[i] = dfList[i]['Value'].resample(timeStep).max().reindex(timeIndex)
+for i, id in enumerate(sorted(sensorIdSet)):
+    # print(i,id)
+    mo_check[i] = df['Sensor-id'] == id
+    dfList[i] = df[mo_check[i]]
 
-        maxDf = pd.DataFrame({'Timestamp': maxList[i].index, sensorIdSet[i]: maxList[i].values, str(sensorIdSet[i]) + "flag": maxList[i].values})
+    # meanList[i] = dfList[i]['Value'].resample(timeStep).mean().reindex(timeIndex)
+    maxList[i] = dfList[i]['Value'].resample(timeStep).max().reindex(timeIndex)
 
-        maxDf[str(sensorIdSet[i]) + "flag"] = (maxDf[str(sensorIdSet[i]) + "flag"] > 150 ).astype(int)
-        outDf.append(maxDf)
-        # print(outDf[i].head(100))
+    maxDf = pd.DataFrame({'Timestamp': maxList[i].index, sensorIdSet[i]: maxList[i].values, str(sensorIdSet[i]) + "flag": maxList[i].values})
 
-    df_final = reduce( lambda df1, df2: df1.merge(df2, on='Timestamp', sort = True), outDf)
+    maxDf[str(sensorIdSet[i]) + "flag"] = (maxDf[str(sensorIdSet[i]) + "flag"] > 150 ).astype(int)
+    outDf.append(maxDf)
+    # print(outDf[i].head(100))
 
-    print(df_final.head(5))
-    # df_final.to_csv(ourfilename, index=False)
+for i, id in enumerate(sorted(staticIdSet)):
+    st_check[i] = df2['Sensor-id'] == id
+    df2List[i] = df2[st_check[i]]
+    static_id = "static-" + str(staticIdSet[i])
+    st_maxList[i] = df2List[i]['Value'].resample(timeStep).max().reindex(timeIndex)
+    st_maxDf = pd.DataFrame({'Timestamp': st_maxList[i].index, static_id: st_maxList[i].values})
+    outDf.append(st_maxDf)
+
+df_final = reduce( lambda df1, df2: df1.merge(df2, on='Timestamp', sort = True), outDf)
+
+# print(df_final.head(5))
+df_final.to_csv(ourfilename, index=False)
