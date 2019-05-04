@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from functools import reduce
 
-f = 13
+f = 1
 # for f in range(1, 2):
 timeStep = "2H"
 mo_check = {}
@@ -47,7 +47,8 @@ for i, id in enumerate(sorted(staticIdSet)):
     df2List[i] = df2[st_check[i]]
     static_id = "static-" + str(staticIdSet[i])
     st_maxList[i] = df2List[i]['Value'].resample(timeStep).max().reindex(timeIndex)
-    st_maxDf = pd.DataFrame({'Timestamp': st_maxList[i].index, static_id: st_maxList[i].values})
+    st_maxDf = pd.DataFrame({'Timestamp': st_maxList[i].index, static_id: st_maxList[i].values, static_id + "flag": st_maxList[i].values})
+    st_maxDf[static_id + "flag"] = (st_maxDf[static_id + "flag"] > 150 ).astype(int)
     outDf.append(st_maxDf)
 
 df_final = reduce( lambda df1, df2: df1.merge(df2, on='Timestamp', sort = True), outDf)
