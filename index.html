@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>VAST_mini_challenge_two</title>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.js"></script>
@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="css/heatmap.css">
     <link rel="stylesheet" href="css/leaflet.css">
     <link rel="stylesheet" href="css/map.css">
-    <link rel="stylesheet" href="css/time_series.css">
+    <!-- <link rel="stylesheet" href="css/time_series.css"> -->
+    <link rel="stylesheet" href="css/ts.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/main.css">
   </head>
@@ -33,7 +34,7 @@
               <script src="js/map.js"></script>
           </div>
           <div class="col-md-2">
-              <svg width="250" height="700">
+              <!-- <svg width="250" height="700">
                 <g transform = "translate(0,25)" id = "sensor-1">
                    <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#FF0000"/>
                    <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-1</text>
@@ -234,17 +235,17 @@
                    <circle x = "1066" y = "61" cx = "12" cy = "9" r = "10" stroke-width = "3" fill = "#9932CC"/>
                    <text x = "24" y = "9" dy = ".35em" fill = "black">Sensor-50</text>
                 </g>
-              </svg>
+              </svg> -->
           </div>
           <div class="col-md-5">
               <div class="up" style="min-height:300px;">
                 <!--time series container-->
                 <div id="timeSeries"></div>
                 <!--select/clear button-->
-                <div id="option">
+                <!-- <div id="option">
                   <input name="updateButton" type="button" value="Select/Clear all lines" />
-                </div>
-                <!-- <script src="js/time_series.js"></script> -->
+                </div> -->
+                <script src="js/ts.js"></script>
               </div>
               <div class="down">
                   <div id="heatmap"></div>
@@ -255,7 +256,7 @@
         </div>
       </div>
 
-      <script src="js/time_series.js"></script>
+      <!-- <script src="js/time_series.js"></script> -->
 
       <!-- Footer -->
       <footer class="footer">
