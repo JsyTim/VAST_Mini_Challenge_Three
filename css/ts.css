@@ -1,0 +1,45 @@
+.line {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #5d5d5d;
+  shape-rendering: crispEdges;
+}
+
+.axis .tick line {
+  stroke: #5d5d5d;
+	stroke-dasharray: 1.5;
+	stroke-opacity: .5;
+}
+
+/* .x.axis path, .x.axis1 path {
+  display: none;
+} */
+
+/* .axis--grid .domain {
+  fill: #bfbfbf;
+  opacity: 0.75;
+  stroke: none;
+} */
+
+/* .axis--x .domain,
+.axis--grid .tick line {
+  stroke: #fff;
+  stroke-dasharray: 0;
+  stroke-width: 1px;
+} */
+
+/* .axis--x .tick line {
+  stroke: #bfbfbf;
+  stroke-dasharray: 0;
+  stroke-opacity: 1;
+} */
+
+/* .axis--grid .tick--minor line {
+  stroke-opacity: .5;
+  stroke-width: 0.5px;
+} */
