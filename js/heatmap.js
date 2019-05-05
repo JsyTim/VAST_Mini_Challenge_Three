@@ -1,6 +1,4 @@
 
-
-
 //cell size
 var cellSize = 10;
 
