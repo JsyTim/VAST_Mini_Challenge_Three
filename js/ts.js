@@ -80,7 +80,7 @@ Promise.all( filelist ).then( data => {
   // console.log(data[0][0]);
   var sensor = 1;
   // Use region 1 as an example
-  var sensorList = Object.keys(data[sensor][0]).slice(1);
+  var sensorList = Object.keys(data[sensor-1][0]).slice(1);
   // console.log(sensorList);
 
   var dataset = sensorList.map(d => {
