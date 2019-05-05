@@ -118,30 +118,11 @@ var geojson = L.geoJson(districts, {
 
 
 // add region_Name label
-var region1 = [0.185, -119.97];
-var region2 = [0.185, -119.928];
-var region3 = [0.195, -119.86];
-var region4 = [0.18, -119.81];
-var region5 = [0.12, -119.93];
-var region6 = [0.153, -119.925];
-var region7 = [0.11, -119.725];
-var region8 = [0.045, -119.755];
-var region9 = [0.055, -119.845];
-var region10 = [0.055, -119.79];
-var region11 = [0.075, -119.76];
-var region12 = [0.12, -119.76];
-var region13 = [0.115, -119.805];
-var region14 = [0.16, -119.869];
-var region15 = [0.16, -119.895];
-var region16 = [0.132, -119.895];
-var region17 = [0.09, -119.842];
-var region18 = [0.13, -119.84];
-var region19 = [0.13, -119.87];
-
+//
 // location of different regions
-regionList = [[0.18, -119.97], [0.185, -119.928], [0.193, -119.87], [0.18, -119.81],  [0.12, -119.93], [0.153, -119.925], [0.11, -119.727], [0.045, -119.755], [0.058, -119.845], [0.055, -119.79], [0.075, -119.769], [0.12, -119.76], [0.115, -119.805], [0.16, -119.869], [0.16, -119.895], [0.132, -119.895], [0.09, -119.842], [0.13, -119.84], [0.13, -119.87]];
+var regionList = [[0.18, -119.97], [0.185, -119.928], [0.193, -119.87], [0.18, -119.81],  [0.12, -119.93], [0.153, -119.925], [0.11, -119.727], [0.045, -119.755], [0.058, -119.845], [0.055, -119.79], [0.075, -119.769], [0.12, -119.76], [0.115, -119.805], [0.16, -119.869], [0.16, -119.895], [0.132, -119.895], [0.09, -119.842], [0.13, -119.84], [0.13, -119.87]];
 
-regionName = ['1 Palace Hills', '2 Northwest', '3 Old Town', '4 Safe Town', '5 Southwest', '6 Downtown', '7 Wilson Forest', '8_Scenic-Vista', '9 Broadview', '10 Chapparal', '11 Terrapin Springs', '12 Pepper Mill', '13 Cheddar-ford', '14 Easton', '15 Weston', '16 Southton', '17_Oak Willow', '18 East Parton', '19 West Parton'];
+var regionName = ['1 Palace Hills', '2 Northwest', '3 Old Town', '4 Safe Town', '5 Southwest', '6 Downtown', '7 Wilson Forest', '8_Scenic-Vista', '9 Broadview', '10 Chapparal', '11 Terrapin Springs', '12 Pepper Mill', '13 Cheddar-ford', '14 Easton', '15 Weston', '16 Southton', '17_Oak Willow', '18 East Parton', '19 West Parton'];
 
 for(i = 0; i < 19; i++){
     window["regionLabel" + i] = L.marker(regionList[i], {
@@ -159,11 +140,9 @@ hospitalList = [[0.180960, -119.959400], [0.153120, -119.915900], [0.151090, -11
 
 var hospitalIcon = L.icon({
     iconUrl:'data/icon/hospital.svg',
-    // iconUrl:'https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_for_hospital_ship_of_the_Regia_Marina.svg',
     iconSize: [25, 30], // size of the icon
     popupAnchor: [0, -12] // point from which the popup should open relative to the iconAnchor
 });
-// L.marker([0.18, -119.959], {icon: hospitalIcon}).bindPopup('This is Hospital.').addTo(map);
 for(i = 0; i < 8; i++){
   window["hospitalLabel" + i] = L.marker(hospitalList[i], {icon: hospitalIcon}).addTo(map).bindPopup('<b>This is a Hospital.</b>');
 }
@@ -176,3 +155,9 @@ var radiationIcon = L.icon({
 });
 var nuclear = L.marker([0.162679, -119.784825], {icon: radiationIcon}).addTo(map).bindPopup('<b>The Always Safe Nuclear plant.</b>');
 map.addLayer(nuclear);
+
+//add sensor route
+console.log(sensorRoute.length)
+// for(i = 0; i < sensorRoute.length; i++){
+
+// }
