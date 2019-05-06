@@ -80,9 +80,59 @@ function style(feature, color) {
 L.geoJson(districts).addTo(map);
 
 // click dot show sensorRoute
-function showRoute(){
+function showSensorRoute(){
+  let sensorId = event.target.id;
+  drawSensorRoute(sensorId);
+}
+
+//add sensor route
+function drawSensorRoute(sensorId){
+  // var sensorId = 4
+  date = ['06', '07', '08', '09', '10'];
+  route = [];
+  for(i = 0; i < date.length; i++){
+      day = date[i];
+      route = route.concat(sensorRoute[sensorId][day]['location']);
+  }
+  sensorRouteDay1 = sensorRoute[sensorId]['06']['location'];
+  sensorRouteDay2 = sensorRoute[sensorId]['07']['location'];
+  sensorRouteDay3 = sensorRoute[sensorId]['08']['location'];
+  sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
+  sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
+  var marker = L.Marker.movingMarker(route, 1000);
+  L.polyline(sensorRouteDay1, {color: '#CC0000'}).addTo(map);
+  L.polyline(sensorRouteDay2, {color: '#FF3300'}).addTo(map);
+  L.polyline(sensorRouteDay3, {color: '#330033'}).addTo(map);
+  L.polyline(sensorRouteDay4, {color: '#33CCCC'}).addTo(map);
+  L.polyline(sensorRouteDay5, {color: '#0000CC'}).addTo(map);
+  // map.fitBounds(route);
+  var taxiIcon = L.icon({
+    iconUrl:'data/Icon/car_sensor.svg',
+    iconSize: [15, 30], // size of the icon
+    popupAnchor: [0, -5]
+  });
+  marker.once('click', function () {
+      marker.start();
+      marker.closePopup();
+      marker.unbindPopup();
+      marker.on('click', function() {
+          if (marker.isRunning()) {
+              marker.pause();
+          } else {
+              marker.start();
+          }
+      });
+      setTimeout(function() {
+          marker.bindPopup('<b>sensor-'+sensorId+'</b>').openPopup();
+      }, 0);
+  });
+  marker.options.icon = taxiIcon;
+  // marker.bindPopup('<b>sensorId-1</b>', {closeOnClick: false});
+  marker.openPopup('<b>sensor-'+sensorId+'</b>');
+  map.addLayer(marker);
 
 }
+
 
 function highlightFeature(e) {
     var layer = e.target;
@@ -112,7 +162,8 @@ function resetHighlight(e) {
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
-        mouseout: resetHighlight
+        mouseout: resetHighlight,
+        click: showSensorRoute
     });
 }
 
@@ -159,49 +210,3 @@ var radiationIcon = L.icon({
 });
 var nuclear = L.marker([0.162679, -119.784825], {icon: radiationIcon}).addTo(map).bindPopup('<b>The Always Safe Nuclear plant.</b>');
 map.addLayer(nuclear);
-
-//add sensor route
-var sensorId = 4
-date = ['06', '07', '08', '09', '10']
-route = []
-for(i = 0; i < date.length; i++){
-    day = date[i]
-    route = route.concat(sensorRoute[sensorId][day]['location']);
-}
-console.log(route)
-sensorRouteDay1 = sensorRoute[sensorId]['06']['location']
-sensorRouteDay2 = sensorRoute[sensorId]['07']['location']
-sensorRouteDay3 = sensorRoute[sensorId]['08']['location']
-sensorRouteDay4 = sensorRoute[sensorId]['09']['location']
-sensorRouteDay5 = sensorRoute[sensorId]['10']['location']
-var marker = L.Marker.movingMarker(route, 1000);
-L.polyline(sensorRouteDay1, {color: '#CC0000'}).addTo(map);
-L.polyline(sensorRouteDay2, {color: '#FF3300'}).addTo(map);
-L.polyline(sensorRouteDay3, {color: '#330033'}).addTo(map);
-L.polyline(sensorRouteDay4, {color: '#33CCCC'}).addTo(map);
-L.polyline(sensorRouteDay5, {color: '#0000CC'}).addTo(map);
-// map.fitBounds(route);
-var taxiIcon = L.icon({
-  iconUrl:'data/Icon/car_sensor.svg',
-  iconSize: [15, 30], // size of the icon
-  popupAnchor: [0, -5]
-});
-marker.once('click', function () {
-    marker.start();
-    marker.closePopup();
-    marker.unbindPopup();
-    marker.on('click', function() {
-        if (marker.isRunning()) {
-            marker.pause();
-        } else {
-            marker.start();
-        }
-    });
-    setTimeout(function() {
-        marker.bindPopup('<b>sensor-'+sensorId+'</b>').openPopup();
-    }, 0);
-});
-marker.options.icon = taxiIcon;
-// marker.bindPopup('<b>sensorId-1</b>', {closeOnClick: false});
-marker.openPopup('<b>sensor-'+sensorId+'</b>');
-map.addLayer(marker);
