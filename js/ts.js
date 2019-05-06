@@ -150,12 +150,15 @@ Promise.all( filelist ).then( data => {
                                    y = +b.split("-")[1];
                                return(x < y)? -1:1;
                              });
-  var staticList = sensorList.filter(d => d.split("-")[0] === "static")
-                             .sort((a,b) => {
-                               var x = +a.split("-")[1],
-                                   y = +b.split("-")[1];
-                               return(x < y)? -1:1;
-                             });
+  var staticList = sensorList.filter(d => d.split("-")[0] === "static");
+  if (staticList.length != 0 ){
+    staticList.sort((a,b) => {
+                var x = +a.split("-")[1],
+                    y = +b.split("-")[1];
+                return(x < y)? -1:1;
+    });
+  }
+
 
   var updateList = mobileList.concat(staticList);
 
