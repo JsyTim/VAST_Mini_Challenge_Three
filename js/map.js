@@ -79,6 +79,11 @@ function style(feature, color) {
 
 L.geoJson(districts).addTo(map);
 
+// click dot show sensorRoute
+function showRoute(){
+
+}
+
 function highlightFeature(e) {
     var layer = e.target;
     //on hover change color from what was defined in function style(feature)
@@ -193,10 +198,10 @@ marker.once('click', function () {
         }
     });
     setTimeout(function() {
-        marker.bindPopup('<b>sensorId-'+sensorId+'</b>').openPopup();
+        marker.bindPopup('<b>sensor-'+sensorId+'</b>').openPopup();
     }, 0);
 });
 marker.options.icon = taxiIcon;
 // marker.bindPopup('<b>sensorId-1</b>', {closeOnClick: false});
-marker.openPopup('<b>sensorId-'+sensorId+'</b>');
+marker.openPopup('<b>sensor-'+sensorId+'</b>');
 map.addLayer(marker);
