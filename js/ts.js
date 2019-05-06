@@ -1,20 +1,30 @@
 //This javascript is using D3.V5 library
 
 // Width and height, height2 is for slider
-var margin = {top:20, right:120, bottom: 100, left: 50},
+var margin = {top:20, right:120, bottom: 80, left: 50},
+    margin2 = {top: 430, right: 10, bottom: 20, left: 40},
     width = 960 - margin.left - margin.right,
-    height = 480 - margin.top - margin.bottom;
+    height = 480 - margin.top - margin.bottom,
+    height2 = 480 - margin2.top - margin2.bottom;
 
 var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
-    // bisectDate = d3.bisector( d => d.date).left;
+    bisectDate = d3.bisector( d => d.date).left;
 
 // Set up scales
 var xScale = d3.scaleTime().range([0, width]),
+    xScale2 = d3.scaleTime().range([0, width]),
+    xScale3 = d3.scaleTime().range([0, width]),
     yScale = d3.scaleLinear().range([height, 0]);
 
 // Define the axes
 var xAxis = d3.axisBottom(xScale)
               .tickSize(-height),
+    xAxis2 = d3.axisBottom(xScale2)
+               .ticks(d3.timeHour.every(12)),
+    xAxis3 = d3.axisBottom(xScale3)
+               .ticks(d3.timeHour.every(2))
+               .tickSize(-height2)
+               .tickFormat( () => null ),
     yAxis = d3.axisLeft(yScale)
               .tickSize(-width)
               .tickFormat(d3.format(".2f"));
@@ -57,15 +67,66 @@ svg.append("defs")
 
 // 59 Custom colors, 50 mobile, 9 static
 colorScheme =
-["#C3594D","#C45853","#C5575A","#C45661","#C35668","#C1576F","#BE5876","#BB5A7C",
-"#B75C82","#B25F88","#AD618E","#A66493","#A06797","#986A9B","#906D9F","#8870A1",
-"#7F72A4","#7675A5","#6D78A6","#637AA6","#597CA6","#4F7EA4","#4480A3","#3A82A0",
-"#2F839D","#25859A","#1A8696","#0F8791","#06878C","#038887","#068882","#0F897C",
-"#198976","#228970","#2A896A","#328864","#3A885F","#418859","#498754","#50864E",
-"#568549","#5D8445","#648341","#6A823D","#70813A","#767F37","#7C7E35","#827C34",
-"#877A33","#8C7833","#917634","#967435","#9B7237","#9F7139","#A26F3C","#A66D3F",
-"#A96B43","#AB6947","#AD684B","#AF674F"];
-
+[
+  "rgb(110, 64, 170)",
+  "rgb(123, 63, 174)",
+  "rgb(138, 62, 178)",
+  "rgb(152, 61, 179)",
+  "rgb(167, 60, 179)",
+  "rgb(181, 60, 177)",
+  "rgb(195, 61, 173)",
+  "rgb(209, 62, 168)",
+  "rgb(221, 63, 162)",
+  "rgb(233, 66, 154)",
+  "rgb(243, 69, 145)",
+  "rgb(251, 73, 135)",
+  "rgb(255, 79, 124)",
+  "rgb(255, 85, 113)",
+  "rgb(255, 92, 102)",
+  "rgb(255, 100, 91)",
+  "rgb(255, 109, 81)",
+  "rgb(255, 119, 71)",
+  "rgb(255, 129, 63)",
+  "rgb(255, 140, 56)",
+  "rgb(250, 151, 51)",
+  "rgb(242, 162, 47)",
+  "rgb(234, 174, 46)",
+  "rgb(224, 186, 47)",
+  "rgb(214, 197, 50)",
+  "rgb(205, 208, 55)",
+  "rgb(195, 218, 63)",
+  "rgb(186, 227, 73)",
+  "rgb(179, 236, 84)",
+  "rgb(167, 241, 89)",
+  "rgb(150, 243, 87)",
+  "rgb(133, 245, 87)",
+  "rgb(116, 246, 90)",
+  "rgb(100, 247, 95)",
+  "rgb(85, 246, 101)",
+  "rgb(71, 245, 110)",
+  "rgb(59, 242, 119)",
+  "rgb(49, 239, 130)",
+  "rgb(40, 234, 141)",
+  "rgb(34, 229, 153)",
+  "rgb(29, 222, 164)",
+  "rgb(26, 214, 176)",
+  "rgb(25, 206, 186)",
+  "rgb(26, 197, 196)",
+  "rgb(28, 187, 205)",
+  "rgb(32, 177, 212)",
+  "rgb(38, 167, 218)",
+  "rgb(44, 156, 222)",
+  "rgb(51, 145, 225)",
+  "rgb(58, 134, 225)",
+  "rgb(66, 124, 224)",
+  "rgb(74, 113, 221)",
+  "rgb(82, 104, 216)",
+  "rgb(89, 94, 209)",
+  "rgb(95, 86, 201)",
+  "rgb(101, 78, 192)",
+  "rgb(106, 70, 181)",
+  "rgb(110, 64, 170)"
+]
 var color = d3.scaleOrdinal().range(colorScheme);
 
 var filelist = [];
@@ -78,15 +139,30 @@ for ( i = 1; i < 20; i ++ )
 // Read data from csv file and preprocess it
 Promise.all( filelist ).then( data => {
   // console.log(data[0][0]);
-  var sensor = 1;
+  var region = 1;
   // Use region 1 as an example
-  var sensorList = Object.keys(data[sensor-1][0]).slice(1);
+  var sensorList = Object.keys(data[region-1][0]).slice(1);
   // console.log(sensorList);
 
-  var dataset = sensorList.map(d => {
+  var mobileList = sensorList.filter(d => d.split("-")[0] === "mobile")
+                             .sort((a,b) => {
+                               var x = +a.split("-")[1],
+                                   y = +b.split("-")[1];
+                               return(x < y)? -1:1;
+                             });
+  var staticList = sensorList.filter(d => d.split("-")[0] === "static")
+                             .sort((a,b) => {
+                               var x = +a.split("-")[1],
+                                   y = +b.split("-")[1];
+                               return(x < y)? -1:1;
+                             });
+
+  var updateList = mobileList.concat(staticList);
+
+  var dataset = updateList.map(d => {
     return {
       name: d,
-      values: data[sensor].map( i => {
+      values: data[region].map( i => {
         return {
           time:parseTime(i["Timestamp"]),
           value:+i[d]
@@ -97,6 +173,8 @@ Promise.all( filelist ).then( data => {
   });
   // console.log(dataset);
 
+  var greyBtn = "#d7d7d7";
+
   //yMin, yMax
   var yMin = d3.min(dataset, d => d3.min(d.values, v => v.value)),
       yMax = d3.max(dataset, d => d3.max(d.values, v => v.value));
@@ -104,8 +182,31 @@ Promise.all( filelist ).then( data => {
   // console.log(yMin);
   // console.log(yMax);
 
-  xScale.domain(d3.extent(data[sensor].map(d => parseTime(d["Timestamp"]))));
+  xScale.domain(d3.extent(data[region].map(d => parseTime(d["Timestamp"]))));
   yScale.domain([yMin, yMax+100]);
+  // Setting a duplicate xdomain for burshing reference
+  xScale2.domain(xScale.domain());
+  xScale3.domain(xScale.domain());
+
+  // --------------------------For slider part--------------------------
+  var brush = d3.brushX()
+                .extent([[0,0], [width, height2]])
+                .on("brush", brushing)
+                .on("end", brushended);
+
+  // Create brushing xAxis
+  context.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(xAxis2);
+  context.append("g")
+      .attr("class", "axis axis--grid")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(xAxis3);
+  context.append("g")
+         .attr("class", "brush")
+         .call(brush);
+// --------------------------End slider part--------------------------
 
   //Draw line graph
   svg.append("g")
@@ -119,12 +220,26 @@ Promise.all( filelist ).then( data => {
 
   svg.append("g")
      .append("text")
-     .attr("y", 0)
+     .attr("y", -18)
      .attr("x", -4)
      .attr("dy", "0.7em")
      .style("text-anchor", "end")
      .text("cpm")
      .attr("fill", "#000000");
+
+// Draw focus
+ var focus = svg.append("g")
+       .attr("class", "circle")
+       .style("display", "none")
+       .attr("pointer-events", "none");
+ focus.append("circle")
+       .attr("r", 2);
+
+// create a tooltip
+ var Tooltip = d3.select("#timeSeries")
+     .append("div")
+     .style("display", "none")
+     .attr("class", "tooltip")
 
 // Draw Line
  var lines = svg.selectAll(".line-group")
@@ -138,7 +253,39 @@ Promise.all( filelist ).then( data => {
  lines.append("path")
      .attr("class", "line")
      .attr("d", d => d.visible? line(d.values) : null)
-     .style("stroke", d => getColor(d.name));
+     .style("stroke", d => getColor(d.name))
+     .on("mouseover", function(d) {
+          d3.selectAll('.line').style("opacity", 0.2);
+          d3.select(this).style("opacity", 1).style("stroke-width", "2.5px");
+          d3.selectAll(".legend").style("opacity", 0.2);
+          d3.select("#leg-" + d.name).style("opacity", 1);
+
+          // Show circle
+          var x0 = xScale.invert(d3.mouse(this)[0]),
+              x1 = d3.timeHour.round(x0),
+              i = bisectDate(d.values, x1);
+          focus.attr("transform", "translate(" + xScale(x1) + "," + yScale(d.values[i].value) + ")"); // Find position
+          focus.style("display", null);
+          focus.selectAll("circle")
+              .attr("fill", getColor(d.name));
+
+          // Show tooltip
+          Tooltip.style("display", null)
+              .html( "<strong>" + d.name + "</strong>" + "<br>"
+                  + " CPM valus is  " + "<strong>" + d.values[i].time.getHours() + "</strong> :" + "<br>"
+                  + "<strong>" + d.values[i].value.toFixed(2) +  "</strong>" )
+              .style("left", (d3.mouse(this)[0]+70) + "px")
+              .style("top", (d3.mouse(this)[1]) + "px");
+       })
+      .on("mouseout", function() {
+          d3.selectAll('.line').style("opacity", 1);
+          d3.select(this).style("stroke-width", "1.5px");
+          d3.selectAll(".legend").style("opacity", 1);
+          focus.style("display", "none");
+
+          // Hide tooltip
+          Tooltip.style("display", "none")
+       });
 
  // Draw legend
  var legendSpace = height/(dataset.length + 1);
@@ -148,6 +295,95 @@ Promise.all( filelist ).then( data => {
      .append("g")
      .attr("class", "legend")
      .attr("id", d => "leg-" + d.name);
+
+  legend.append("rect")
+     .attr("width", 10)
+     .attr("height", 10)
+     .attr("x", width + (margin.right/3) - 25)
+     .attr("y", (d, i) => (i + 1) * legendSpace - 4)
+     .attr("fill", d => d.visible? getColor(d.name) : greyBtn)
+     .attr("class", "legend-box")
+     .on("click", (d, i) => {
+         d.visible = ! d.visible;
+
+         //Update axis
+         maxY = findMaxY(dataset) + 100;
+         minY = findMinY(dataset);
+         yScale.domain([minY, maxY]);
+         svg.select(".y.axis")
+             .transition()
+             .call(yAxis);
+
+         // Update graph
+         lines.select("path")
+             .transition()
+             .attr("d", d=> d.visible? line(d.values) : null);
+         legend.select("rect")
+             .transition()
+             .attr("fill", d => d.visible? getColor(d.name) : greyBtn);
+        })
+     .on("mouseover", function(d) {
+         d3.select(this)
+             .transition()
+            .attr("fill", d =>getColor(d.name));
+        })
+        .on("mouseout", function(d) {
+          d3.select(this)
+            .transition()
+            .attr("fill", d => d.visible? getColor(d.name) : greyBtn);
+        });
+
+  legend.append("text")
+     .attr("x", width + (margin.right/3) + 20)
+     .attr("y", (d, i) => (i + 1) * legendSpace + 4 )
+     .attr("fill", "#5d5d5d")
+     .text(d => d.name);
+
+ //For brusher of the slider bar at the bottom
+   function brushing() {
+     xScale.domain(!d3.event.selection ? xScale2.domain() : d3.event.selection.map(xScale2.invert)); // If brush is empty then reset the Xscale domain to default, if not then make it the brush extent
+     reDraw();
+   }
+
+   function brushended() {
+     if( !d3.event.sourceEvent) {
+       return; // Only transition after input;
+     }
+     if( !d3.event.selection) {
+       xScale.domain(xScale2.domain());
+     }
+     else {
+       var d0 = d3.event.selection.map(xScale2.invert),
+           d1 = d0.map(d3.timeHour.round);
+       // If empty when rounded, use floor & ceil instead.
+       if (d1[0] >= d1[1]) {
+         d1[0] = d3.timeHour.floor(d0[0]);
+         d1[1] = d3.timeHour.offset(d1[0]);
+       }
+       d3.select(this).transition().call(d3.event.target.move, d1.map(xScale2));
+       xScale.domain([d1[0], d1[1]]);
+     }
+     reDraw();
+   }
+
+   function reDraw() {
+       svg.select(".x.axis")
+           .transition()
+           .call(xAxis);
+
+       maxY = findMaxY(dataset);
+       minY = findMinY(dataset);
+       yScale.domain([minY, maxY]);
+
+       svg.select(".y.axis")
+           .transition()
+           .call(yAxis);
+
+       lines.select("path")
+           .transition()
+           .attr("d", d => d.visible ? line(d.values) : null);
+
+   }
 
 });
 
@@ -196,376 +432,20 @@ function getColor(name){
   return colorScheme[result];
 }
 
-//   // Add visible item index to dataSelect
-//   dataSelect.add(10);
-//
-//   // Match a color to a country
-//   color.domain(dataset.map(d => d.name));
-//
+function findMaxY(data) {
+  var maxYValues = data.map( d => {
+    if (d.visible) {
+      return d3.max(d.values, value => value.value) + 1;
+    }
+  });
+  return d3.max(maxYValues);
+}
 
-
-
-
-//
-//  // Draw focus
-//   var focus = svg.append("g")
-//         .attr("class", "circle")
-//         .style("display", "none")
-//         .attr("pointer-events", "none");
-//   focus.append("circle")
-//         .attr("r", 5);
-//
-//  // create a tooltip
-//   var Tooltip = d3.select("body")
-//       .append("div")
-//       .style("display", "none")
-//       .attr("class", "tooltip")
-//
-//   // Create areas variable
-//   var areas;
-//
-//  // Draw Line
-//   var lines = svg.selectAll(".line-group")
-//       .data(dataset)
-//       .enter()
-//       .append("g")
-//       .attr("clip-path", "url(#clip)")
-//       .attr("class", "line-group")
-//       .attr("id", d => "line-" + d.name.replace(" ", ""));
-//
-//   lines.append("path")
-//       .attr("class", "line")
-//       .attr("d", d => d.visible? line(d.values) : null)
-//       .style("stroke", d => color(d.name))
-//       .on("mouseover", function(d) {
-//           d3.selectAll('.line').style("opacity", 0.2);
-//           d3.select(this).style("opacity", 1).style("stroke-width", "2.5px");
-//           d3.selectAll(".legend").style("opacity", 0.2);
-//           d3.select("#leg-" + d.name.replace(" ","")).style("opacity", 1);
-//
-//           // Show circle
-//           var x0 = xScale.invert(d3.mouse(this)[0]),
-//               x1 = d3.timeYear.round(x0),
-//               i = bisectDate(d.values, x1);
-//           focus.attr("transform", "translate(" + xScale(x1) + "," + yScale(d.values[i].rating) + ")"); // Find position
-//           focus.style("display", null);
-//           focus.selectAll("circle")
-//               .attr("fill", color(d.name));
-//
-//           // Show tooltip
-//           Tooltip.style("display", null)
-//               .html( "<strong>" + d.name + "</strong>" + "<br>"
-//                   + " GDP Growth in " + "<strong>" + d.values[i].date.getFullYear() + "</strong> :" + "<br>"
-//                   + "<strong>" + d.values[i].rating.toFixed(2) + "%" + "</strong>" )
-//               .style("left", (d3.mouse(this)[0]+70) + "px")
-//               .style("top", (d3.mouse(this)[1]) + "px");
-//        })
-//       .on("mouseout", function() {
-//           d3.selectAll('.line').style("opacity", 1);
-//           d3.select(this).style("stroke-width", "1.5px");
-//           d3.selectAll(".legend").style("opacity", 1);
-//           focus.style("display", "none");
-//
-//           // Hide tooltip
-//           Tooltip.style("display", "none")
-//        });
-//
-//   // Draw legend
-//   var legendSpace = height/(dataset.length + 1);
-//   var legend = svg.selectAll('.legend')
-//       .data(dataset)
-//       .enter()
-//       .append("g")
-//       .attr("class", "legend")
-//       .attr("id", d => "leg-" + d.name.replace(" ", ""));
-//
-//   legend.append("rect")
-//       .attr("width", 10)
-//       .attr("height", 10)
-//       .attr("x", width + (margin.right/3) - 25)
-//       .attr("y", (d, i) => (i + 1/2) * legendSpace - 4)
-//       .attr("fill", d => d.visible? color(d.name) : greyBtn)
-//       .attr("class", "legend-box")
-//       .on("click", (d, i) => {
-//           // Show the line that has been hide
-//           if(temp !== -1) {
-//               d3.select("#line-" + dataset[temp].name.replace(" ", "")).attr("display", null);
-//           }
-//
-//           d.visible = ! d.visible;
-//
-//           //update dataSelect set
-//           if (d.visible) {
-//               dataSelect.add(i);
-//           }
-//           else {
-//               dataSelect.delete(i);
-//           }
-//
-//           if(dataSelect.size === 2 ) {
-//               d3.selectAll(".comparision-btn")
-//                   .transition()
-//                   .attr("opacity", 1);
-//           } else {
-//               if(!svg.select(".area-group").empty()) areas.remove();
-//               comparision = false;
-//               d3.selectAll(".comparision-btn")
-//                   .transition()
-//                   .attr("opacity", 0);
-//           }
-//
-//           // Update appearance of comparision button
-//           d3.select("#comparision-btn-left")
-//               .transition()
-//               .attr("fill", greyBtn);
-//           d3.select("#comparision-btn-right")
-//               .transition()
-//               .attr("fill", greyBtn);
-//           d3.select("#comparision-text")
-//               .transition()
-//               .attr("fill", "#000000");
-//
-//           //Update axis
-//           maxY = findMaxY(dataset);
-//           minY = findMinY(dataset);
-//           yScale.domain([minY, maxY]);
-//           svg.select(".y.axis")
-//               .transition()
-//               .call(yAxis);
-//
-//           // Update graph
-//           lines.select("path")
-//               .transition()
-//               .attr("d", d=> d.visible? line(d.values) : null);
-//           legend.select("rect")
-//               .transition()
-//               .attr("fill", d => d.visible? color(d.name) : greyBtn);
-//          })
-//       .on("mouseover", function(d) {
-//           d3.select(this)
-//               .transition()
-//              .attr("fill", d =>color(d.name));
-//          })
-//          .on("mouseout", function(d) {
-//            d3.select(this)
-//              .transition()
-//              .attr("fill", d => d.visible? color(d.name) : greyBtn);
-//          });
-//
-//     legend.append("text")
-//            .attr("x", width + (margin.right/3) - 10)
-//            .attr("y", (d, i) => (i + 1/2) * legendSpace + 4 )
-//            .attr("fill", greyBtn)
-//            .text(d => d.name)
-//            .on("click", () => {
-//                light = !light;
-//                if(light) {
-//                    d3.select("body").style("color", "black");
-//                    d3.select("body").style("background-color", "white");
-//                    svg.selectAll("text").attr("fill", "black");
-//                    svg.select("#comparision-text").attr("fill", comparision? "#ffffff" : "#000000");
-//                } else {
-//                    d3.select("body").style("color", "#bfbfbf");
-//                    d3.select("body").style("background-color", "black");
-//                    svg.selectAll("text").attr("fill", "#bfbfbf");
-//                    svg.select("#comparision-text").attr("fill", comparision? "#ffffff" : "#000000");
-//                }
-//            });
-//
-//     // Comparision button
-//     svg.append("g")
-//         .attr("class", "comparision-btn")
-//         .attr("opacity", "0")
-//         .append("rect")
-//         .attr("width", 42)
-//         .attr("height", 16)
-//         .attr("x", width + (margin.right/3) - 25)
-//         .attr("y",(dataset.length + 1/2) * legendSpace - 7)
-//         .attr("fill", greyBtn)
-//         .attr("id", "comparision-btn-left");
-//
-//     svg.append("g")
-//         .attr("class", "comparision-btn")
-//         .attr("opacity", "0")
-//         .append("rect")
-//         .attr("width", 42)
-//         .attr("height", 16)
-//         .attr("x", width + (margin.right/3) +17 )
-//         .attr("y",(dataset.length + 1/2) * legendSpace - 7)
-//         .attr("fill", greyBtn)
-//         .attr("id", "comparision-btn-right");
-//
-//     svg.append("g")
-//         .attr("class", "comparision-btn")
-//         .attr("opacity", "0")
-//         .append("text")
-//         .attr("class", "legend-box")
-//         .attr("x", width + (margin.right/3) - 10)
-//         .attr("y", (dataset.length + 1/2) * legendSpace + 4 )
-//         .text("Comparison")
-//         .attr("id", "comparision-text")
-//         .on("click", function() {
-//             comparision = !comparision;
-//             d3.select(this)
-//                 .transition()
-//                 .attr("fill", comparision? "#ffffff" : "#000000");
-//
-//             d3.select("#comparision-btn-left")
-//                 .transition()
-//                 .attr("fill", comparision? "#91bfdb" : greyBtn);
-//
-//             d3.select("#comparision-btn-right")
-//                 .transition()
-//                 .attr("fill", comparision? "#fc8d59" : greyBtn);
-//
-//             if(dataSelect.size === 2 && comparision) {
-//                 // Set to Array
-//                 dataSelectArr = Array.from(dataSelect);
-//                 // Hide the line of the first item
-//                 temp = dataSelectArr[0];
-//                 d3.select("#line-" + dataset[temp].name.replace(" ", "")).attr("display", "none");
-//
-//                 // Select date from dataset
-//                 var subdata = dataSelectArr.map( i => dataset[i]);
-//                 cmpdata = [(subdata[0].values.map((d, i) => {
-//                     return {
-//                         date: d.date,
-//                         rating0:subdata[0].values[i].rating,
-//                         rating1: subdata[1].values[i].rating
-//                     }
-//                 }))];
-//
-//                 areas = svg.selectAll(".area-group")
-//                     .data(cmpdata)
-//                     .enter(cmpdata[0])
-//                     .append("g")
-//                     .attr("clip-path", "url(#clip)")
-//                     .attr("class", "area-group");
-//                 drawComp();
-//             } else {
-//                 comparision = false;
-//                 // Show the second item
-//                 d3.select("#line-" + dataset[dataSelectArr[0]].name.replace(" ", "")).attr("display", null);
-//                 areas.remove();
-//             }
-//         });
-//
-//     //For brusher of the slider bar at the bottom
-//     function brushing() {
-//       xScale.domain(!d3.event.selection ? xScale2.domain() : d3.event.selection.map(xScale2.invert)); // If brush is empty then reset the Xscale domain to default, if not then make it the brush extent
-//       if(dataSelect.size === 2 && comparision) {
-//           reDrawComp();
-//       }
-//       reDraw();
-//     }
-//
-//     function brushended() {
-//       if( !d3.event.sourceEvent) {
-//         return; // Only transition after input;
-//       }
-//       if( !d3.event.selection) {
-//         xScale.domain(xScale2.domain());
-//       }
-//       else {
-//         var d0 = d3.event.selection.map(xScale2.invert),
-//             d1 = d0.map(d3.timeYear.round);
-//         // If empty when rounded, use floor & ceil instead.
-//         if (d1[0] >= d1[1]) {
-//           d1[0] = d3.timeYear.floor(d0[0]);
-//           d1[1] = d3.timeYear.offset(d1[0]);
-//         }
-//         d3.select(this).transition().call(d3.event.target.move, d1.map(xScale2));
-//         xScale.domain([d1[0], d1[1]]);
-//       }
-//
-//       if(dataSelect.size === 2 && comparision) {
-//           reDrawComp();
-//       }
-//       reDraw();
-//     }
-//
-//     function reDraw() {
-//         svg.select(".x.axis")
-//             .transition()
-//             .call(xAxis);
-//
-//         maxY = findMaxY(dataset);
-//         minY = findMinY(dataset);
-//         yScale.domain([minY, maxY]);
-//
-//         svg.select(".y.axis")
-//             .transition()
-//             .call(yAxis);
-//
-//         lines.select("path")
-//             .transition()
-//             .attr("d", d => d.visible ? line(d.values) : null);
-//
-//     }
-//
-//     function drawComp() {
-//
-//         areas.append("clipPath")
-//             .attr("id", "clip-above")
-//             .append("path")
-//             .transition()
-//             .attr("d", area1.y0(0));
-//
-//         areas.append("path")
-//             .attr("class", "area above")
-//             .attr("clip-path", "url(#clip-above)")
-//             .transition()
-//             .attr("d", area0.y0(height));
-//
-//         areas.append("clipPath")
-//             .attr("id", "clip-below")
-//             .append("path")
-//             .transition()
-//             .attr("d", area1.y0(height));
-//
-//         areas.append("path")
-//             .attr("class", "area below")
-//             .attr("clip-path", "url(#clip-below)")
-//             .transition()
-//             .attr("d", area0.y0(0));
-//
-//     }
-//
-//     function reDrawComp() {
-//         areas.select("#clip-above")
-//              .select("path")
-//              .transition()
-//              .attr("d", area1.y0(0));
-//
-//         areas.select(".above")
-//             .transition()
-//             .attr("d", area0.y0(height));
-//
-//         areas.select("#clip-below")
-//             .select("path")
-//             .transition()
-//             .attr("d", area1.y0(height));
-//
-//         areas.select(".below")
-//             .transition()
-//             .attr("d", area0.y0(0));
-//     }
-// }); // End of read csv file.
-//
-// function findMaxY(data) {
-//   var maxYValues = data.map( d => {
-//     if (d.visible) {
-//       return d3.max(d.values, value => value.rating) + 1;
-//     }
-//   });
-//   return d3.max(maxYValues);
-// }
-//
-// function findMinY(data) {
-//   var minYValues = data.map( d => {
-//     if (d.visible) {
-//       return d3.min(d.values, value => value.rating) - 1;
-//     }
-//   });
-//   return d3.min(minYValues);
-// }
+function findMinY(data) {
+  var minYValues = data.map( d => {
+    if (d.visible) {
+      return d3.min(d.values, value => value.value) - 1;
+    }
+  });
+  return d3.min(minYValues);
+}
