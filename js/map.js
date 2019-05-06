@@ -81,7 +81,8 @@ L.geoJson(districts).addTo(map);
 
 // click dot show sensorRoute
 function showSensorRoute(){
-  let sensorId = event.target.id;
+  let targetText = event.target.id;
+  sensorId = targetText.split('-')[1];
   drawSensorRoute(sensorId);
 }
 
@@ -99,12 +100,12 @@ function drawSensorRoute(sensorId){
   sensorRouteDay3 = sensorRoute[sensorId]['08']['location'];
   sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
   sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
-  var marker = L.Marker.movingMarker(route, 1000);
-  L.polyline(sensorRouteDay1, {color: '#CC0000'}).addTo(map);
-  L.polyline(sensorRouteDay2, {color: '#FF3300'}).addTo(map);
-  L.polyline(sensorRouteDay3, {color: '#330033'}).addTo(map);
-  L.polyline(sensorRouteDay4, {color: '#33CCCC'}).addTo(map);
-  L.polyline(sensorRouteDay5, {color: '#0000CC'}).addTo(map);
+  var marker = L.Marker.movingMarker(route, 10000);
+  var sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'}).addTo(map);
+  var sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'}).addTo(map);
+  var sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'}).addTo(map);
+  var sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC'}).addTo(map);
+  var sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC'}).addTo(map);
   // map.fitBounds(route);
   var taxiIcon = L.icon({
     iconUrl:'data/Icon/car_sensor.svg',
@@ -127,10 +128,8 @@ function drawSensorRoute(sensorId){
       }, 0);
   });
   marker.options.icon = taxiIcon;
-  // marker.bindPopup('<b>sensorId-1</b>', {closeOnClick: false});
   marker.openPopup('<b>sensor-'+sensorId+'</b>');
   map.addLayer(marker);
-
 }
 
 
@@ -162,8 +161,7 @@ function resetHighlight(e) {
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: showSensorRoute
+        mouseout: resetHighlight
     });
 }
 
