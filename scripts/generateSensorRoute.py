@@ -2,15 +2,14 @@ import csv
 import json
 file_path = 'C:/Users/TIM58/Documents/GitHub/VAST_Mini_Challenge_Two/data/SortbySenid/'
 
-
+date = ['06', '07', '08', '09', '10']
 def create_dict():
     new_dict = {}
-    date = ['06', '07', '08', '09', '10']
     for i in range(1, 51):
         new_dict[i] = {}
         for day in date:
             new_dict[i][day] = {}
-            new_dict[i][day]['location'] = []
+            new_dict[i][day]['location'] = [0] * 12
     return new_dict
 
 
@@ -22,12 +21,30 @@ def add_dict_data(sensorId):
     csv_output_path = file_path + file_output_name
     with open(csv_output_path, 'r') as csv_reader:
         rows = csv.reader(csv_reader)
+        i = 0
         for row in rows:
+            loc = [0]*2
             day = row[0]
             lat = row[2]
             long = row[3]
-            loc = '[' + lat + ',' + long + ']'
-            my_dict[sensorId][day]["location"].append(loc)
+            loc[0] = float(lat)
+            loc[1] = float(long)
+            my_dict[sensorId][day]["location"][i] = loc
+            i += 1
+            if i == 12:
+                i = 0
+
+
+def check_dict():
+    deleK = 0
+    for sensorId in range(1, 51):
+        for day in date:
+            loc_array = my_dict[sensorId][day]["location"]
+            array_fliter = filter(lambda x: x != deleK, loc_array)
+            new_loc_array = [i for i in array_fliter]
+            my_dict[sensorId][day]["location"] = new_loc_array
+            if len(my_dict[sensorId][day]["location"]) < 1:
+                print(sensorId, day)
 
 
 def convert2json():
@@ -68,6 +85,7 @@ def reader(sensorId):
 def main():
     for i in range(1, 51):
         add_dict_data(i)
+    check_dict()
     convert2json()
 
 
