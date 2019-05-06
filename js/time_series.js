@@ -1,13 +1,13 @@
 
 
 // Set the dimensions of the canvas / graph
-const margin = {top: 80, right: 90, bottom: 150, left: 80},
-    width = 900 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+const margin = {top: 20, right: 120, bottom: 150, left: 50},
+    width = 700 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
 // Set the dimensions of zoom area
-const marginZoom = {top:500, right:90, bottom:30,left:80},
-    heightZoom = 600 - marginZoom.top - marginZoom.bottom;
+const marginZoom = {top:80, right:90, bottom:30,left:80},
+    heightZoom = 150 - marginZoom.top - marginZoom.bottom;
 
 // Add svg canvas to the body of the page
 const svg = d3.select("body")
@@ -49,8 +49,8 @@ const xZoom = d3.scaleTime().range([0, width]);
 const yZoom = d3.scaleLinear().range([heightZoom, 0]);
 
 // Define the axes
-const xAxis = d3.axisBottom(x).ticks(6);
-const yAxis = d3.axisLeft(y).ticks(8);
+const xAxis = d3.axisBottom(x).tickSize(-height);
+const yAxis = d3.axisLeft(y).tickSize(-width);
 // Define zoomed x axes
 
 const xAxisZoom = d3.axisBottom(xZoom);
@@ -72,7 +72,7 @@ var focus = svg.append("g")
 // add zoomed area
 var context = svg.append("g")// brushing context box container
     .attr("class", "context")
-    .attr("transform", "translate(" + marginZoom.left + "," + marginZoom.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 30) + ")");
 
 //  add clip path for lines plotted, hiding those part out of bounds
 svg.append("defs").append("clipPath")
@@ -99,7 +99,7 @@ d3.csv("data/newfile.csv").then(function(data) {
         d.Value = +d.Value;
     });
 
-    draw_line(data.filter(d=>d.Value <100));
+    draw_line(data.filter(d=>d.Value));
 });
 
 // ========end test==========
@@ -154,21 +154,6 @@ function draw_line(data){
     // draw main graph and lines; mouseover and mouseout effect
     focus.selectAll(".line").data(newData).enter().append("path")
         .attr("class", "line")
-        // =======
-        //
-        //     // add clip path
-        //     svg.append("defs").append("clipPath")
-        //         .attr("id", "clip")
-        //         .append("rect")
-        //         .attr("width", width)
-        //         .attr("height", height);
-        // // .attr("x", 0)
-        // // .attr("y", 0);
-        //
-        //     // draw main graph and lines; mouseover and mouseout effect
-        //     focus.selectAll(".mobile.line").data(newData).enter().append("path")
-        //         .attr("class", "mobile line")
-        // >>>>>>> 2996e5cf4e944a7409a4f43cf5f94bcb2ba05562
         .attr("d", function (d) {
             return valueline(d.values)
         })
@@ -210,7 +195,7 @@ function draw_line(data){
                 .duration(500)
                 .style("opacity", 0)
         });
-
+debugger
     focus.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
@@ -219,31 +204,6 @@ function draw_line(data){
     focus.append("g")
         .attr("class", "y axis")
         .call(yAxis);
-
-    // draw zoomed area and lines
-// <<<<<<< HEAD
-    // context.selectAll(".mobile.line").data(newData).enter().append("path")
-    //     // .attr("class", "mobile line")
-    //     .attr("d", function (d) {
-    //         return valuelineZoom(d.values)
-    //     })
-    //     .style("stroke", function (d) {
-    //         return d.color = color(d.key);
-    //     })
-    //     .attr("id", function(d){return 'tag1' + d.key.replace(/\s+/g, '')}) //id for click effect
-    //     .attr("clip-path", "url(#clip)");
-// =======
-//     context.selectAll(".mobile.line").data(newData).enter().append("path")
-//         // .attr("class", "mobile line")
-//         .attr("d", function (d) {
-//             return valuelineZoom(d.values)
-//         })
-//         .style("stroke", function (d) {
-//             return d.color = color(d.key);
-//         })
-//         .attr("id", function(d){return 'tag1' + d.key.replace(/\s+/g, '')}) //id for click effect
-//         .attr("clip-path", "url(#clip)");
-// >>>>>>> 2996e5cf4e944a7409a4f43cf5f94bcb2ba05562
 
     context.append("g")
         .attr("class", "axis axis--x")
@@ -262,9 +222,6 @@ function draw_line(data){
         .attr("y", -6)
         .attr("height", heightZoom + 7  );
 
-
-
-
     debugger
 //======================= Add legend and mouse click effect =============================
     //spacing for the legend
@@ -273,7 +230,7 @@ function draw_line(data){
 
     newData.forEach(function(d, i) {
         svg.append("text")
-            .attr("x", width + margin.right + margin.left/ 2)
+            .attr("x", width + margin.right )
             // .attr("x", (legengendSpace / 2) + i * legendSpace) // spacing
             // .attr("y", (height + (margin.bottom / 2) + 15)
             .attr("y", ((legendSpace + margin.top)/ 2) + i * legendSpace)
@@ -301,27 +258,29 @@ function draw_line(data){
 
 //====================== Draw x, y labels ===================
     // draw the title of the chart
-    svg.append("text")
-        .attr("x", (width / 2))
-        .attr("y", (margin.top / 2))
-        .attr("text-anchor", "middle")
-        .style("font-size", "20px");
+    // svg.append("text")
+    //     .attr("x", (width / 2))
+    //     .attr("y", (margin.top / 2))
+    //     .attr("text-anchor", "middle")
+    //     .style("font-size", "20px");
     // .style("text-decoration","underline")
     // .text("Birth Rate for Females by Age Group: United States");
 
     // label for x axis
     svg.append("text")
-        .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 30) + ")")
+        .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top+ 20 ) + ")")
         .style("text-anchor", "middle")
+        .style("font-size",10)
         .text("Time");
 
     // label for y axis
     svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", margin.left - 50)
+        .attr("y", margin.left - 40)
         .attr("x", 0 - ((height+ heightZoom) / 2))
         .attr("dy", ".8em")
         .style("text-anchor", "end")
+        .style("font-size",10)
         .text("Value");
 
 }
