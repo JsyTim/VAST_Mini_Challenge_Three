@@ -86,6 +86,13 @@ function showSensorRoute(){
   drawSensorRoute(sensorId);
 }
 
+var sensorR1;
+var sensorR2;
+var sensorR3;
+var sensorR4;
+var sensorR5;
+var markerLayer;
+var marker;
 //add sensor route
 function drawSensorRoute(sensorId){
   // var sensorId = 4
@@ -100,12 +107,12 @@ function drawSensorRoute(sensorId){
   sensorRouteDay3 = sensorRoute[sensorId]['08']['location'];
   sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
   sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
-  var marker = L.Marker.movingMarker(route, 10000);
-  var sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'}).addTo(map);
-  var sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'}).addTo(map);
-  var sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'}).addTo(map);
-  var sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC'}).addTo(map);
-  var sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC'}).addTo(map);
+  marker = L.Marker.movingMarker(route, 10000);
+  sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'}).addTo(map);
+  sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'}).addTo(map);
+  sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'}).addTo(map);
+  sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC'}).addTo(map);
+  sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC'}).addTo(map);
   // map.fitBounds(route);
   var taxiIcon = L.icon({
     iconUrl:'data/Icon/car_sensor.svg',
@@ -129,7 +136,19 @@ function drawSensorRoute(sensorId){
   });
   marker.options.icon = taxiIcon;
   marker.openPopup('<b>sensor-'+sensorId+'</b>');
-  map.addLayer(marker);
+  markerLayer = map.addLayer(marker);
+}
+
+function removeRoute(){
+  // map.Layer(function (layer) {
+  //   map.removeLayer(layer)
+  // });
+  map.removeLayer(sensorR1);
+  map.removeLayer(sensorR2);
+  map.removeLayer(sensorR3);
+  map.removeLayer(sensorR4);
+  map.removeLayer(sensorR5);
+  map.removeLayer(marker);
 }
 
 
@@ -161,7 +180,8 @@ function resetHighlight(e) {
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
-        mouseout: resetHighlight
+        mouseout: resetHighlight,
+        click: removeRoute
     });
 }
 
