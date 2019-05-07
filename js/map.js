@@ -1,10 +1,10 @@
 //Initialize a map inside a div called map
 var map = L.map('map',{
   zoomControl: false,
-  scrollWheelZoom: false,
-  dragging: false,
+  // scrollWheelZoom: false,
+  // dragging: false,
   attributionControl: false,
-  doubleClickZoom: false
+  // doubleClickZoom: false
 }).setView([0.11, -119.845], 11.8);
 
 //
@@ -79,6 +79,79 @@ function style(feature, color) {
 
 L.geoJson(districts).addTo(map);
 
+// click dot show sensorRoute
+function showSensorRoute(){
+  let targetText = event.target.id;
+  sensorId = targetText.split('-')[1];
+  drawSensorRoute(sensorId);
+}
+
+var sensorR1;
+var sensorR2;
+var sensorR3;
+var sensorR4;
+var sensorR5;
+var markerLayer;
+var marker;
+//add sensor route
+function drawSensorRoute(sensorId){
+  // var sensorId = 4
+  date = ['06', '07', '08', '09', '10'];
+  route = [];
+  for(i = 0; i < date.length; i++){
+      day = date[i];
+      route = route.concat(sensorRoute[sensorId][day]['location']);
+  }
+  sensorRouteDay1 = sensorRoute[sensorId]['06']['location'];
+  sensorRouteDay2 = sensorRoute[sensorId]['07']['location'];
+  sensorRouteDay3 = sensorRoute[sensorId]['08']['location'];
+  sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
+  sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
+  marker = L.Marker.movingMarker(route, 10000);
+  sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'}).addTo(map);
+  sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'}).addTo(map);
+  sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'}).addTo(map);
+  sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC'}).addTo(map);
+  sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC'}).addTo(map);
+  // map.fitBounds(route);
+  var taxiIcon = L.icon({
+    iconUrl:'data/Icon/car_sensor.svg',
+    iconSize: [15, 30], // size of the icon
+    popupAnchor: [0, -5]
+  });
+  marker.once('click', function () {
+      marker.start();
+      marker.closePopup();
+      marker.unbindPopup();
+      marker.on('click', function() {
+          if (marker.isRunning()) {
+              marker.pause();
+          } else {
+              marker.start();
+          }
+      });
+      setTimeout(function() {
+          marker.bindPopup('<b>sensor-'+sensorId+'</b>').openPopup();
+      }, 0);
+  });
+  marker.options.icon = taxiIcon;
+  marker.openPopup('<b>sensor-'+sensorId+'</b>');
+  markerLayer = map.addLayer(marker);
+}
+
+function removeRoute(){
+  // map.Layer(function (layer) {
+  //   map.removeLayer(layer)
+  // });
+  map.removeLayer(sensorR1);
+  map.removeLayer(sensorR2);
+  map.removeLayer(sensorR3);
+  map.removeLayer(sensorR4);
+  map.removeLayer(sensorR5);
+  map.removeLayer(marker);
+}
+
+
 function highlightFeature(e) {
     var layer = e.target;
     //on hover change color from what was defined in function style(feature)
@@ -107,7 +180,8 @@ function resetHighlight(e) {
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
-        mouseout: resetHighlight
+        mouseout: resetHighlight,
+        click: removeRoute
     });
 }
 
@@ -118,7 +192,6 @@ var geojson = L.geoJson(districts, {
 
 
 // add region_Name label
-//
 // location of different regions
 var regionList = [[0.18, -119.97], [0.185, -119.928], [0.193, -119.87], [0.18, -119.81],  [0.12, -119.93], [0.153, -119.925], [0.11, -119.727], [0.045, -119.755], [0.058, -119.845], [0.055, -119.79], [0.075, -119.769], [0.12, -119.76], [0.115, -119.805], [0.16, -119.869], [0.16, -119.895], [0.132, -119.895], [0.09, -119.842], [0.13, -119.84], [0.13, -119.87]];
 
@@ -155,9 +228,3 @@ var radiationIcon = L.icon({
 });
 var nuclear = L.marker([0.162679, -119.784825], {icon: radiationIcon}).addTo(map).bindPopup('<b>The Always Safe Nuclear plant.</b>');
 map.addLayer(nuclear);
-
-//add sensor route
-console.log(sensorRoute.length)
-// for(i = 0; i < sensorRoute.length; i++){
-
-// }
