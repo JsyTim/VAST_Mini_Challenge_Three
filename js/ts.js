@@ -36,14 +36,14 @@ var line = d3.line()
     .curve(d3.curveMonotoneX)
     .defined(d => !isNaN(d.value));// Hiding line value for missing data
 
-var svg = d3.select("#timeSeries").append("svg")
+var svgTs = d3.select("#timeSeries").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // Create invisible rect for mouse tracking
-svg.append("rect")
+svgTs.append("rect")
    .attr("width", width)
    .attr("height", height)
    .attr("x", 0)
@@ -52,12 +52,12 @@ svg.append("rect")
    .style("fill", "none");
 
 // --------------------------For slider part--------------------------
-var context = svg.append("g")
+var context = svgTs.append("g")
                  .attr("class", "context")
                  .attr("transform", "translate(" + 0 + "," + 410 + ")");
 
 // Append clip path for lines plotted, hiding those part out of bounds
-svg.append("defs")
+svgTs.append("defs")
    .append("clipPath")
    .attr("id", "clip")
    .append("rect")
@@ -141,9 +141,14 @@ Promise.all( filelist ).then( data => {
   // console.log(data[0][0]);
   var region = 1;
   // Use region 1 as an example
-  var sensorList = Object.keys(data[region-1][0]).slice(1);
-  // console.log(sensorList);
+  // console.log(data[region-1]);
+  drawTimeSeries(data[region-1]);
 
+});
+function drawTimeSeries(regionData){
+  // console.log(dataset);
+  // svgTs.selectALL("*").remove();
+  var sensorList = Object.keys(regionData[0]).slice(1);
   var mobileList = sensorList.filter(d => d.split("-")[0] === "mobile")
                              .sort((a,b) => {
                                var x = +a.split("-")[1],
@@ -159,13 +164,12 @@ Promise.all( filelist ).then( data => {
     });
   }
 
-
   var updateList = mobileList.concat(staticList);
 
   var dataset = updateList.map(d => {
     return {
       name: d,
-      values: data[region].map( i => {
+      values: regionData.map( i => {
         return {
           time:parseTime(i["Timestamp"]),
           value:+i[d]
@@ -174,7 +178,6 @@ Promise.all( filelist ).then( data => {
       visible:true
     }
   });
-  // console.log(dataset);
 
   var greyBtn = "#d7d7d7";
 
@@ -185,7 +188,7 @@ Promise.all( filelist ).then( data => {
   // console.log(yMin);
   // console.log(yMax);
 
-  xScale.domain(d3.extent(data[region].map(d => parseTime(d["Timestamp"]))));
+  xScale.domain(d3.extent(regionData.map(d => parseTime(d["Timestamp"]))));
   yScale.domain([yMin, yMax+100]);
   // Setting a duplicate xdomain for burshing reference
   xScale2.domain(xScale.domain());
@@ -212,16 +215,16 @@ Promise.all( filelist ).then( data => {
 // --------------------------End slider part--------------------------
 
   //Draw line graph
-  svg.append("g")
+  svgTs.append("g")
      .attr("class", "x axis")
      .attr("transform", "translate(0," + height + ")")
      .call(xAxis);
 
-  svg.append("g")
+  svgTs.append("g")
      .attr("class", "y axis")
      .call(yAxis);
 
-  svg.append("g")
+  svgTs.append("g")
      .append("text")
      .attr("y", -18)
      .attr("x", -4)
@@ -231,7 +234,7 @@ Promise.all( filelist ).then( data => {
      .attr("fill", "#000000");
 
 // Draw focus
- var focus = svg.append("g")
+ var focus = svgTs.append("g")
        .attr("class", "circle")
        .style("display", "none")
        .attr("pointer-events", "none");
@@ -244,8 +247,9 @@ Promise.all( filelist ).then( data => {
      .style("display", "none")
      .attr("class", "tooltip")
 
+
 // Draw Line
- var lines = svg.selectAll(".line-group")
+ var lines = svgTs.selectAll(".line-group")
      .data(dataset)
      .enter()
      .append("g")
@@ -292,7 +296,7 @@ Promise.all( filelist ).then( data => {
 
  // Draw legend
  var legendSpace = height/(dataset.length + 1);
- var legend = svg.selectAll('.legend')
+ var legend = svgTs.selectAll('.legend')
      .data(dataset)
      .enter()
      .append("g")
@@ -313,7 +317,7 @@ Promise.all( filelist ).then( data => {
          maxY = findMaxY(dataset) + 100;
          minY = findMinY(dataset);
          yScale.domain([minY, maxY]);
-         svg.select(".y.axis")
+         svgTs.select(".y.axis")
              .transition()
              .call(yAxis);
 
@@ -370,7 +374,7 @@ Promise.all( filelist ).then( data => {
    }
 
    function reDraw() {
-       svg.select(".x.axis")
+       svgTs.select(".x.axis")
            .transition()
            .call(xAxis);
 
@@ -378,7 +382,7 @@ Promise.all( filelist ).then( data => {
        minY = findMinY(dataset);
        yScale.domain([minY, maxY]);
 
-       svg.select(".y.axis")
+       svgTs.select(".y.axis")
            .transition()
            .call(yAxis);
 
@@ -388,7 +392,7 @@ Promise.all( filelist ).then( data => {
 
    }
 
-});
+}
 
 function getColor(name){
   var sensor = name.split("-");
