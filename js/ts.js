@@ -15,6 +15,7 @@ var tsxScale = d3.scaleTime().range([0, tsWidth]),
     tsxScale2 = d3.scaleTime().range([0, tsWidth]),
     tsxScale3 = d3.scaleTime().range([0, tsWidth]),
     tsyScale = d3.scaleLinear().range([tsHeight, 0]);
+    // tsyScale = d3.scaleSymlog().range([tsHeight, 0]);
 
 // Define the axes
 var tsxAxis = d3.axisBottom(tsxScale)
@@ -112,11 +113,11 @@ var color = d3.scaleOrdinal().range(colorScheme);
 //   var tsfilename = "data/AggRegid/Region" + i + ".csv";
 //   tsfilelist.push(d3.csv(tsfilename));
 // }
-
-// Read data from csv file and preprocess it
+//
+// // Read data from csv file and preprocess it
 // Promise.all( tsfilelist ).then( tsfiles => {
 //   // console.log(data[0][0]);
-//   var region = 1;
+//   var region = 6;
 //   // Use region 1 as an example
 //   // console.log(data[region-1]);
 //   drawTimeSeries(tsfiles[region-1]);
@@ -161,7 +162,7 @@ function drawTimeSeries(regionData){
 
   //yMin, yMax
   var yMin = d3.min(dataset, d => d3.min(d.values, v => v.value)),
-      yMax = d3.max(dataset, d => d3.max(d.values, v => v.value));
+      yMax = d3.max(dataset, d => d3.max(d.values, v => v.value)) + 100;
 
   // console.log(yMin);
   // console.log(yMax);
@@ -193,9 +194,7 @@ function drawTimeSeries(regionData){
      .append("rect")
      .attr("width", tsWidth)
      .attr("height", tsHeight);
-  // --------------------------End slider part--------------------------
 
-  // --------------------------For slider part--------------------------
   var brush = d3.brushX()
                 .extent([[0,0], [tsWidth, tsHeight2]])
                 .on("brush", brushing)
@@ -243,10 +242,10 @@ function drawTimeSeries(regionData){
        .attr("r", 3);
 
 // create a tooltip
- var Tooltip = d3.select("#timeSeries")
+ var tooltip = d3.select("#timeSeries")
      .append("div")
      .style("display", "none")
-     .attr("class", "tooltip")
+     .attr("class", "tstooltip")
 
 
 // Draw Line
@@ -277,11 +276,12 @@ function drawTimeSeries(regionData){
           focus.selectAll("circle")
               .attr("fill", getColorTs(d.name));
 
+          // console.log(d.values[i].time);
           // Show tooltip
-          Tooltip.style("display", null)
-              .html( "<strong>" + d.name + "</strong>" + "<br>"
-                  + " CPM valus is  " + "<strong>" + d.values[i].time.getHours() + "</strong> :" + "<br>"
-                  + "<strong>" + d.values[i].value.toFixed(2) +  "</strong>" )
+          tooltip.style("display", null)
+              .html( "Sensor: " + d.name + "<br>"
+                  +  "Time  : " + d.values[i].time.toLocaleString() + "<br>"
+                  +  "Value : " + d.values[i].value.toFixed(2) +  " (CPM)" )
               .style("left", (d3.mouse(this)[0]+70) + "px")
               .style("top", (d3.mouse(this)[1]) + "px");
        })
@@ -292,7 +292,7 @@ function drawTimeSeries(regionData){
           focus.style("display", "none");
 
           // Hide tooltip
-          Tooltip.style("display", "none")
+          tooltip.style("display", "none")
        });
 
  // Draw legend
@@ -316,8 +316,8 @@ function drawTimeSeries(regionData){
 
          //Update axis
          maxY = findMaxY(dataset) + 100;
-         minY = findMinY(dataset);
-         tsyScale.domain([minY, maxY]);
+         minY = findMinY(dataset) + 5;
+         tsyScale.domain([minY, maxY]).nice();
          svgTs.select(".y.axis")
              .transition()
              .call(tsyAxis);
@@ -379,9 +379,9 @@ function drawTimeSeries(regionData){
            .transition()
            .call(tsxAxis);
 
-       maxY = findMaxY(dataset);
+       maxY = findMaxY(dataset) + 100;
        minY = findMinY(dataset);
-       tsyScale.domain([minY, maxY]);
+       tsyScale.domain([minY, maxY]).nice();
 
        svgTs.select(".y.axis")
            .transition()
