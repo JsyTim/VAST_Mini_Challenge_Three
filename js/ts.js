@@ -1,51 +1,51 @@
 //This javascript is using D3.V5 library
 
 // Width and height, height2 is for slider
-var margin = {top:20, right:120, bottom: 80, left: 50},
-    margin2 = {top: 430, right: 10, bottom: 20, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 480 - margin.top - margin.bottom,
-    height2 = 480 - margin2.top - margin2.bottom;
+var tsMargin = {top:20, right:120, bottom: 80, left: 50},
+    tsMargin2 = {top: 430, right: 10, bottom: 20, left: 40},
+    tsWidth = 960 - tsMargin.left - tsMargin.right,
+    tsHeight = 480 - tsMargin.top - tsMargin.bottom,
+    tsHeight2 = 480 - tsMargin2.top - tsMargin2.bottom;
 
-var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
-    bisectDate = d3.bisector( d => d.date).left;
+var tsParseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
+    bisectDate = d3.bisector( d => d.time).left;
 
 // Set up scales
-var xScale = d3.scaleTime().range([0, width]),
-    xScale2 = d3.scaleTime().range([0, width]),
-    xScale3 = d3.scaleTime().range([0, width]),
-    yScale = d3.scaleLinear().range([height, 0]);
+var tsxScale = d3.scaleTime().range([0, tsWidth]),
+    tsxScale2 = d3.scaleTime().range([0, tsWidth]),
+    tsxScale3 = d3.scaleTime().range([0, tsWidth]),
+    tsyScale = d3.scaleLinear().range([tsHeight, 0]);
 
 // Define the axes
-var xAxis = d3.axisBottom(xScale)
-              .tickSize(-height),
-    xAxis2 = d3.axisBottom(xScale2)
+var tsxAxis = d3.axisBottom(tsxScale)
+              .tickSize(-tsHeight),
+    tsxAxis2 = d3.axisBottom(tsxScale2)
                .ticks(d3.timeHour.every(12)),
-    xAxis3 = d3.axisBottom(xScale3)
+    tsxAxis3 = d3.axisBottom(tsxScale3)
                .ticks(d3.timeHour.every(2))
-               .tickSize(-height2)
+               .tickSize(-tsHeight2)
                .tickFormat( () => null ),
-    yAxis = d3.axisLeft(yScale)
-              .tickSize(-width)
+    tsyAxis = d3.axisLeft(tsyScale)
+              .tickSize(-tsWidth)
               .tickFormat(d3.format(".2f"));
 
 // Define the line
 var line = d3.line()
-    .x(d => xScale(d.time))
-    .y(d => yScale(d.value))
-    .curve(d3.curveMonotoneX)
+    .x(d => tsxScale(d.time))
+    .y(d => tsyScale(d.value))
+    .curve(d3.curveLinear)
     .defined(d => !isNaN(d.value));// Hiding line value for missing data
 
 var svgTs = d3.select("#timeSeries").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("width", tsWidth + tsMargin.left + tsMargin.right)
+            .attr("height", tsHeight + tsMargin.top + tsMargin.bottom)
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + tsMargin.left + "," + tsMargin.top + ")");
 
 // Create invisible rect for mouse tracking
 svgTs.append("rect")
-   .attr("width", width)
-   .attr("height", height)
+   .attr("width", tsWidth)
+   .attr("height", tsHeight)
    .attr("x", 0)
    .attr("y", 0)
    .attr("id", "mouse-tracker")
@@ -61,8 +61,8 @@ svgTs.append("defs")
    .append("clipPath")
    .attr("id", "clip")
    .append("rect")
-   .attr("width", width)
-   .attr("height", height);
+   .attr("width", tsWidth)
+   .attr("height", tsHeight);
 // --------------------------End slider part--------------------------
 
 // 59 Custom colors, 50 mobile, 9 static
@@ -129,25 +129,26 @@ colorScheme =
 ]
 var color = d3.scaleOrdinal().range(colorScheme);
 
-var filelist = [];
-for ( i = 1; i < 20; i ++ )
-{
-  var filename = "data/AggRegid/Region" + i + ".csv";
-  filelist.push(d3.csv(filename));
-}
+// var tsfilelist = [];
+// for ( i = 1; i < 20; i ++ )
+// {
+//   var tsfilename = "data/AggRegid/Region" + i + ".csv";
+//   tsfilelist.push(d3.csv(tsfilename));
+// }
 
 // Read data from csv file and preprocess it
-Promise.all( filelist ).then( data => {
+Promise.all( tsfilelist ).then( tsfiles => {
   // console.log(data[0][0]);
   var region = 1;
   // Use region 1 as an example
   // console.log(data[region-1]);
-  drawTimeSeries(data[region-1]);
+  drawTimeSeries(tsfiles[region-1]);
 
 });
+
 function drawTimeSeries(regionData){
   // console.log(dataset);
-  // svgTs.selectALL("*").remove();
+  svgTs.selectALL("*").remove();
   var sensorList = Object.keys(regionData[0]).slice(1);
   var mobileList = sensorList.filter(d => d.split("-")[0] === "mobile")
                              .sort((a,b) => {
@@ -171,7 +172,7 @@ function drawTimeSeries(regionData){
       name: d,
       values: regionData.map( i => {
         return {
-          time:parseTime(i["Timestamp"]),
+          time:tsParseTime(i["Timestamp"]),
           value:+i[d]
         }
       }),
@@ -188,27 +189,27 @@ function drawTimeSeries(regionData){
   // console.log(yMin);
   // console.log(yMax);
 
-  xScale.domain(d3.extent(regionData.map(d => parseTime(d["Timestamp"]))));
-  yScale.domain([yMin, yMax+100]);
+  tsxScale.domain(d3.extent(regionData.map(d => tsParseTime(d["Timestamp"]))));
+  tsyScale.domain([yMin, yMax]);
   // Setting a duplicate xdomain for burshing reference
-  xScale2.domain(xScale.domain());
-  xScale3.domain(xScale.domain());
+  tsxScale2.domain(tsxScale.domain());
+  tsxScale3.domain(tsxScale.domain());
 
   // --------------------------For slider part--------------------------
   var brush = d3.brushX()
-                .extent([[0,0], [width, height2]])
+                .extent([[0,0], [tsWidth, tsHeight2]])
                 .on("brush", brushing)
                 .on("end", brushended);
 
-  // Create brushing xAxis
+  // Create brushing tsxAxis
   context.append("g")
       .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height2 + ")")
-      .call(xAxis2);
+      .attr("transform", "translate(0," + tsHeight2 + ")")
+      .call(tsxAxis2);
   context.append("g")
       .attr("class", "axis axis--grid")
-      .attr("transform", "translate(0," + height2 + ")")
-      .call(xAxis3);
+      .attr("transform", "translate(0," + tsHeight2 + ")")
+      .call(tsxAxis3);
   context.append("g")
          .attr("class", "brush")
          .call(brush);
@@ -217,12 +218,12 @@ function drawTimeSeries(regionData){
   //Draw line graph
   svgTs.append("g")
      .attr("class", "x axis")
-     .attr("transform", "translate(0," + height + ")")
-     .call(xAxis);
+     .attr("transform", "translate(0," + tsHeight + ")")
+     .call(tsxAxis);
 
   svgTs.append("g")
      .attr("class", "y axis")
-     .call(yAxis);
+     .call(tsyAxis);
 
   svgTs.append("g")
      .append("text")
@@ -239,7 +240,7 @@ function drawTimeSeries(regionData){
        .style("display", "none")
        .attr("pointer-events", "none");
  focus.append("circle")
-       .attr("r", 2);
+       .attr("r", 3);
 
 // create a tooltip
  var Tooltip = d3.select("#timeSeries")
@@ -260,21 +261,21 @@ function drawTimeSeries(regionData){
  lines.append("path")
      .attr("class", "line")
      .attr("d", d => d.visible? line(d.values) : null)
-     .style("stroke", d => getColor(d.name))
+     .style("stroke", d => getColorTs(d.name))
      .on("mouseover", function(d) {
           d3.selectAll('.line').style("opacity", 0.2);
-          d3.select(this).style("opacity", 1).style("stroke-width", "2.5px");
+          d3.select(this).style("opacity", 1).style("stroke-width", "2px");
           d3.selectAll(".legend").style("opacity", 0.2);
           d3.select("#leg-" + d.name).style("opacity", 1);
 
           // Show circle
-          var x0 = xScale.invert(d3.mouse(this)[0]),
-              x1 = d3.timeHour.round(x0),
+          var x0 = tsxScale.invert(d3.mouse(this)[0]),
+              x1 = d3.timeMinute.every(10).round(x0),
               i = bisectDate(d.values, x1);
-          focus.attr("transform", "translate(" + xScale(x1) + "," + yScale(d.values[i].value) + ")"); // Find position
+          focus.attr("transform", "translate(" + tsxScale(x1) + "," + tsyScale(d.values[i].value) + ")"); // Find position
           focus.style("display", null);
           focus.selectAll("circle")
-              .attr("fill", getColor(d.name));
+              .attr("fill", getColorTs(d.name));
 
           // Show tooltip
           Tooltip.style("display", null)
@@ -295,7 +296,7 @@ function drawTimeSeries(regionData){
        });
 
  // Draw legend
- var legendSpace = height/(dataset.length + 1);
+ var legendSpace = tsHeight/(dataset.length + 1);
  var legend = svgTs.selectAll('.legend')
      .data(dataset)
      .enter()
@@ -306,9 +307,9 @@ function drawTimeSeries(regionData){
   legend.append("rect")
      .attr("width", 10)
      .attr("height", 10)
-     .attr("x", width + (margin.right/3) - 25)
+     .attr("x", tsWidth + (tsMargin.right/3) - 25)
      .attr("y", (d, i) => (i + 1) * legendSpace - 4)
-     .attr("fill", d => d.visible? getColor(d.name) : greyBtn)
+     .attr("fill", d => d.visible? getColorTs(d.name) : greyBtn)
      .attr("class", "legend-box")
      .on("click", (d, i) => {
          d.visible = ! d.visible;
@@ -316,10 +317,10 @@ function drawTimeSeries(regionData){
          //Update axis
          maxY = findMaxY(dataset) + 100;
          minY = findMinY(dataset);
-         yScale.domain([minY, maxY]);
+         tsyScale.domain([minY, maxY]);
          svgTs.select(".y.axis")
              .transition()
-             .call(yAxis);
+             .call(tsyAxis);
 
          // Update graph
          lines.select("path")
@@ -327,28 +328,28 @@ function drawTimeSeries(regionData){
              .attr("d", d=> d.visible? line(d.values) : null);
          legend.select("rect")
              .transition()
-             .attr("fill", d => d.visible? getColor(d.name) : greyBtn);
+             .attr("fill", d => d.visible? getColorTs(d.name) : greyBtn);
         })
      .on("mouseover", function(d) {
          d3.select(this)
              .transition()
-            .attr("fill", d =>getColor(d.name));
+            .attr("fill", d =>getColorTs(d.name));
         })
         .on("mouseout", function(d) {
           d3.select(this)
             .transition()
-            .attr("fill", d => d.visible? getColor(d.name) : greyBtn);
+            .attr("fill", d => d.visible? getColorTs(d.name) : greyBtn);
         });
 
   legend.append("text")
-     .attr("x", width + (margin.right/3) + 20)
+     .attr("x", tsWidth + (tsMargin.right/3) + 20)
      .attr("y", (d, i) => (i + 1) * legendSpace + 4 )
      .attr("fill", "#5d5d5d")
      .text(d => d.name);
 
  //For brusher of the slider bar at the bottom
    function brushing() {
-     xScale.domain(!d3.event.selection ? xScale2.domain() : d3.event.selection.map(xScale2.invert)); // If brush is empty then reset the Xscale domain to default, if not then make it the brush extent
+     tsxScale.domain(!d3.event.selection ? tsxScale2.domain() : d3.event.selection.map(tsxScale2.invert)); // If brush is empty then reset the tsxScale domain to default, if not then make it the brush extent
      reDraw();
    }
 
@@ -357,18 +358,18 @@ function drawTimeSeries(regionData){
        return; // Only transition after input;
      }
      if( !d3.event.selection) {
-       xScale.domain(xScale2.domain());
+       tsxScale.domain(tsxScale2.domain());
      }
      else {
-       var d0 = d3.event.selection.map(xScale2.invert),
+       var d0 = d3.event.selection.map(tsxScale2.invert),
            d1 = d0.map(d3.timeHour.round);
        // If empty when rounded, use floor & ceil instead.
        if (d1[0] >= d1[1]) {
          d1[0] = d3.timeHour.floor(d0[0]);
          d1[1] = d3.timeHour.offset(d1[0]);
        }
-       d3.select(this).transition().call(d3.event.target.move, d1.map(xScale2));
-       xScale.domain([d1[0], d1[1]]);
+       d3.select(this).transition().call(d3.event.target.move, d1.map(tsxScale2));
+       tsxScale.domain([d1[0], d1[1]]);
      }
      reDraw();
    }
@@ -376,15 +377,15 @@ function drawTimeSeries(regionData){
    function reDraw() {
        svgTs.select(".x.axis")
            .transition()
-           .call(xAxis);
+           .call(tsxAxis);
 
        maxY = findMaxY(dataset);
        minY = findMinY(dataset);
-       yScale.domain([minY, maxY]);
+       tsyScale.domain([minY, maxY]);
 
        svgTs.select(".y.axis")
            .transition()
-           .call(yAxis);
+           .call(tsyAxis);
 
        lines.select("path")
            .transition()
@@ -394,7 +395,7 @@ function drawTimeSeries(regionData){
 
 }
 
-function getColor(name){
+function getColorTs(name){
   var sensor = name.split("-");
   var type = sensor[0];
   // console.log(type);

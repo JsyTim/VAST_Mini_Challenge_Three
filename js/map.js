@@ -5,7 +5,15 @@ for ( i = 1; i < 20; i ++ )
 	filelist.push(d3.csv(filename));
 }
 
+var tsfilelist = [];
+for ( i = 1; i < 20; i ++ )
+{
+  var tsfilename = "data/AggRegid/Region" + i + ".csv";
+  tsfilelist.push(d3.csv(tsfilename));
+}
+
 Promise.all(filelist).then(files => {
+	Promise.all( tsfilelist ).then( tsfiles => {
 	var index = 1;
 	var alldata = [];
 	for (i = 0; i < files.length; i ++ ){
@@ -248,7 +256,7 @@ function showHeatMap(e){
   var region_id = layer.feature.properties.Id;
   console.log(region_id);
   draw_heatmap(alldata[region_id-1]);
-
+	drawTimeSeries(tsfiles[region_id-1]);
 }
 
 function onEachFeature(feature, layer) {
@@ -365,4 +373,6 @@ for(var i = 1; i < 51; i++){
     .attr('fill', '#000000')
     .text(i.toString())
 }
-}); // Promise all end
+
+});	// in Promise all end
+}); // out Promise all end
