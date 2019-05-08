@@ -137,14 +137,14 @@ var color = d3.scaleOrdinal().range(colorScheme);
 // }
 
 // Read data from csv file and preprocess it
-Promise.all( tsfilelist ).then( tsfiles => {
-  // console.log(data[0][0]);
-  var region = 1;
-  // Use region 1 as an example
-  // console.log(data[region-1]);
-  drawTimeSeries(tsfiles[region-1]);
-
-});
+// Promise.all( tsfilelist ).then( tsfiles => {
+//   // console.log(data[0][0]);
+//   var region = 1;
+//   // Use region 1 as an example
+//   // console.log(data[region-1]);
+//   drawTimeSeries(tsfiles[region-1]);
+//
+// });
 
 function drawTimeSeries(regionData){
   // console.log(dataset);
