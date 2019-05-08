@@ -51,20 +51,6 @@ svgTs.append("rect")
    .attr("id", "mouse-tracker")
    .style("fill", "none");
 
-// --------------------------For slider part--------------------------
-var context = svgTs.append("g")
-                 .attr("class", "context")
-                 .attr("transform", "translate(" + 0 + "," + 410 + ")");
-
-// Append clip path for lines plotted, hiding those part out of bounds
-svgTs.append("defs")
-   .append("clipPath")
-   .attr("id", "clip")
-   .append("rect")
-   .attr("width", tsWidth)
-   .attr("height", tsHeight);
-// --------------------------End slider part--------------------------
-
 // 59 Custom colors, 50 mobile, 9 static
 colorScheme =
 [
@@ -148,7 +134,7 @@ var color = d3.scaleOrdinal().range(colorScheme);
 
 function drawTimeSeries(regionData){
   // console.log(dataset);
-  svgTs.selectAll(".line-group").remove();
+  svgTs.selectAll("*").remove();
   var sensorList = Object.keys(regionData[0]).slice(1);
   var mobileList = sensorList.filter(d => d.split("-")[0] === "mobile")
                              .sort((a,b) => {
@@ -194,6 +180,20 @@ function drawTimeSeries(regionData){
   // Setting a duplicate xdomain for burshing reference
   tsxScale2.domain(tsxScale.domain());
   tsxScale3.domain(tsxScale.domain());
+
+  // --------------------------For slider part--------------------------
+  var context = svgTs.append("g")
+                   .attr("class", "context")
+                   .attr("transform", "translate(" + 0 + "," + 410 + ")");
+
+  // Append clip path for lines plotted, hiding those part out of bounds
+  svgTs.append("defs")
+     .append("clipPath")
+     .attr("id", "clip")
+     .append("rect")
+     .attr("width", tsWidth)
+     .attr("height", tsHeight);
+  // --------------------------End slider part--------------------------
 
   // --------------------------For slider part--------------------------
   var brush = d3.brushX()
