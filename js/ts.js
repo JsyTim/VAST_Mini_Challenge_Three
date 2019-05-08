@@ -42,15 +42,6 @@ var svgTs = d3.select("#timeSeries").append("svg")
             .append("g")
             .attr("transform", "translate(" + tsMargin.left + "," + tsMargin.top + ")");
 
-// Create invisible rect for mouse tracking
-svgTs.append("rect")
-   .attr("width", tsWidth)
-   .attr("height", tsHeight)
-   .attr("x", 0)
-   .attr("y", 0)
-   .attr("id", "mouse-tracker")
-   .style("fill", "none");
-
 // 59 Custom colors, 50 mobile, 9 static
 colorScheme =
 [
@@ -180,6 +171,15 @@ function drawTimeSeries(regionData){
   // Setting a duplicate xdomain for burshing reference
   tsxScale2.domain(tsxScale.domain());
   tsxScale3.domain(tsxScale.domain());
+
+  // Create invisible rect for mouse tracking
+  svgTs.append("rect")
+     .attr("width", tsWidth)
+     .attr("height", tsHeight)
+     .attr("x", 0)
+     .attr("y", 0)
+     .attr("id", "mouse-tracker")
+     .style("fill", "none");
 
   // --------------------------For slider part--------------------------
   var context = svgTs.append("g")
