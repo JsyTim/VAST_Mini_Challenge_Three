@@ -8,7 +8,7 @@ Our task is to help St. Himark’s emergency management team combine data from t
 
 We aim to use visual analytics to find if data from citizen scientists clarify the situation or make it more uncertain. And using visualization, we will answer the questions provided by mini challenge 2.
 
-# Team members:
+# Team members and duties:
 
 Jian Guo, Jie Li, Siyuan Jiang
 
