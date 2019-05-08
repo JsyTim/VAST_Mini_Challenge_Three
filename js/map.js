@@ -38,7 +38,6 @@ function merge_styles(base, new_styles){
     return base;
 }
 
-
 //set color palatte
 function getColor(d) {
   return d == '1' ? '#FFB6C1':
@@ -94,23 +93,15 @@ function highlightSensor(sensor){
   }
 }
 
-// click dot show sensorRoute
-function showSensorRoute(){
-  let targetText = event.target.id;
-  sensorId = targetText.split('-')[1];
-  drawSensorRoute(sensorId);
-  highlightSensor(targetText);
-}
-
 var sensorR1;
 var sensorR2;
 var sensorR3;
 var sensorR4;
 var sensorR5;
 var marker;
-//add sensor route
-function drawSensorRoute(sensorId){
-  // var sensorId = 4
+
+function Initial(){
+  sensorId = 1;
   date = ['06', '07', '08', '09', '10'];
   route = [];
   for(i = 0; i < date.length; i++){
@@ -123,11 +114,72 @@ function drawSensorRoute(sensorId){
   sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
   sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
   marker = L.Marker.movingMarker(route, 10000);
-  sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'}).addTo(map);
-  sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'}).addTo(map);
-  sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'}).addTo(map);
-  sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC'}).addTo(map);
-  sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC'}).addTo(map);
+  sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000', riseOnHover: true});
+  sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300', riseOnHover: true});
+  sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033', riseOnHover: true});
+  sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC', riseOnHover: true});
+  sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC', riseOnHover: true});
+  map.addLayer(sensorR1);
+  map.addLayer(sensorR2);
+  map.addLayer(sensorR3);
+  map.addLayer(sensorR4);
+  map.addLayer(sensorR5);
+  var taxiIcon = L.icon({
+    iconUrl:'data/Icon/car_sensor.svg',
+    iconSize: [15, 30], // size of the icon
+    popupAnchor: [0, -5]
+  });
+  marker.once('click', function () {
+      marker.start();
+      marker.closePopup();
+      marker.unbindPopup();
+      marker.on('click', function() {
+          if (marker.isRunning()) {
+              marker.pause();
+          } else {
+              marker.start();
+          }
+      });
+      setTimeout(function() {
+          marker.bindPopup('<b>sensor-'+sensorId+'</b>').openPopup();
+      }, 0);
+  });
+  marker.options.icon = taxiIcon;
+  marker.openPopup('<b>sensor-'+sensorId+'</b>');
+  map.addLayer(marker);
+}
+
+Initial()
+
+//add sensor route
+function drawSensorRoute(sensorId){
+  date = ['06', '07', '08', '09', '10'];
+  route = [];
+  for(i = 0; i < date.length; i++){
+      day = date[i];
+      route = route.concat(sensorRoute[sensorId][day]['location']);
+  }
+  sensorRouteDay1 = sensorRoute[sensorId]['06']['location'];
+  sensorRouteDay2 = sensorRoute[sensorId]['07']['location'];
+  sensorRouteDay3 = sensorRoute[sensorId]['08']['location'];
+  sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
+  sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
+  marker = L.Marker.movingMarker(route, 10000);
+  // sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000', riseOnHover: true}).addTo(map);
+  // sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300', riseOnHover: true}).addTo(map);
+  // sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033', riseOnHover: true}).addTo(map);
+  // sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC', riseOnHover: true}).addTo(map);
+  // sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC', riseOnHover: true}).addTo(map);
+  sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'});
+  sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'});
+  sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'});
+  sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC'});
+  sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC'});
+  map.addLayer(sensorR1);
+  map.addLayer(sensorR2);
+  map.addLayer(sensorR3);
+  map.addLayer(sensorR4);
+  map.addLayer(sensorR5);
   // map.fitBounds(route);
   var taxiIcon = L.icon({
     iconUrl:'data/Icon/car_sensor.svg',
@@ -155,9 +207,6 @@ function drawSensorRoute(sensorId){
 }
 
 function removeRoute(){
-  // map.Layer(function (layer) {
-  //   map.removeLayer(layer)
-  // });
   map.removeLayer(sensorR1);
   map.removeLayer(sensorR2);
   map.removeLayer(sensorR3);
@@ -166,12 +215,21 @@ function removeRoute(){
   map.removeLayer(marker);
 }
 
+// click dot show sensorRoute
+function showSensorRoute(){
+  removeRoute();
+  let targetText = event.target.id;
+  console.log(targetText);
+  sensorId = targetText.split('-')[1];
+  drawSensorRoute(sensorId);
+  highlightSensor(targetText);
+}
 
 function highlightFeature(e) {
     var layer = e.target;
     //on hover change color from what was defined in function style(feature)
     style_override = {
-        weight: 1,
+        weight: 2,
         fillColor:"grey",
         fillOpacity: 0.4
     }
@@ -192,11 +250,14 @@ function resetHighlight(e) {
     // info.update();
 }
 
+function test(){
+  console.log('click');
+}
 function onEachFeature(feature, layer) {
     layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: removeRoute
+        // mouseover: highlightFeature,
+        // mouseout: resetHighlight,
+        click:test
     });
 }
 
