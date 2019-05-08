@@ -52,29 +52,29 @@ var heatTip = d3.select("#heatmap")
 	.attr("class", "tooltip");
 
 
-
-var filelist = [];
-for ( i = 1; i < 20; i ++ )
-{
-	var filename = "data/aggDataHeatmap/Region" + i + ".csv";
-	filelist.push(d3.csv(filename));
-}
+//
+// var filelist = [];
+// for ( i = 1; i < 20; i ++ )
+// {
+// 	var filename = "data/aggDataHeatmap/Region" + i + ".csv";
+// 	filelist.push(d3.csv(filename));
+// }
 // datasets = [];
 
 //Read the data
-Promise.all(filelist).then(files => {
-	var index = 1;
-	var alldata = [];
-	for (i = 0; i < files.length; i ++ ){
-		files[i].forEach(d => {
-			d.Timestamp = parse(d.Timestamp);
-			d.Value = +d.Value;
-		})
-		alldata.push(files[i]);
-
-	}
-
-	draw_heatmap(alldata[index-1]);
+// Promise.all(filelist).then(files => {
+// 	var index = 1;
+// 	var alldata = [];
+// 	for (i = 0; i < files.length; i ++ ){
+// 		files[i].forEach(d => {
+// 			d.Timestamp = parse(d.Timestamp);
+// 			d.Value = +d.Value;
+// 		})
+// 		alldata.push(files[i]);
+//
+// 	}
+//
+// 	draw_heatmap(alldata[index-1]);
 	//
 	// var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
 	//     .data(alldata);
@@ -88,7 +88,7 @@ Promise.all(filelist).then(files => {
 	//         draw_heatmap(d);
 	//     });
 
-});
+// });
 
 
 // d3.csv("data/aggDataHeatmap/Region19.csv").then(function(data) {
