@@ -79,11 +79,27 @@ function style(feature, color) {
 
 L.geoJson(districts).addTo(map);
 
+var sensor_list = ['sensor-1', 'sensor-2', 'sensor-3', 'sensor-4', 'sensor-5', 'sensor-6', 'sensor-7', 'sensor-8', 'sensor-9', 'sensor-10', 'sensor-11', 'sensor-12', 'sensor-13', 'sensor-14', 'sensor-15', 'sensor-16', 'sensor-17', 'sensor-18', 'sensor-19', 'sensor-20', 'sensor-21', 'sensor-22', 'sensor-23', 'sensor-24', 'sensor-25', 'sensor-26', 'sensor-27', 'sensor-28', 'sensor-29', 'sensor-30', 'sensor-31', 'sensor-32', 'sensor-33', 'sensor-34', 'sensor-35', 'sensor-36', 'sensor-37', 'sensor-38', 'sensor-39', 'sensor-40', 'sensor-41', 'sensor-42', 'sensor-43', 'sensor-44', 'sensor-45', 'sensor-46', 'sensor-47', 'sensor-48', 'sensor-49', 'sensor-50'];
+
+function highlightSensor(sensor){
+  for (let j = 0; j < sensor_list.length; j++) {
+    if(sensor_list[j] !== sensor){
+      var x = document.getElementById(sensor_list[j]);
+      x.style.opacity = 0.1;
+    }
+    else{
+      var x = document.getElementById(sensor_list[j]);
+      x.style.opacity = 0.9;
+    }
+  }
+}
+
 // click dot show sensorRoute
 function showSensorRoute(){
   let targetText = event.target.id;
   sensorId = targetText.split('-')[1];
   drawSensorRoute(sensorId);
+  highlightSensor(targetText);
 }
 
 var sensorR1;
@@ -91,7 +107,6 @@ var sensorR2;
 var sensorR3;
 var sensorR4;
 var sensorR5;
-var markerLayer;
 var marker;
 //add sensor route
 function drawSensorRoute(sensorId){
@@ -136,7 +151,7 @@ function drawSensorRoute(sensorId){
   });
   marker.options.icon = taxiIcon;
   marker.openPopup('<b>sensor-'+sensorId+'</b>');
-  markerLayer = map.addLayer(marker);
+  map.addLayer(marker);
 }
 
 function removeRoute(){
