@@ -23,7 +23,7 @@ var map = L.map('map',{
   dragging: false,
   attributionControl: false,
   doubleClickZoom: false
-}).setView([0.10, -119.85], 11.9);
+}).setView([0.12, -119.8565], 11.68);
 
 var geojson;
 
@@ -110,11 +110,11 @@ function Initial(){
   sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
   sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
   marker = L.Marker.movingMarker(route, 99999999);
-  sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000', riseOnHover: true});
-  sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300', riseOnHover: true});
-  sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033', riseOnHover: true});
-  sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC', riseOnHover: true});
-  sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC', riseOnHover: true});
+  sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'});
+  sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'});
+  sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'});
+  sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC'});
+  sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC'});
   map.addLayer(sensorR1);
   map.addLayer(sensorR2);
   map.addLayer(sensorR3);
@@ -146,7 +146,9 @@ function Initial(){
 }
 
 Initial()
-
+function test(){
+  console.log('test');
+}
 //add sensor route
 function drawSensorRoute(sensorId){
   date = ['06', '07', '08', '09', '10'];
@@ -161,11 +163,6 @@ function drawSensorRoute(sensorId){
   sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
   sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
   marker = L.Marker.movingMarker(route, 100000);
-  // sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000', riseOnHover: true}).addTo(map);
-  // sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300', riseOnHover: true}).addTo(map);
-  // sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033', riseOnHover: true}).addTo(map);
-  // sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC', riseOnHover: true}).addTo(map);
-  // sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC', riseOnHover: true}).addTo(map);
   sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'});
   sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'});
   sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'});
@@ -220,31 +217,31 @@ function showSensorRoute(){
   drawSensorRoute(sensorId);
   highlightSensor(targetText);
 }
-
-function highlightFeature(e) {
-    var layer = e.target;
-    //on hover change color from what was defined in function style(feature)
-    style_override = {
-        weight: 2,
-        fillColor:"grey",
-        fillOpacity: 0.4
-    }
-    geojson.resetStyle(e.target);
-
-    if (!L.Browser.ie && !L.Browser.opera) {
-        layer.bringToFront();
-    }
-
-     //on hover change infobox
-    // info.update(layer.feature.properties);
-}
-
-//reset highlight when hovering out
-function resetHighlight(e) {
-    style_override = {};
-    geojson.resetStyle(e.target);
-    // info.update();
-}
+//
+// function highlightFeature(e) {
+//     var layer = e.target;
+//     //on hover change color from what was defined in function style(feature)
+//     style_override = {
+//         weight: 2,
+//         fillColor:"grey",
+//         fillOpacity: 0.4
+//     }
+//     geojson.resetStyle(e.target);
+//
+//     if (!L.Browser.ie && !L.Browser.opera) {
+//         layer.bringToFront();
+//     }
+//
+//      //on hover change infobox
+//     // info.update(layer.feature.properties);
+// }
+//
+// //reset highlight when hovering out
+// function resetHighlight(e) {
+//     style_override = {};
+//     geojson.resetStyle(e.target);
+//     // info.update();
+// }
 
 function showHeatMap(e){
   var layer = e.target;
@@ -312,10 +309,60 @@ staticIdList = [1, 4, 6, 9, 11, 12, 13, 14, 15];
 var staticIcon = L.icon({
     iconUrl:'data/Icon/meter.svg',
     iconSize: [15, 25], // size of the icon
-    popupAnchor: [0, -12] // point from which the popup should open relative to the iconAnchor
+    popupAnchor: [0, -5] // point from which the popup should open relative to the iconAnchor
 });
 for(i = 0; i < 9; i++){
   window["staticLabel" + i] = L.marker(staticList[i], {icon: staticIcon}).addTo(map).bindPopup('<b>This is the Static Sensor '+ staticIdList[i] +'</b>');
 }
 
+// draw dot
+d3.select('#dot')
+  .append('svg')
+  .attr('id', 'dot')
+  .attr('width', 715)
+  .attr('height', 150)
+
+dot_svg = d3.select('svg#dot')
+j = 0;
+for(var i = 1; i < 51; i++){
+  if(i > 25){
+    dot_g = dot_svg.append('g')
+    .attr('transform', 'translate(' + j*28 + ', 50)')
+    .attr('id', 'sensor-' + i.toString())
+    .on('click', function(){
+      showSensorRoute()
+    });
+    j++;
+  }
+  else{
+    dot_g = dot_svg.append('g')
+    .attr('transform', 'translate(' + (i-1)*28 + ', 5)')
+    .attr('id', 'sensor-' + i.toString())
+    .on('click', function(){
+      showSensorRoute()
+    });
+  }
+
+  dot_g.append('circle')
+    .attr('x', 24)
+    .attr('y', 9)
+    .attr('cx', 12)
+    .attr('cy', 9)
+    .attr('r', 12)
+    .attr('margin', 2)
+    .attr('stroke-width', 3)
+    .attr('fill', '#FFB6C1')
+
+  dot_g.append('text')
+    .attr('x', 24)
+    .attr('y', 9)
+    .attr('cx', 6)
+    .attr('cy', 3)
+    .attr('id', 'sensor-' + i.toString())
+    .attr('text-anchor', 'middle')
+    .attr('dx', '-0.85em')
+    .attr('dy', '.35em')
+    .attr('fill', '#000000')
+    .text(i.toString())
+}
 }); // Promise all end

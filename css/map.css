@@ -1,21 +1,12 @@
 #map{
-    width: 755px;
-    height: 700px;
+    width: 680px;
+    height: 585px;
     background-color: white;
-    position: fixed;
+    /* position: fixed; */
 }
 
-.info {
-    padding: 6px 8px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
-    background: white;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-}
-.info h4 {
-    margin: 0 0 5px;
-    color: #777;
+#dot{
+  padding-left: 15px;
 }
 
 path{
@@ -23,6 +14,5 @@ path{
 }
 
 .text-labels {
-   /* font-size: 1.6em; */
    font-weight: 1000;
 }
