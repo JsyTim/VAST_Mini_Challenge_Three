@@ -11,7 +11,7 @@ buckets = 9;
 
 
 // append the svg object to the body of the page
-var svgHeat = d3.select("body")
+var svgHeat = d3.select("#heatmap")
 	.append("svg")
 	.attr("width", heatWidth + heatMargin.left + heatMargin.right)
 	.attr("height", heatHeight + heatMargin.top + heatMargin.bottom)

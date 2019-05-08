@@ -1,3 +1,21 @@
+var filelist = [];
+for ( i = 1; i < 20; i ++ )
+{
+	var filename = "data/aggDataHeatmap/Region" + i + ".csv";
+	filelist.push(d3.csv(filename));
+}
+
+Promise.all(filelist).then(files => {
+	var index = 1;
+	var alldata = [];
+	for (i = 0; i < files.length; i ++ ){
+		files[i].forEach(d => {
+			d.Timestamp = parse(d.Timestamp);
+			d.Value = +d.Value;
+		})
+		alldata.push(files[i]);
+	}
+
 //Initialize a map inside a div called map
 var map = L.map('map',{
   zoomControl: false,
@@ -232,6 +250,8 @@ function showHeatMap(e){
   var layer = e.target;
   var region_id = layer.feature.properties.Id;
   console.log(region_id);
+  draw_heatmap(region_id);
+
 }
 
 function onEachFeature(feature, layer) {
@@ -297,3 +317,5 @@ var staticIcon = L.icon({
 for(i = 0; i < 9; i++){
   window["staticLabel" + i] = L.marker(staticList[i], {icon: staticIcon}).addTo(map).bindPopup('<b>This is the Static Sensor '+ staticIdList[i] +'</b>');
 }
+
+}); // Promise all end
