@@ -148,7 +148,7 @@ var color = d3.scaleOrdinal().range(colorScheme);
 
 function drawTimeSeries(regionData){
   // console.log(dataset);
-  svgTs.selectALL("*").remove();
+  svgTs.selectAll(".line-group").remove();
   var sensorList = Object.keys(regionData[0]).slice(1);
   var mobileList = sensorList.filter(d => d.split("-")[0] === "mobile")
                              .sort((a,b) => {
