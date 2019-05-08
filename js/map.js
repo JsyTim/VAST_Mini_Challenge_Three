@@ -1,33 +1,11 @@
 //Initialize a map inside a div called map
 var map = L.map('map',{
   zoomControl: false,
-  // scrollWheelZoom: false,
-  // dragging: false,
+  scrollWheelZoom: false,
+  dragging: false,
   attributionControl: false,
-  // doubleClickZoom: false
-}).setView([0.11, -119.845], 11.8);
-
-//
-// var info = L.control();
-// info.onAdd = function (map) {
-//     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-//     this.update();
-//     return this._div;
-// };
-// // method that we will use to update the control based on feature properties passed
-// info.
-//
-// update = function (props) {
-//     this._div.innerHTML = '<h4>Detailed Information</h4>' +
-//         //ternary
-//         (props ?
-//         //if hovering on a district
-//           "District: " + props.Region
-//         //if not hovering on a district
-//         : 'Hover over a district');
-// };
-// //add info to map
-// info.addTo(map);
+  doubleClickZoom: false
+}).setView([0.10, -119.85], 11.8);
 
 var geojson;
 
@@ -84,7 +62,7 @@ function highlightSensor(sensor){
   for (let j = 0; j < sensor_list.length; j++) {
     if(sensor_list[j] !== sensor){
       var x = document.getElementById(sensor_list[j]);
-      x.style.opacity = 0.1;
+      x.style.opacity = 0.4;
     }
     else{
       var x = document.getElementById(sensor_list[j]);
@@ -113,7 +91,7 @@ function Initial(){
   sensorRouteDay3 = sensorRoute[sensorId]['08']['location'];
   sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
   sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
-  marker = L.Marker.movingMarker(route, 10000);
+  marker = L.Marker.movingMarker(route, 99999999);
   sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000', riseOnHover: true});
   sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300', riseOnHover: true});
   sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033', riseOnHover: true});
@@ -164,7 +142,7 @@ function drawSensorRoute(sensorId){
   sensorRouteDay3 = sensorRoute[sensorId]['08']['location'];
   sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
   sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
-  marker = L.Marker.movingMarker(route, 10000);
+  marker = L.Marker.movingMarker(route, 100000);
   // sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000', riseOnHover: true}).addTo(map);
   // sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300', riseOnHover: true}).addTo(map);
   // sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033', riseOnHover: true}).addTo(map);
@@ -250,14 +228,17 @@ function resetHighlight(e) {
     // info.update();
 }
 
-function test(){
-  console.log('click');
+function showHeatMap(e){
+  var layer = e.target;
+  var region_id = layer.feature.properties.Id;
+  console.log(region_id);
 }
+
 function onEachFeature(feature, layer) {
     layer.on({
         // mouseover: highlightFeature,
         // mouseout: resetHighlight,
-        click:test
+        click: showHeatMap
     });
 }
 
@@ -288,8 +269,8 @@ for(i = 0; i < 19; i++){
 hospitalList = [[0.180960, -119.959400], [0.153120, -119.915900], [0.151090, -119.909520], [0.121800, -119.904300], [0.134560, -119.883420], [0.182990, -119.855580], [0.041470, -119.828610], [0.065250, -119.744800]];
 
 var hospitalIcon = L.icon({
-    iconUrl:'data/icon/hospital.svg',
-    iconSize: [25, 30], // size of the icon
+    iconUrl:'data/Icon/hospital.svg',
+    iconSize: [30, 45], // size of the icon
     popupAnchor: [0, -12] // point from which the popup should open relative to the iconAnchor
 });
 for(i = 0; i < 8; i++){
@@ -298,9 +279,21 @@ for(i = 0; i < 8; i++){
 
 // add radiation station
 var radiationIcon = L.icon({
-    iconUrl:'data/icon/radiation.svg',
-    iconSize: [30, 35], // size of the icon
+    iconUrl:'data/Icon/radiation.svg',
+    iconSize: [25, 30], // size of the icon
     popupAnchor: [0, -12] // point from which the popup should open relative to the iconAnchor
 });
 var nuclear = L.marker([0.162679, -119.784825], {icon: radiationIcon}).addTo(map).bindPopup('<b>The Always Safe Nuclear plant.</b>');
 map.addLayer(nuclear);
+
+// add static sensor
+staticList = [[0.15689, -119.9594], [0.15109, -119.90952], [0.1218, -119.9043], [0.18299, -119.85558], [0.04147, -119.82861], [0.20764, -119.81556], [0.15979, -119.80715], [0.1218, -119.79265], [0.16849, -119.79033]];
+staticIdList = [1, 4, 6, 9, 11, 12, 13, 14, 15];
+var staticIcon = L.icon({
+    iconUrl:'data/Icon/meter.svg',
+    iconSize: [15, 25], // size of the icon
+    popupAnchor: [0, -12] // point from which the popup should open relative to the iconAnchor
+});
+for(i = 0; i < 9; i++){
+  window["staticLabel" + i] = L.marker(staticList[i], {icon: staticIcon}).addTo(map).bindPopup('<b>This is the Static Sensor '+ staticIdList[i] +'</b>');
+}
