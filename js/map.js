@@ -5,7 +5,7 @@ var map = L.map('map',{
   dragging: false,
   attributionControl: false,
   doubleClickZoom: false
-}).setView([0.10, -119.85], 11.8);
+}).setView([0.10, -119.85], 11.9);
 
 var geojson;
 
