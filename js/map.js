@@ -250,7 +250,7 @@ function showHeatMap(e){
   var layer = e.target;
   var region_id = layer.feature.properties.Id;
   console.log(region_id);
-  draw_heatmap(region_id);
+  draw_heatmap(alldata[region_id-1]);
 
 }
 

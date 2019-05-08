@@ -107,7 +107,6 @@ function draw_heatmap(data) {
 	// Labels of row and columns
 	var sensors = d3.map(data, d => d["Sensor-id"]).keys();
 	var times = d3.map(data,d=>d.Timestamp).keys();
-	debugger
 	xHeat.domain(d3.extent(data,d=>d.Timestamp));
 	// xHeat.domain(d3.extent(data, function (d) {return d.Timestamp;}));
 	// xHeat.domain(times);
