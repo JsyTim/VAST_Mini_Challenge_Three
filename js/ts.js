@@ -261,6 +261,7 @@ function drawTimeSeries(regionData){
      .attr("class", "line")
      .attr("d", d => d.visible? line(d.values) : null)
      .style("stroke", d => getColorTs(d.name))
+     .attr("id", d => "lin-" + d.name)
      .on("mouseover", function(d) {
           d3.selectAll('.line').style("opacity", 0.2);
           d3.select(this).style("opacity", 1).style("stroke-width", "2px");
@@ -334,11 +335,25 @@ function drawTimeSeries(regionData){
          d3.select(this)
              .transition()
             .attr("fill", d =>getColorTs(d.name));
+
+        d3.selectAll('.line').style("opacity", 0.2);
+        // d3.select(this).style("opacity", 1).style("stroke-width", "2px");
+        d3.selectAll(".legend").style("opacity", 0.2);
+        d3.select("#lin-" + d.name).style("opacity", 1);
+        d3.select("#leg-" + d.name).style("opacity", 1);
         })
         .on("mouseout", function(d) {
           d3.select(this)
             .transition()
             .attr("fill", d => d.visible? getColorTs(d.name) : greyBtn);
+
+          d3.selectAll('.line').style("opacity", 1);
+          d3.select(this).style("stroke-width", "1.5px");
+          d3.selectAll(".legend").style("opacity", 1);
+          focus.style("display", "none");
+
+          // Hide tooltip
+          tooltip.style("display", "none")
         });
 
   legend.append("text")
@@ -392,6 +407,14 @@ function drawTimeSeries(regionData){
            .attr("d", d => d.visible ? line(d.values) : null);
 
    }
+
+   // // select/clear all the lines
+   // var toggle = true;
+   // d3.select("input")
+   //     .on("click", function() {
+   //         d3.selectAll("path.line")
+   //             .style("opacity", +(toggle = !toggle))
+   //     })
 
 }
 

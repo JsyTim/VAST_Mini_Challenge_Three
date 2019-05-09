@@ -1,9 +1,9 @@
 
 var parse = d3.timeParse("%Y-%m-%d %H:%M:%S");
 // set the dimensions and margins of the graph
-var heatMargin = {top: 30, right: 50, bottom: 150, left: 120};
+var heatMargin = {top: 20, right: 120, bottom: 90, left: 50};
 // var heatWidth = Math.max(Math.min(window.innerWidth, 1000), 500) - heatMargin.left - heatMargin.right - 20;
-var heatWidth = Math.max(Math.min(window.innerWidth, 1200), 500) - heatMargin.left - heatMargin.right - 20;
+var heatWidth = 1100 - heatMargin.left - heatMargin.right;
 
 //set the colors
 var colors = ['#fee8c8','#fdbb84','#e34a33'];
@@ -34,22 +34,22 @@ var heatTip = d3.select("#heatmap")
 // 		alldata.push(files[i]);
 //
 // 	}
-// 	// console.log(alldata[index-1]);
-//
+// // 	// console.log(alldata[index-1]);
+// //
 // 	draw_heatmap(alldata[index-1]);
-//
-// 	var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-// 		.data(alldata);
-//
-// 	datasetpicker.enter()
-// 		.append("input")
-// 		.attr("value", function(d, i){ return "Dataset " + i })
-// 		.attr("type", "button")
-// 		.attr("class", "dataset-button")
-// 		.on("click", function(d) {
-// 			draw_heatmap(d);
-// 		});
-//
+// //
+// // 	var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
+// // 		.data(alldata);
+// //
+// // 	datasetpicker.enter()
+// // 		.append("input")
+// // 		.attr("value", function(d, i){ return "Dataset " + i })
+// // 		.attr("type", "button")
+// // 		.attr("class", "dataset-button")
+// // 		.on("click", function(d) {
+// // 			draw_heatmap(d);
+// // 		});
+// //
 // });
 
 
@@ -85,7 +85,7 @@ function draw_heatmap(data) {
 	var heatHeight = cellSize * (sensors.length + 2);
 
 	//append heat map svg
-	d3.select("#heatmap").selectAll("*").remove();
+	// d3.select("#heatmap").selectAll("*").remove();
 
 	var svgHeat = d3.select("#heatmap")
 		.append("svg")
