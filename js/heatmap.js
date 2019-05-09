@@ -1,4 +1,18 @@
 
+var parse = d3.timeParse("%Y-%m-%d %H:%M:%S");
+// set the dimensions and margins of the graph
+var heatMargin = {top: 30, right: 50, bottom: 150, left: 120};
+// var heatWidth = Math.max(Math.min(window.innerWidth, 1000), 500) - heatMargin.left - heatMargin.right - 20;
+var heatWidth = Math.max(Math.min(window.innerWidth, 1200), 500) - heatMargin.left - heatMargin.right - 20;
+
+//set the colors
+var colors = ['#fee8c8','#fdbb84','#e34a33'];
+
+// create a tooltip
+var heatTip = d3.select("#heatmap")
+	.append("div")
+	.style("opacity", 0)
+	.attr("class", "tooltip");
 
 // var filelist = [];
 // for ( i = 1; i < 20; i ++ )
@@ -33,7 +47,6 @@
 // 		.attr("type", "button")
 // 		.attr("class", "dataset-button")
 // 		.on("click", function(d) {
-//
 // 			draw_heatmap(d);
 // 		});
 //
@@ -43,32 +56,6 @@
 //main function to update heatmap
 function draw_heatmap(data) {
 
-	var parse = d3.timeParse("%Y-%m-%d %H:%M:%S");
-	// set the dimensions and margins of the graph
-	var heatMargin = {top: 30, right: 50, bottom: 150, left: 120};
-	// var heatWidth = Math.max(Math.min(window.innerWidth, 1000), 500) - heatMargin.left - heatMargin.right - 20;
-	var heatWidth = Math.max(Math.min(window.innerWidth, 1200), 500) - heatMargin.left - heatMargin.right - 20;
-
-	//set the colors
-	var colors = ['#fee8c8','#fdbb84','#e34a33'];
-
-	// create a tooltip
-	var heatTip = d3.select("#heatmap")
-		.append("div")
-		.style("opacity", 0)
-		.attr("class", "tooltip");
-
-	//append heat map svg
-	var svgHeat = d3.select("#heatmap")
-		.append("svg")
-		.attr("width", heatWidth + heatMargin.left + heatMargin.right)
-		.attr("height", heatHeight + heatMargin.top + heatMargin.bottom)
-		.append("g")
-		.attr("transform",
-			"translate(" + heatMargin.left + "," + heatMargin.top + ")");
-
-
-	svgHeat.selectAll("*").remove();
 	// Labels of row and columns
 	var sensor;
 	var sensorList = d3.map(data, d => d["Sensor-id"]).keys();
@@ -96,6 +83,17 @@ function draw_heatmap(data) {
 
 	var cellSize = Math.floor(heatWidth/(times.length));
 	var heatHeight = cellSize * (sensors.length + 2);
+
+	//append heat map svg
+	var svgHeat = d3.select("#heatmap")
+		.append("svg")
+		.attr("width", heatWidth + heatMargin.left + heatMargin.right)
+		.attr("height", heatHeight + heatMargin.top + heatMargin.bottom)
+		.append("g")
+		.attr("transform",
+			"translate(" + heatMargin.left + "," + heatMargin.top + ")");
+
+	svgHeat.selectAll("*").remove();
 
 	// define color scale for heatmap
 	var heatColor = d3.scaleLinear()
