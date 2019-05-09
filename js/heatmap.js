@@ -310,7 +310,7 @@ function draw_heatmap(data) {
 					  + "Time  : " + d.Timestamp.toLocaleTimeString([], { year: '2-digit', month: '2-digit',day: '2-digit', hour: '2-digit', minute:'2-digit'})  + "<br>"
 						+ "Value: " + d.Value.toFixed(2) + " (cmp)")
 			.style("left", (d3.mouse(this)[0] + 50) + "px")
-			.style("top", (d3.mouse(this)[1] + 200) + "px")
+			.style("top", (d3.mouse(this)[1] + 480) + "px")
 	}
 	function mouseleave() {
 		heatTip
