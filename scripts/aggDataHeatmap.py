@@ -11,9 +11,10 @@ import pandas as pd
 
 file_list = []
 df_list = []
-df_group_list=[]
+#df_group_list=[]
+melt_list = []
 for i in range(1,20):
-    file_name = "../data/AggRegid/Region" + str(i) + ".csv"
+    file_name = "../data/HeatmapData/Region" + str(i) + ".csv"
     file_list.append(file_name)
 
 
@@ -50,20 +51,24 @@ def melt_columns(df):
     df_melt = pd.melt(df, id_vars=['Timestamp'], value_vars=columns,var_name = 'Sensor-id', value_name='Value').fillna(0)
     return df_melt
 
+
 def group_by_hours(df):
     df_melt = melt_columns(df).set_index(pd.DatetimeIndex(melt_columns(df)['Timestamp']))
     df_group = df_melt.groupby('Sensor-id').resample('2H').max()
     return df_group
 
+#for df in df_list:
+#    df_group_list.append(group_by_hours(df))
+
+#
+#def write_file(file):
+#    file.to_csv("file.csv",index=False)
+
 for df in df_list:
-    df_group_list.append(group_by_hours(df))
-
-
-def write_file(file):
-    file.to_csv("file.csv",index=False)
+    melt_list.append(melt_columns(df))
 
 for i in range(0,19):
-    df_group_list[i].to_csv("Region" + str(i+1) + ".csv", index=False)
+    melt_list[i].to_csv("Region" + str(i+1) + ".csv", index=False)
 
 
 #df_melt = melt_columns(df).set_index(pd.DatetimeIndex(melt_columns(df)['Timestamp']))
