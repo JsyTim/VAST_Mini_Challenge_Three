@@ -9,10 +9,6 @@ var heatWidth = 1100 - heatMargin.left - heatMargin.right;
 var colors = ['#fee8c8','#fdbb84','#e34a33'];
 
 // create a tooltip
-var heatTip = d3.select("#heatmap")
-	.append("div")
-	.style("opacity", 0)
-	.attr("class", "tstooltip");
 
 // var filelist = [];
 // for ( i = 1; i < 20; i ++ )
@@ -86,6 +82,11 @@ function draw_heatmap(data) {
 
 	//append heat map svg
 	d3.select("#heatmap").selectAll("*").remove();
+	
+	var heatTip = d3.select("#heatmap")
+		.append("div")
+		.style("opacity", 0)
+		.attr("class", "tstooltip");
 
 	var svgHeat = d3.select("#heatmap")
 		.append("svg")
