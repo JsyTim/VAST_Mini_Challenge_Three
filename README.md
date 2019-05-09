@@ -51,13 +51,21 @@ For mobile data, we splitted it into 19 regions, thus we have 19 files. But each
 
 ## Functionality:
 
-### Map
+### 1.Map
 
-#### 1. Static sensors, hospitals and nuclear plant are plotted on the map
+1. Map is colored and plotted with region name and id so that user can easily distinguish among regions. Static sensors, hospitals and nuclear plant are plotted on the map with icon by longtitude and latitude so user can have a big picture of the locations of these facilities. 
 
-### Time Series
+2. Map is our main colsole. Clicking on a region on the map will trigger both time series and heatmap to change. For example, when region1 is clicked, both time series and heatmap will show all the sensors in region1, including both mobile and static sensors, and their radiation value over the entire length of simulation. 
 
-### Heatmap
+3. Below the map are 50 legends for mobile sensors, each standing for one mobile sensor. Clicking on one legend will highlight it and dim all the other legends. At the same time, the map will show a full route of this mobile sensor(represented by a car icon) over the entire length of simulation. Clicking on the car simbol will trigger an animation that simulates the car's movement. With this animation, users can easily tell which regions the car has gone through and predict wether it is contaminated.
+
+### 2. Time Series
+
+1.
+
+### 3. Heatmap
+
+1.
 
 ## Findings and explanation:
 
