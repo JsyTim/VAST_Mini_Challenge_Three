@@ -85,6 +85,8 @@ function draw_heatmap(data) {
 	var heatHeight = cellSize * (sensors.length + 2);
 
 	//append heat map svg
+	d3.select("#heatmap").selectAll("*").remove();
+
 	var svgHeat = d3.select("#heatmap")
 		.append("svg")
 		.attr("width", heatWidth + heatMargin.left + heatMargin.right)
@@ -92,8 +94,6 @@ function draw_heatmap(data) {
 		.append("g")
 		.attr("transform",
 			"translate(" + heatMargin.left + "," + heatMargin.top + ")");
-
-	svgHeat.selectAll("*").remove();
 
 	// define color scale for heatmap
 	var heatColor = d3.scaleLinear()
