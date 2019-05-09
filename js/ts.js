@@ -3,9 +3,9 @@
 // Width and height, height2 is for slider
 var tsMargin = {top:20, right:120, bottom: 80, left: 50},
     tsMargin2 = {top: 430, right: 10, bottom: 20, left: 40},
-    tsWidth = 960 - tsMargin.left - tsMargin.right,
-    tsHeight = 480 - tsMargin.top - tsMargin.bottom,
-    tsHeight2 = 480 - tsMargin2.top - tsMargin2.bottom;
+    tsWidth = 600 - tsMargin.left - tsMargin.right,
+    tsHeight = 300 - tsMargin.top - tsMargin.bottom,
+    tsHeight2 = 300 - tsMargin2.top - tsMargin2.bottom;
 
 var tsParseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
     bisectDate = d3.bisector( d => d.time).left;
