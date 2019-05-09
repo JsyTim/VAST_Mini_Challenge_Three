@@ -53,6 +53,8 @@ For mobile data, we splitted it into 19 regions, thus we have 19 files. But each
 
 ### Map
 
+#### 1. Static sensors, hospitals and nuclear plant are plotted on the map
+
 ### Time Series
 
 ### Heatmap
@@ -89,4 +91,6 @@ Limit your response to 6 images and 800 words.
 ## References:
 
 https://vast-challenge.github.io/2019/MC2.html
+
+https://www.qgis.org/en/site/
 
