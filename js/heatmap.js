@@ -85,7 +85,7 @@ function draw_heatmap(data) {
 	var heatHeight = cellSize * (sensors.length + 2);
 
 	//append heat map svg
-	// d3.select("#heatmap").selectAll("*").remove();
+	d3.select("#heatmap").selectAll("*").remove();
 
 	var svgHeat = d3.select("#heatmap")
 		.append("svg")
