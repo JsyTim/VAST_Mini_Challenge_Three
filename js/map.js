@@ -31,7 +31,7 @@ var map = L.map('map',{
   dragging: false,
   attributionControl: false,
   doubleClickZoom: false
-}).setView([0.12, -119.8565], 11.68);
+}).setView([0.115, -119.855], 11.9);
 
 var geojson;
 
@@ -259,7 +259,6 @@ function showGraph(e){
   $('#region_name').append(html);
   draw_heatmap(alldata[region_id-1]);
 	drawTimeSeries(tsfiles[region_id-1]);
-
 }
 
 function onEachFeature(feature, layer) {

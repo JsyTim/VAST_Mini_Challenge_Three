@@ -4,6 +4,27 @@ body {
   height: 100%;
 }
 
+#map_title{
+  text-align: center;
+  display: block;
+  font-family: Impact;
+  font-size: 25px;
+}
+
+#mobile_title{
+  text-align: center;
+  display: block;
+  font-family: Impact;
+  font-size: 25px;
+}
+
+#region_name{
+  text-align: center;
+  display: block;
+  font-family: Impact;
+  font-size: 25px;
+}
+
 .my-header{
     padding-top: 10px;
     width:100%;

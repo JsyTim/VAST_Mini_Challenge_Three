@@ -32,28 +32,25 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-5">
-            <span id="map_title" style="text-align: center; display: block;">StHimark Map</span>
+            <span id="map_title">StHimark Map</span>
             <div id="map"></div>
+            <div id='dot'>
+              <span id="mobile_title">Mobile Route</span>
+            </div>
         </div>
         <div class="col-md-7">
             <div class="region_name" id="region_name"></div>
             <!--time series container-->
             <div id="timeSeries"></div>
+            <script src="js/ts.js"></script>
             <!--select/clear button-->
             <!-- <div id="option">
               <input name="updateButton" type="button" value="Select/Clear all lines" />
             </div> -->
-            <script src="js/ts.js"></script>
+
+            <div id="heatmap"></div>
+            <script src="js/heatmap.js"></script>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-5" id='dot'></div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="heatmap"></div>
-        <script src="js/heatmap.js"></script>
-      </div>
     </div>
 </div>
 <script src="js/map.js"></script>
