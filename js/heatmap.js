@@ -81,7 +81,7 @@ function draw_heatmap(data) {
 	// timesList = times.forEach(d => d.toLocaleString());
 
 
-	var cellSize = Math.floor(heatWidth/(times.length));
+	var cellSize = heatWidth/times.length;
 	var heatHeight = cellSize * (sensors.length + 2);
 
 	//append heat map svg
@@ -106,9 +106,9 @@ function draw_heatmap(data) {
 														.data(sensors)
 														.enter().append("text")
 														.text( d => d)
-														.attr("x", -5)
+														.attr("x", heatWidth + 15)
 														.attr("y", (d,i) => i * cellSize)
-														.style("text-anchor", "end")
+														.style("text-anchor", "head")
 														.attr("transform", "translate(0," + cellSize/1.5 + ")")
 														.attr("class", d => d);
 
