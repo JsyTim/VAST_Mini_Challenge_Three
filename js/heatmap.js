@@ -13,6 +13,15 @@ var heatTip = d3.select("#heatmap")
 	.style("opacity", 0)
 	.attr("class", "tooltip");
 
+//append heat map svg
+var svgHeat = d3.select("#heatmap")
+	.append("svg")
+	.attr("width", heatWidth + heatMargin.left + heatMargin.right)
+	.attr("height", heatHeight + heatMargin.top + heatMargin.bottom)
+	.append("g")
+	.attr("transform",
+		"translate(" + heatMargin.left + "," + heatMargin.top + ")");
+
 
 // var filelist = [];
 // for ( i = 1; i < 20; i ++ )
@@ -86,15 +95,6 @@ function draw_heatmap(data) {
 
 	var cellSize = Math.floor(heatWidth/(times.length));
 	var heatHeight = cellSize * (sensors.length + 2);
-
-	//append heat map svg
-	var svgHeat = d3.select("#heatmap")
-		.append("svg")
-		.attr("width", heatWidth + heatMargin.left + heatMargin.right)
-		.attr("height", heatHeight + heatMargin.top + heatMargin.bottom)
-		.append("g")
-		.attr("transform",
-			"translate(" + heatMargin.left + "," + heatMargin.top + ")");
 
 	// define color scale for heatmap
 	var heatColor = d3.scaleLinear()
