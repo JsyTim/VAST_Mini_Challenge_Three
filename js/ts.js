@@ -1,11 +1,11 @@
 //This javascript is using D3.V5 library
 
 // Width and height, height2 is for slider
-var tsMargin = {top:20, right:120, bottom: 80, left: 50},
-    tsMargin2 = {top: 430, right: 10, bottom: 20, left: 40},
+var tsMargin = {top:20, right:120, bottom: 90, left: 50},
+    tsMargin2 = {top: 400, right: 10, bottom: 20, left: 40},
     tsWidth = 1100 - tsMargin.left - tsMargin.right,
-    tsHeight = 400 - tsMargin.top - tsMargin.bottom,
-    tsHeight2 = 300 - tsMargin2.top - tsMargin2.bottom;
+    tsHeight = 450 - tsMargin.top - tsMargin.bottom,
+    tsHeight2 = 440 - tsMargin2.top - tsMargin2.bottom;
 
 var tsParseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
     bisectDate = d3.bisector( d => d.time).left;
@@ -185,7 +185,7 @@ function drawTimeSeries(regionData){
   // --------------------------For slider part--------------------------
   var context = svgTs.append("g")
                    .attr("class", "context")
-                   .attr("transform", "translate(" + 0 + "," + 410 + ")");
+                   .attr("transform", "translate(" + 0 + "," + 360 + ")");
 
   // Append clip path for lines plotted, hiding those part out of bounds
   svgTs.append("defs")
