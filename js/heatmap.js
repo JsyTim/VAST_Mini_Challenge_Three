@@ -1,26 +1,3 @@
-var parse = d3.timeParse("%Y-%m-%d %H:%M:%S");
-// set the dimensions and margins of the graph
-var heatMargin = {top: 30, right: 50, bottom: 150, left: 120};
-// var heatWidth = Math.max(Math.min(window.innerWidth, 1000), 500) - heatMargin.left - heatMargin.right - 20;
-var heatWidth = Math.max(Math.min(window.innerWidth, 1200), 500) - heatMargin.left - heatMargin.right - 20;
-
-//set the colors
-var colors = ['#fee8c8','#fdbb84','#e34a33'];
-
-// create a tooltip
-var heatTip = d3.select("#heatmap")
-	.append("div")
-	.style("opacity", 0)
-	.attr("class", "tooltip");
-
-//append heat map svg
-var svgHeat = d3.select("#heatmap")
-	.append("svg")
-	.attr("width", heatWidth + heatMargin.left + heatMargin.right)
-	.attr("height", heatHeight + heatMargin.top + heatMargin.bottom)
-	.append("g")
-	.attr("transform",
-		"translate(" + heatMargin.left + "," + heatMargin.top + ")");
 
 
 // var filelist = [];
@@ -65,6 +42,30 @@ var svgHeat = d3.select("#heatmap")
 
 //main function to update heatmap
 function draw_heatmap(data) {
+
+	var parse = d3.timeParse("%Y-%m-%d %H:%M:%S");
+	// set the dimensions and margins of the graph
+	var heatMargin = {top: 30, right: 50, bottom: 150, left: 120};
+	// var heatWidth = Math.max(Math.min(window.innerWidth, 1000), 500) - heatMargin.left - heatMargin.right - 20;
+	var heatWidth = Math.max(Math.min(window.innerWidth, 1200), 500) - heatMargin.left - heatMargin.right - 20;
+
+	//set the colors
+	var colors = ['#fee8c8','#fdbb84','#e34a33'];
+
+	// create a tooltip
+	var heatTip = d3.select("#heatmap")
+		.append("div")
+		.style("opacity", 0)
+		.attr("class", "tooltip");
+
+	//append heat map svg
+	var svgHeat = d3.select("#heatmap")
+		.append("svg")
+		.attr("width", heatWidth + heatMargin.left + heatMargin.right)
+		.attr("height", heatHeight + heatMargin.top + heatMargin.bottom)
+		.append("g")
+		.attr("transform",
+			"translate(" + heatMargin.left + "," + heatMargin.top + ")");
 
 
 	svgHeat.selectAll("*").remove();
