@@ -253,6 +253,8 @@ function showGraph(e){
   var layer = e.target;
   var region_id = layer.feature.properties.Id;
 	var region_name = layer.feature.properties.Nbrhood;
+	// add region_name after click
+	$('#region_name').children().remove();
 	var html = '<span id="region_name" style="text-align: center; display: block; ">Region: ' + region_name + '</span>'
   $('#region_name').append(html);
   draw_heatmap(alldata[region_id-1]);
