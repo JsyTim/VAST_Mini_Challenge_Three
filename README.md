@@ -10,7 +10,11 @@ We aim to use visual analytics to find if data from citizen scientists clarify t
 
 # Team members and duties:
 
-Jian Guo, Jie Li, Siyuan Jiang
+Jian Guo: 
+
+Jie Li:
+
+Siyuan Jiang:
 
 ## Video demo link: 
 
@@ -22,10 +26,26 @@ Jian Guo, Jie Li, Siyuan Jiang
 
 
 ## Data description:
+We are provided with two data files spanning the entire length of the simulation (12 am on April 6, 2020 to 11:59 pm on April 10, 2020), containing radiation measurements from mobile and static radiation sensors. 
 
+‘MobileSensorReadings.csv’ contains readings from 50 mobile sensors that are attached to cars. Data fields include: Timestamp, Sensor-id, Long, Lat, Value, Units, User-id. The timestamps are reported in 5 second intervals. Each sensor has a unique sensor id that is a number from 1 to 50. Location of the sensor is reported as longitude and latitude values. The radiation measurement is provided in the Value field. Radiation is reported with units of counts per minute (cpm). 
 
+'StaticSensorReadings.csv' contains readings from 9 static sensors that are located in different regions.Data fields include: Timestamp, Sensor-id, Value. The sensor id numbers are: 1, 4, 6, 9, 11, 12, 13, 14, 15. THe locations of the sensors are provided in "StaticSensorLocations.csv" file. 
+
+A map of the neighborhoods has also been provided as a shapefile, which is contained in the folder ‘StHimarkNeighborhoodShapefile’. 
 
 ## Data preprocess:
+
+### 1.Visualize the map. 
+
+The first step in our data preprocess is to visualize the map of St. Highmark city using the shapefile provided. We used the software QGIS to conver the the shapefile to geojson file, and generated an empty map of St. Highmark city for later use.
+
+### 2. Assign a resgion id to each sensor group data by region id.
+
+The geojson file also includes the region id for each region in the city. We extracted the region ids from it and wrote a python script to assign each mobile sensor and each static sensor a region id based on thier longtitude and latitude. Then, we grouped both mobile and static sensors by their region ids
+
+
+### 3. 
 
 ## Functionality:
 
