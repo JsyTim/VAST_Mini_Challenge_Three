@@ -10,7 +10,11 @@ We aim to use visual analytics to find if data from citizen scientists clarify t
 
 # Team members and duties:
 
-Jian Guo, Jie Li, Siyuan Jiang
+Jian Guo: 
+
+Jie Li:
+
+Siyuan Jiang:
 
 ## Video demo link: 
 
@@ -22,12 +26,46 @@ Jian Guo, Jie Li, Siyuan Jiang
 
 
 ## Data description:
+We are provided with two data files spanning the entire length of the simulation (12 am on April 6, 2020 to 11:59 pm on April 10, 2020), containing radiation measurements from mobile and static radiation sensors. 
 
+‘MobileSensorReadings.csv’ contains readings from 50 mobile sensors that are attached to cars. Data fields include: Timestamp, Sensor-id, Long, Lat, Value, Units, User-id. The timestamps are reported in 5 second intervals. Each sensor has a unique sensor id that is a number from 1 to 50. Location of the sensor is reported as longitude and latitude values. The radiation measurement is provided in the Value field. Radiation is reported with units of counts per minute (cpm). 
 
+'StaticSensorReadings.csv' contains readings from 9 static sensors that are located in different regions.Data fields include: Timestamp, Sensor-id, Value. The sensor id numbers are: 1, 4, 6, 9, 11, 12, 13, 14, 15. THe locations of the sensors are provided in "StaticSensorLocations.csv" file. 
+
+A map of the neighborhoods has also been provided as a shapefile, which is contained in the folder ‘StHimarkNeighborhoodShapefile’. 
 
 ## Data preprocess:
 
+### 1.Visualize the map. 
+
+The first step in our data preprocess is to visualize the map of St. Highmark city using the shapefile provided. We used the software QGIS to conver the the shapefile to geojson file, and generated an empty map of St. Highmark city for later use.
+
+### 2. Assign a resgion id to each sensor group both mobile and static data by region id.
+
+The geojson file also includes the region id for each region in the city. We extracted the region ids (19 regions in total)from it and wrote a python script to assign each mobile sensor and each static sensor a region id based on thier longtitude and latitude. Then, we grouped both mobile and static sensors by their region ids, and split the two huge csv files by region into small files to save time in loading data.  
+
+
+### 3. Aggregate the data to reduce loading time
+
+For mobile data, we splitted it into 19 regions, thus we have 19 files. But each file is still too large to load. To reduce the loading time, we decided to aggregate the timstamps for each sensor, with 10 minutes interval instead of 5 seconds. We did the the same to the static data.
+
 ## Functionality:
+
+### 1.Map
+
+1. Map is colored and plotted with region name and id so that user can easily distinguish among regions. Static sensors, hospitals and nuclear plant are plotted on the map with icon by longtitude and latitude so user can have a big picture of the locations of these facilities. 
+
+2. Map is our main colsole. Clicking on a region on the map will trigger both time series and heatmap to change. For example, when region1 is clicked, both time series and heatmap will show all the sensors in region1, including both mobile and static sensors, and their radiation value over the entire length of simulation. 
+
+3. Below the map are 50 legends for mobile sensors, each standing for one mobile sensor. Clicking on one legend will highlight it and dim all the other legends. At the same time, the map will show a full route of this mobile sensor(represented by a car icon) over the entire length of simulation. Clicking on the car simbol will trigger an animation that simulates the car's movement. With this animation, users can easily tell which regions the car has gone through and predict wether it is contaminated.
+
+### 2. Time Series
+
+1.
+
+### 3. Heatmap
+
+1.
 
 ## Findings and explanation:
 
@@ -61,4 +99,6 @@ Limit your response to 6 images and 800 words.
 ## References:
 
 https://vast-challenge.github.io/2019/MC2.html
+
+https://www.qgis.org/en/site/
 
