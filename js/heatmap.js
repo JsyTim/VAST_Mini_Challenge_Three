@@ -1,56 +1,16 @@
 var parse = d3.timeParse("%Y-%m-%d %H:%M:%S");
-
-//cell size
-var cellSize = 10;
 // set the dimensions and margins of the graph
-var heatMargin = {top: 30, right: 0, bottom: 50, left: 50},
-	heatWidth = 1000 - heatMargin.left - heatMargin.right,
-	heatHeight = 430,
-	legendElementWidth = cellSize*2;
-buckets = 9;
+var heatMargin = {top: 30, right: 50, bottom: 150, left: 50};
+var heatWidth = Math.max(Math.min(window.innerWidth, 1000), 500) - heatMargin.left - heatMargin.right - 20;
 
-
-// append the svg object to the body of the page
-var svgHeat = d3.select("#heatmap")
-	.append("svg")
-	.attr("width", heatWidth + heatMargin.left + heatMargin.right)
-	.attr("height", heatHeight + heatMargin.top + heatMargin.bottom)
-	.append("g")
-	.attr("transform",
-		"translate(" + heatMargin.left + "," + heatMargin.top + ")");
-
-
-// Build x scales and axis:
-var xHeat = d3.scaleLinear()
-	.range([ 0, heatWidth]);
-// .padding(0.01);
-
-// Build y scales and axis:
-var yHeat = d3.scaleBand()
-	.range([ heatHeight, 0]);
-// .padding(0.01);
-
-//draw axis
-var xAxisHeat = d3.axisBottom(xHeat)
-// .ticks(d3.timeHour.every(6))
-	.tickFormat(d3.timeFormat("%m/%d %H:%m"))
-
-var yAxisHeat = d3.axisLeft(yHeat);
-
-//take the range of radiation values and divides by the number of colors
-//assign a color for each range of values
-var colors =['#ffffd9','#edf8b1','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#253494','#081d58']
-var heatColor = d3.scaleQuantize()
-// .range(["#bdb7d6", "#948DB3", "#605885", "#433B67"])
-// .range(['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'])
-	.range(colors);
+//set the colors
+var colors = ["#FFFFDD", "#3E9583", "#1F2D86"];
 
 // create a tooltip
 var heatTip = d3.select("#heatmap")
 	.append("div")
 	.style("opacity", 0)
 	.attr("class", "tooltip");
-
 
 //
 // var filelist = [];
@@ -59,9 +19,9 @@ var heatTip = d3.select("#heatmap")
 // 	var filename = "data/aggDataHeatmap/Region" + i + ".csv";
 // 	filelist.push(d3.csv(filename));
 // }
-// datasets = [];
-
-//Read the data
+// // datasets = [];
+//
+// //Read the data
 // Promise.all(filelist).then(files => {
 // 	var index = 1;
 // 	var alldata = [];
@@ -75,139 +35,72 @@ var heatTip = d3.select("#heatmap")
 // 	}
 //
 // 	draw_heatmap(alldata[index-1]);
-	//
-	// var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-	//     .data(alldata);
-	//
-	// datasetpicker.enter()
-	//     .append("input")
-	//     .attr("value", function(d, i){ return "Dataset " + i })
-	//     .attr("type", "button")
-	//     .attr("class", "dataset-button")
-	//     .on("click", function(d) {
-	//         draw_heatmap(d);
-	//     });
-
-// });
-
-
-// d3.csv("data/aggDataHeatmap/Region19.csv").then(function(data) {
 //
-//     data.forEach(function(d){
-//         d.Timestamp = parse(d.Timestamp);
-//         d.Value = +d.Value;
-//     })
-//     console.log(data);
-//     draw_heatmap(data)
-//     // debugger
+// 	var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
+// 		.data(alldata);
+//
+// 	datasetpicker.enter()
+// 		.append("input")
+// 		.attr("value", function(d, i){ return "Dataset " + i })
+// 		.attr("type", "button")
+// 		.attr("class", "dataset-button")
+// 		.on("click", function(d) {
+//
+// 			draw_heatmap(d);
+// 		});
+//
 // });
 
+
+//main function to update heatmap
 function draw_heatmap(data) {
-	svgHeat.selectAll("*").remove();
+
+	// svgHeat.selectAll("*").remove();
 	// Labels of row and columns
 	var sensors = d3.map(data, d => d["Sensor-id"]).keys();
 	var times = d3.map(data,d=>d.Timestamp).keys();
-	xHeat.domain(d3.extent(data,d=>d.Timestamp));
-	// xHeat.domain(d3.extent(data, function (d) {return d.Timestamp;}));
-	// xHeat.domain(times);
+	var cellSize = Math.floor(heatWidth/(times.length));
+	var heatHeight = cellSize * (sensors.length + 2);
 
-	yHeat.domain(sensors);
-	heatColor.domain([0,d3.max(data, d => d.Value)])
+	//append heat map svg
+	var svgHeat = d3.select("#heatmap")
+		.append("svg")
+		.attr("width", heatWidth + heatMargin.left + heatMargin.right)
+		.attr("height", heatHeight + heatMargin.top + heatMargin.bottom)
+		.append("g")
+		.attr("transform",
+			"translate(" + heatMargin.left + "," + heatMargin.top + ")");
 
+	// define x scale
+	var xHeat = d3.scaleLinear()
+		.domain(d3.extent(data,d=>d.Timestamp))
+		.range([ 0, heatWidth]);
 
-	// var sensorLabels = svgHeat.selectAll(".sensorLabel")
-	//     .data(sensors)
-	//     .enter().append("text")
-	//     .text(function (d) { return d; })
-	//     .attr("x", 0)
-	//     .attr("y", function (d, i) { return i * cellSize; })
-	//     .style("text-anchor", "end")
-	//     .attr("transform", "translate(-6," + cellSize / 1.5 + ")")
-	//     .attr("class", function (d, i) { return ((i >= 0 && i <= 4) ? "sensorLabel mono axis axis-sensors" : "sensorLabel mono axis"); });
-	//
-	// var timeLabels = svgHeat.selectAll(".timeLabel")
-	//     .data(times)
-	//     .enter().append("text")
-	//     .text(function(d) { return d; })
-	//     .attr("x", function(d, i) { return i * cellSize; })
-	//     .attr("y", 0)
-	//     .style("text-anchor", "middle")
-	//     .attr("transform", "translate(" + cellSize / 2 + ", -6)")
-	//     .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-time" : "timeLabel mono axis"); });
-	//
-	// var heatMap = svgHeat.selectAll(".time")
-	//     .data(data,d=>(d["sensor-id"] + ":" +d.Timestamp));
-	//
-	// heatMap.append("title")
-	// heatMap.enter().append("rect")
-	//     .attr("x", function(d) { return (d.Timestamp - 1) * cellSize; })
-	//     .attr("y", function(d) { return (d["Sensor-id"] - 1) * cellSize; })
-	//     .attr("rx", 4)
-	//     .attr("ry", 4)
-	//     .attr("class", "time bordered")
-	//     .attr("width", cellSize)
-	//     .attr("height", cellSize)
-	//     .style("fill", colors[0]);
-	//
-	// heatMap.transition().duration(1000)
-	//     .style("fill", function(d) { return heatColor(d.Value); });
-	//
-	// heatMap.select("title").text(function(d) { return d.Value; });
-	//
-	// heatMap.exit().remove();
-	//
-	// //create legend
-	// var legend = svgHeat.selectAll(".legend")
-	//     .data([0].concat(heatColor.quantiles()), function(d) { return d; });
-	//
-	// legend.enter().append("g")
-	//     .attr("class", "legend");
-	//
-	// legend.append("rect")
-	//     .attr("x", function(d, i) { return legendElementWidth * i; })
-	//     .attr("y", height)
-	//     .attr("width", legendElementWidth)
-	//     .attr("height", cellSize / 2)
-	//     .style("fill", function(d, i) { return colors[i]; });
-	//
-	// legend.append("text")
-	//     .attr("class", "mono")
-	//     .text(function(d) { return "≥ " + Math.round(d); })
-	//     .attr("x", function(d, i) { return legendElementWidth * i; })
-	//     .attr("y", height + cellSize);
-	//
-	// legend.exit().remove();
+	// define y scale
+	var  yHeat = d3.scaleBand()
+		.domain(sensors)
+		.range([ heatHeight, 0]);
 
 
+	//define x axis
+	var xAxisHeat = d3.axisBottom(xHeat)
+	// .ticks(d3.timeHour.every(6))
+		.tickFormat(d3.timeFormat("%m/%d %H:%m"))
 
-	//add the squares
-	svgHeat.selectAll("rect")
-		.data(data)
-		.enter()
-		.append("rect")
-		.attr("class", "cell")
-		.attr("x", function (d) {
-			return xHeat(d.Timestamp)
-		})
-		.attr("y", function (d) {
-			return yHeat(d["Sensor-id"]);
-		})
-		.attr("width", cellSize)
-		.attr("height", cellSize)
-		.style("fill", function (d) {
-			return heatColor(d.Value)
-		})
-		.style("stroke-width", 1)
-		.style("stroke", "black")
-		.style("opacity", 0.8)
-		.on("mouseover", mouseover)
-		.on("mousemove", mousemove)
-		.on("mouseleave", mouseleave)
+	// define y axis
+	var yAxisHeat = d3.axisLeft(yHeat);
+
+	// define color scale for heatmap
+	var heatColor = d3.scaleLinear()
+		.domain([0, d3.max(data, function(d) {return d.Value; })/2, d3.max(data, function(d) {return d.Value; })])
+		// .range(["#bdb7d6", "#948DB3", "#605885", "#433B67"])
+		// .range(['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'])
+		.range(colors);
 
 
 	//draw x axis
 	svgHeat.append("g")
-		.style("font-size", 9)
+	// .style("font-size", 9)
 		.attr("transform", "translate(0," + heatHeight + ")")
 		.call(xAxisHeat)
 		.selectAll('text')
@@ -218,20 +111,127 @@ function draw_heatmap(data) {
 		.attr("transform", function (d) {
 			return "rotate(-65)";
 		});;
-	// .select(".domain").remove()
 
 	//draw y axis
 	svgHeat.append("g")
 		.style("font-size", 9.5)
-		.call(yAxisHeat)
-	;
-	// .select(".domain").remove()
+		.call(yAxisHeat);
+
+	//draw heat map
+	var heatMap = svgHeat.selectAll(".cell")
+	// .data(data,d=>(d["sensor-id"] + ":" +d.Timestamp))
+		.data(data);
+	heatMap.append("title")
+	heatMap.enter().append("rect")
+		.attr("x", function(d) { return xHeat(d.Timestamp); })
+		.attr("y", function(d) { return yHeat(d["Sensor-id"]) })
+
+		// .attr("rx", 4)
+		// .attr("ry", 4)
+		.attr("class", "cell")
+		.attr("width", cellSize)
+		.attr("height", cellSize)
+		.style("stroke", "grey")
+		.style("stroke-opacity", 0.3)
+		.style("fill", function(d) { return heatColor(d.Value); })
+		.on("mouseover", mouseover)
+		.on("mousemove", mousemove)
+		.on("mouseleave", mouseleave);
+
+// debugger
+	heatMap.selectAll(".cell")
+		.transition().duration(1000)
+		.attr("y", function(d){return yHeat(d["Sensor-id"])})
+		.style("fill", function(d) { return heatColor(d.Value); });
+
+	heatMap.select("title").text(function(d) { return d.Value; });
+
+	heatMap.exit().remove();
+
+
+//=============================legend ============================
+	//create value scale for the legend
+	var valueScale = d3.scaleLinear()
+		.domain([0, d3.max(data, d=>d.Value)])
+		.range(0, heatWidth);
+
+	//Calculate the variables for the temp gradient
+	var numStops = 3;
+	valueRange = valueScale.domain();
+	valueRange[2] = valueRange[1] - valueRange[0];
+	valuePoint = [];
+	for(var i = 0; i < numStops; i++) {
+		valuePoint.push(i * valueRange[2]/(numStops-1) + valueRange[0]);
+	}//for i
+
+	//create the gradient
+	svgHeat.append("defs")
+		.append("linearGradient")
+		.attr("id", "legend-heatmap")
+		.attr("x1", "0%").attr("y1", "0%")
+		.attr("x2", "100%").attr("y2", "0%")
+		.selectAll("stop")
+		.data(d3.range(numStops))
+		.enter().append("stop")
+		.attr("offset", function(d,i) {
+			return valueScale( valuePoint[i] )/heatWidth;
+		})
+		.attr("stop-color", function(d,i) {
+			return heatColor( valuePoint[i] );
+		});
+	debugger
+	// draw legend
+	var legendWidth = Math.min(heatWidth * 0.8, 400);
+
+	// var legend = svgHeat.selectAll(".legend")
+	//     .data([0].concat(heatColor.quantiles()), function(d) { return d; });
+
+	var legend = svgHeat.append("g")
+		.attr("class", "legendWapper")
+		.attr("transform", "translate(" + (heatWidth/2) + "," + (cellSize * sensors.length + 120) + ")");
+
+	legend.append("rect")
+		.attr("class", "legendRect")
+		.attr("x", -legendWidth/2)
+		.attr("y", 0)
+		.attr("width", legendWidth)
+		.attr("height", 10)
+		.style("fill", "url(#legend-heatmap)");
+
+	legend.append("text")
+		.attr("class", "mono")
+		.text(function(d) { return "≥ " + Math.round(d); })
+		.attr("x", 0)
+		.attr("y", -10)
+		.style("text-anchor", "middle")
+		.text("Radiation Values (bmp)");
+
+	// legend.exit().remove();
+
+	//Set scale of x axis for legend
+	var xLegend = d3.scaleLinear()
+		.range([-legendWidth/2, legendWidth/2])
+		.domain([ 0, d3.max(data, function(d) { return d.Value; })] );
+
+	//Define x-axis for legend
+	var xAxisLegend = d3.axisBottom(xLegend)
+		.ticks(6);
+	//.tickFormat(formatPercent)
+
+
+	//draw X axis for legend
+	legend.append("g")
+		.attr("class", "axis--legend")
+		.attr("transform", "translate(0," + (10) + ")")
+		.call(xAxisLegend);
+
+
 
 	// Three function that change the tooltip when user hover / move / leave a cell
 	function mouseover() {
 		heatTip
 			.transition()
-			.duration(200)
+			.duration(500)
 			.style("opacity", 1)
 		d3.select(this)
 		// .style("stroke", "black")
@@ -246,7 +246,7 @@ function draw_heatmap(data) {
 	function mouseleave() {
 		heatTip
 			.transition()
-			.duration(300)
+			.duration(500)
 			.style("opacity", 0)
 		d3.select(this)
 		// .style("stroke", "black")
@@ -254,17 +254,3 @@ function draw_heatmap(data) {
 	}
 
 }
-
-// draw_heatmap(files[0]);
-
-// var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-//     .data(files);
-//
-// datasetpicker.enter()
-//     .append("input")
-//     .attr("value", function(d){ return "Dataset " + d })
-//     .attr("type", "button")
-//     .attr("class", "dataset-button")
-//     .on("click", function(d) {
-//         draw_heatmap(d);
-//     });
