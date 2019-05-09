@@ -280,7 +280,7 @@ function drawTimeSeries(regionData){
           // Show tooltip
           tooltip.style("display", null)
               .html( "Sensor: " + d.name + "<br>"
-                  +  "Time  : " + d.values[i].time.toLocaleString() + "<br>"
+                  +  "Time  : " + d.values[i].time.toLocaleTimeString([], { year: '2-digit', month: '2-digit',day: '2-digit', hour: '2-digit', minute:'2-digit'})  + "<br>"
                   +  "Value : " + d.values[i].value.toFixed(2) +  " (CPM)" )
               .style("left", (d3.mouse(this)[0]+70) + "px")
               .style("top", (d3.mouse(this)[1]) + "px");

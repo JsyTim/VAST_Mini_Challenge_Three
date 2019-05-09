@@ -12,7 +12,7 @@ var colors = ['#fee8c8','#fdbb84','#e34a33'];
 var heatTip = d3.select("#heatmap")
 	.append("div")
 	.style("opacity", 0)
-	.attr("class", "tooltip");
+	.attr("class", "tstooltip");
 
 // var filelist = [];
 // for ( i = 1; i < 20; i ++ )
@@ -112,19 +112,19 @@ function draw_heatmap(data) {
 														.attr("transform", "translate(0," + cellSize/1.5 + ")")
 														.attr("class", d => d);
 
-	var timeLabels = svgHeat.selectAll(".timeLabel")
-													.data(times)
-													.enter().append("text")
-													.style("font-size", 75 + "%")
-													.text( d => {
-																				var da = new Date(d);
-																				return da.toLocaleTimeString([], { year: '2-digit', month: '2-digit',day: '2-digit', hour: '2-digit', minute:'2-digit'});
-																			})
-													.attr("x", heatHeight - 25)
-													.attr("y", (d,i) => -i * cellSize + 4)
-													.style("text-anchor", "head")
-													.attr("transform", (d,i) => "translate(" + cellSize/2 + ", 0) rotate(90)")
-													.attr("class", d=> d.toLocaleString());
+	// var timeLabels = svgHeat.selectAll(".timeLabel")
+	// 												.data(times)
+	// 												.enter().append("text")
+	// 												.style("font-size", 75 + "%")
+	// 												.text( d => {
+	// 																			var da = new Date(d);
+	// 																			return da.toLocaleTimeString([], { year: '2-digit', month: '2-digit',day: '2-digit', hour: '2-digit', minute:'2-digit'});
+	// 																		})
+	// 												.attr("x", heatHeight - 25)
+	// 												.attr("y", (d,i) => -i * cellSize + 4)
+	// 												.style("text-anchor", "head")
+	// 												.attr("transform", (d,i) => "translate(" + cellSize/2 + ", 0) rotate(90)")
+	// 												.attr("class", d=> d.toLocaleString());
 
 	var heatMap = svgHeat.selectAll(".cmp")
 											 .data(data)
@@ -136,7 +136,10 @@ function draw_heatmap(data) {
 											 .attr("height", cellSize)
 											 .style("stroke", "white")
 											 .style("stroke-opacity", 0.6)
-											 .style("fill", d => heatColor(d["Value"]));
+											 .style("fill", d => heatColor(d["Value"]))
+										 	 .on("mouseover", mouseover)
+										 	 .on("mousemove", mousemove)
+										 	 .on("mouseleave", mouseleave);
 
 // 	// define x scale
 // 	var xHeat = d3.scaleLinear()
@@ -218,7 +221,7 @@ function draw_heatmap(data) {
 		.range([0, heatWidth]);
 
 	//Calculate the variables for the temp gradient
-	var numStops = 10;
+	var numStops = 3;
 	valueRange = valueScale.domain();
 	valueRange[2] = valueRange[1] - valueRange[0];
 	valuePoint = [];
@@ -252,7 +255,7 @@ function draw_heatmap(data) {
 
 	var legend = svgHeat.append("g")
 		.attr("class", "legendWapper")
-		.attr("transform", "translate(" + (heatWidth/2) + "," + (cellSize * sensors.length + 120) + ")");
+		.attr("transform", "translate(" + (heatWidth/2) + "," + (cellSize * sensors.length + 40) + ")");
 
 	legend.append("rect")
 		.attr("class", "legendRect")
@@ -303,9 +306,11 @@ function draw_heatmap(data) {
 	}
 	function mousemove(d) {
 		heatTip
-			.html("Value: " + d.Value.toFixed(2) )
-			.style("left", (d3.mouse(this)[0] + 70) + "px")
-			.style("top", (d3.mouse(this)[1]) + "px")
+			.html( "Sensor: " + d["Sensor-id"] + "<br>"
+					  + "Time  : " + d.Timestamp.toLocaleTimeString([], { year: '2-digit', month: '2-digit',day: '2-digit', hour: '2-digit', minute:'2-digit'})  + "<br>"
+						+ "Value: " + d.Value.toFixed(2) + " (cmp)")
+			.style("left", (d3.mouse(this)[0] + 50) + "px")
+			.style("top", (d3.mouse(this)[1] + 400) + "px")
 	}
 	function mouseleave() {
 		heatTip
