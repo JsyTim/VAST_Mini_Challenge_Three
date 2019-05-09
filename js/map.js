@@ -154,9 +154,7 @@ function Initial(){
 }
 
 Initial()
-function test(){
-  console.log('test');
-}
+
 //add sensor route
 function drawSensorRoute(sensorId){
   date = ['06', '07', '08', '09', '10'];
@@ -225,7 +223,7 @@ function showSensorRoute(){
   drawSensorRoute(sensorId);
   highlightSensor(targetText);
 }
-//
+
 // function highlightFeature(e) {
 //     var layer = e.target;
 //     //on hover change color from what was defined in function style(feature)
@@ -251,19 +249,22 @@ function showSensorRoute(){
 //     // info.update();
 // }
 
-function showHeatMap(e){
+function showGraph(e){
   var layer = e.target;
   var region_id = layer.feature.properties.Id;
-  console.log(region_id);
+	var region_name = layer.feature.properties.Nbrhood;
+	var html = '<span id="region_name" style="text-align: center; display: block; ">Region: ' + region_name + '</span>'
+  $('#region_name').append(html);
   draw_heatmap(alldata[region_id-1]);
 	drawTimeSeries(tsfiles[region_id-1]);
+
 }
 
 function onEachFeature(feature, layer) {
     layer.on({
         // mouseover: highlightFeature,
         // mouseout: resetHighlight,
-        click: showHeatMap
+        click: showGraph
     });
 }
 
