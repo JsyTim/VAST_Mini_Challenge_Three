@@ -40,7 +40,7 @@ A map of the neighborhoods has also been provided as a shapefile, which is conta
 
 The first step in our data preprocess is to visualize the map of St. Highmark city using the shapefile provided. We used the software QGIS to conver the the shapefile to geojson file, and generated an empty map of St. Highmark city for later use.
 
-### 2. Assign a resgion id to each sensor group both mobile and static data by region id.
+### 2. Assign a region id to each sensor group both mobile and static data by region id.
 
 The geojson file also includes the region id for each region in the city. We extracted the region ids (19 regions in total)from it and wrote a python script to assign each mobile sensor and each static sensor a region id based on thier longtitude and latitude. Then, we grouped both mobile and static sensors by their region ids, and split the two huge csv files by region into small files to save time in loading data.  
 
@@ -61,11 +61,17 @@ For mobile data, we splitted it into 19 regions, thus we have 19 files. But each
 
 ### 2. Time Series
 
-1.
+1. Shows all the sensors and their radiation values over time(full time span of the simulation), including mobile sensors and static sensors appear in a certain region. As mentioned above, to reduce the time of loading huge file, we aggregated the timestamps for each sensor into 10 minutes intervals instead of 5 seconds, and then take the maxmum value during the time interval. 
+
+2. Hovering over a line will highlight both the selected line and its legend, and dim all the unselected lines and legends. At the same time, a tooltip with all the information, including time, value and sensor name will show along with the selected line. Clicking on the legend will show/hide the line associated with the legend.
+
+3. The zoomed area with brush function below the line chart allows user to zoom into a certain time period to explore and compare the values among different sensors.  
 
 ### 3. Heatmap
 
-1.
+1. The x axis of the heatmap represents time and y axis represents sensors in a certain region. Compared with the linechart, which gives user a overall picture of the change of values of all the sensors over time, the heatmap gives us an intuition of which sensor has higher value of radiation over the full simulation time period. We will explain this in the findings section below. 
+
+2. The heatmap also has a hover effect with tooltips to show the time, value and sensors in a specific cell ( a cell represents a certain senser's value in a certain timestamp range). Here we met the same issue in loading huge amount of data as time series. So we aggregated the timestamps in heatmap data again, with a time interval of 2 hours. So each of the heatmap column represents the maximum values of all the sensors during a two-hour time period. The heatmap has 60 columns in total spanning 5 days of simulation.
 
 ## Findings and explanation:
 
