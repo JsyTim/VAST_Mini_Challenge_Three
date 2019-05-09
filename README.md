@@ -40,14 +40,22 @@ A map of the neighborhoods has also been provided as a shapefile, which is conta
 
 The first step in our data preprocess is to visualize the map of St. Highmark city using the shapefile provided. We used the software QGIS to conver the the shapefile to geojson file, and generated an empty map of St. Highmark city for later use.
 
-### 2. Assign a resgion id to each sensor group data by region id.
+### 2. Assign a resgion id to each sensor group both mobile and static data by region id.
 
-The geojson file also includes the region id for each region in the city. We extracted the region ids from it and wrote a python script to assign each mobile sensor and each static sensor a region id based on thier longtitude and latitude. Then, we grouped both mobile and static sensors by their region ids
+The geojson file also includes the region id for each region in the city. We extracted the region ids (19 regions in total)from it and wrote a python script to assign each mobile sensor and each static sensor a region id based on thier longtitude and latitude. Then, we grouped both mobile and static sensors by their region ids, and split the two huge csv files by region into small files to save time in loading data.  
 
 
-### 3. 
+### 3. Aggregate the data to reduce loading time
+
+For mobile data, we splitted it into 19 regions, thus we have 19 files. But each file is still too large to load. To reduce the loading time, we decided to aggregate the timstamps for each sensor, with 10 minutes interval instead of 5 seconds. We did the the same to the static data.
 
 ## Functionality:
+
+### Map
+
+### Time Series
+
+### Heatmap
 
 ## Findings and explanation:
 
