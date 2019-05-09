@@ -13,14 +13,14 @@ file_list = []
 df_list = []
 df_group_list=[]
 for i in range(1,20):
-    file_name = "/Users/jaywang/Documents/TTU_study/Spring2019/CS5331DataVisualization/Projects/VAST_Mini_Challenge_Two/data/AggRegid/Region" + str(i) + ".csv"
+    file_name = "../data/AggRegid/Region" + str(i) + ".csv"
     file_list.append(file_name)
-    
-    
+
+
 def read_file(file):
     '''
     load csv files and return dataframes
-    '''         
+    '''
     data = pd.read_csv(file ,header=0)
     df = pd.DataFrame(data,columns=data.columns)
     return df
@@ -57,15 +57,15 @@ def group_by_hours(df):
 
 for df in df_list:
     df_group_list.append(group_by_hours(df))
-    
-    
+
+
 def write_file(file):
-    file.to_csv("file.csv",index=False) 
+    file.to_csv("file.csv",index=False)
 
 for i in range(0,19):
     df_group_list[i].to_csv("Region" + str(i+1) + ".csv", index=False)
-    
-    
+
+
 #df_melt = melt_columns(df).set_index(pd.DatetimeIndex(melt_columns(df)['Timestamp']))
 #df_group = df_melt.groupby('Sensor-id').resample('2.0H').max()
 #write_file(melt_columns(df))
