@@ -18,7 +18,7 @@ Siyuan Jiang (Github Name: JsyTim): Created StHimark Map as the center controlle
 
 ## Video demo link:
 
-[Video demo on YouTube]()
+[Video demo on YouTube](https://www.youtube.com/watch?v=QFVbeDay2Bw&feature=youtu.be)
 
 ## Web link:
 
