@@ -10,11 +10,11 @@ We aim to use visual analytics to find if data from citizen scientists clarify t
 
 # Team members and duties:
 
-Jian Guo (Github Name: gj0706):Drafted initial version of time series multiline chart with all necessary functions, created heatmap and its legend, hover effect and tooltips, wrote project report, created video demo.
+Jian Guo (Github Name: gj0706): Drafted initial version of time series multiline chart with all necessary functions, created heatmap and its legend, hover effect and tooltips, wrote project report, created video demo.
 
 Jie Li (Github Name: Artlands):
 
-Siyuan Jiang (Github Name: JsyTim): Created StHimark Map as the center controller to control time series and heat map by using click function; Added Mobile Sensor Routes to show the movement of different mobile cars during five days; The Layout of the website.
+Siyuan Jiang (Github Name: JsyTim): Created StHimark Map as the center controller to control time series and heat map by using click function; Added Mobile Sensor Routes to show the movement of different mobile cars during five days; The Layout of the website; Created the GIF file.
 
 ## Video demo link:
 
