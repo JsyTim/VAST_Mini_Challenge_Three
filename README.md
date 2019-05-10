@@ -12,7 +12,7 @@ We aim to use visual analytics to find if data from citizen scientists clarify t
 
 Jian Guo (Github Name: gj0706): Drafted initial version of time series multiline chart with all necessary functions, created heatmap and its legend, hover effect and tooltips, wrote project report, created video demo.
 
-Jie Li (Github Name: Artlands):
+Jie Li (Github Name: Artlands): Generated Geojson from shape file using QGIS; Preprocessed the raw data, sorted data by region id and sensor id, aggregated the data in 10 mins and 2 hours to reduce the data size; Revised the time series; Optimized the heatmap.
 
 Siyuan Jiang (Github Name: JsyTim): Created StHimark Map as the center controller to control time series and heat map by using click function; Added Mobile Sensor Routes to show the movement of different mobile cars during five days; The Layout of the website; Created the GIF file.
 
