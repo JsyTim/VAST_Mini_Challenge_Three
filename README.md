@@ -76,7 +76,10 @@ For mobile data, we splitted it into 19 regions, thus we have 19 files. But each
 ## Findings and explanation:
 
 ### 1. Visualize radiation measurements over time from both static and mobile sensors to identify areas where radiation over background is detected. Characterize changes over time.
-Limit your response to 6 images and 500 words.
+
+For comparision purpose, we collaged 6 screen shots of regions with both static sensors and mobile sensors. We see a over all trend that many sensors have largely increased value of radiation around 12pm on April 9. We assume that is the time when  radioatctive contamination started to spread out over the city. 
+
+![alt text](http://url/to/img.png)
 
 ### 2. Use visual analytics to represent and analyze uncertainty in the measurement of radiation across the city.
 
