@@ -85,7 +85,18 @@ For comparision purpose, we collaged 6 screen shots of regions with both static 
 
 #### a. Compare uncertainty of the static sensors to the mobile sensors. What anomalies can you see? Are there sensors that are too uncertain to trust?
 
+By comparing the static sensors with mobile sensors in all the regions, we find that the static sensor in region 9 has very different, or even opposit readings from the mobile sensors. By comparing this static sensor to static sensors in other regions, we find that this static sensor might not be reliable. Becaue other static sensors have similar trends in the increase of radiation value over time. 
+
+
+![alt text](http://url/to/img.png)
+
+
+Another anomaly we observed is in region 3. Being a region that shares the border with region 4, where the nuclear plant is located, we have reason to assume that once the nuclear plant leaks, region 3 would be the first region to be contaminated. However, neither static sensor nor mobile sensor show any increase of radiation value. And we believe that the sensors in this region are too uncertain to trust. 
+![alt text](http://url/to/img.png)
+
+
 #### b. Which regions of the city have greater uncertainty of radiation measurement? Use visual analytics to explain your rationale.
+
 
 #### c. What effects do you see in the sensor readings after the earthquake and other major events? What effect do these events have on uncertainty?
 Limit your responses to 12 images and 1000 words.
