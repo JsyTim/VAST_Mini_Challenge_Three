@@ -79,7 +79,7 @@ For mobile data, we splitted it into 19 regions, thus we have 19 files. But each
 
 For comparision purpose, we collaged 6 screen shots of regions with both static sensors and mobile sensors. We see a over all trend that many sensors have largely increased value of radiation around 12pm on April 9. We assume that is the time when  radioatctive contamination started to spread out over the city. 
 
-![alt text](http://url/to/img.png)
+![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/overall.png)
 
 ### 2. Use visual analytics to represent and analyze uncertainty in the measurement of radiation across the city.
 
@@ -88,11 +88,11 @@ For comparision purpose, we collaged 6 screen shots of regions with both static 
 By comparing the static sensors with mobile sensors in all the regions, we find that the static sensor in region 9 has very different, or even opposit readings from the mobile sensors. By comparing this static sensor to static sensors in other regions, we find that this static sensor might not be reliable. Becaue other static sensors have similar trends in the increase of radiation value over time. 
 
 
-![alt text](http://url/to/img.png)
+![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/heatmap_reigon9.png)
 
 
 Another anomaly we observed is in region 3. Being a region that shares the border with region 4, where the nuclear plant is located, we have reason to assume that once the nuclear plant leaks, region 3 would be the first region to be contaminated. However, neither static sensor nor mobile sensor show any increase of radiation value. And we believe that the sensors in this region are too uncertain to trust. 
-![alt text](http://url/to/img.png)
+![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/region3_anomaly.png)
 
 
 #### b. Which regions of the city have greater uncertainty of radiation measurement? Use visual analytics to explain your rationale.
