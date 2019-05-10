@@ -24,6 +24,7 @@ Siyuan Jiang (Github Name: JsyTim): Created StHimark Map as the center controlle
 
 [VAST Mini challenge 2](https://jsytim.github.io/VAST_Mini_Challenge_Two/index.html)
 
+![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/data/P3.Guo.Li.Jiang.gif)
 
 ## Data description:
 We are provided with two data files spanning the entire length of the simulation (12 am on April 6, 2020 to 11:59 pm on April 10, 2020), containing radiation measurements from mobile and static radiation sensors.
