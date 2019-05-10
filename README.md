@@ -10,7 +10,7 @@ We aim to use visual analytics to find if data from citizen scientists clarify t
 
 # Team members and duties:
 
-Jian Guo (Github Name: gj0706):
+Jian Guo (Github Name: gj0706):Drafted initial version of time series multiline chart with all necessary functions, created heatmap and its legend, hover effect and tooltips, wrote project report, created video demo.
 
 Jie Li (Github Name: Artlands):
 
