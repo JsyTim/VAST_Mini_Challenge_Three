@@ -151,7 +151,7 @@ The draw back of static sensors are that their coverage is limited.
 
 Our suggestion is that the city can further analyze the route of the mobile sensors, find their most frequently visited areas, and if there are regions not coverd by the mobiles sensors, we can set some static sensors in that area.
 
-### 5. The data for this challenge can be analyzed either as a static collection or as a dynamic stream of data, as it would occur in a real emergency. Describe how you analyzed the data - as a static collection or a stream. How do you think this choice affected your analysis? Limit your response to 200 words and 3 images.
+
 
 
 ## References:
