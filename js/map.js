@@ -299,7 +299,7 @@ for(var i = 1; i < 51; i++){
 
 
 function Initial(){
-  let sensorId = 9;
+  let sensorId = 6;
 	let regionId = 5;
 	$('#region_name').children().remove();
 	var html = '<span id="region_name" style="text-align: center; display: block; ">Region: Southwest</span>'
