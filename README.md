@@ -10,11 +10,11 @@ We aim to use visual analytics to find if data from citizen scientists clarify t
 
 # Team members and duties:
 
-Jian Guo:
+Jian Guo (Github Name: gj0706):
 
-Jie Li:
+Jie Li (Github Name: Artlands):
 
-Siyuan Jiang: Created StHimark Map as the center controller to control time series and heat map by using click function; Added Mobile Sensor Routes to show the movement of different mobile cars during five days; The Layout of the website.
+Siyuan Jiang (Github Name: JsyTim): Created StHimark Map as the center controller to control time series and heat map by using click function; Added Mobile Sensor Routes to show the movement of different mobile cars during five days; The Layout of the website.
 
 ## Video demo link:
 
