@@ -14,7 +14,7 @@ Jian Guo (Github Name: gj0706): Drafted initial version of time series multiline
 
 Jie Li (Github Name: Artlands): Generated Geojson from shape file using QGIS; Preprocessed the raw data, sorted data by region id and sensor id, aggregated the data in 10 mins and 2 hours to reduce the data size; Revised the time series; Optimized the heatmap.
 
-Siyuan Jiang (Github Name: JsyTim): Created StHimark Map as the center controller to control time series and heat map by using click function; Added Mobile Sensor Routes to show the movement of different mobile cars during five days; The Layout of the website; Created the GIF file.
+Siyuan Jiang (Github Name: JsyTim): Created StHimark Map as the center controller to control time series and heat map by using click function; Added Mobile Sensor Routes to show the movement of different mobile cars during five days; Designed and optimized the Layout of the website; Created the GIF file.
 
 ## Video demo link:
 
@@ -77,7 +77,7 @@ For mobile data, we splitted it into 19 regions, thus we have 19 files. But each
 
 ### 1. Visualize radiation measurements over time from both static and mobile sensors to identify areas where radiation over background is detected. Characterize changes over time.
 
-For comparision purpose, we collaged 6 screen shots of regions with both static sensors and mobile sensors. We see a over all trend that many sensors have largely increased value of radiation around 12pm on April 9. We assume that is the time when  radioatctive contamination started to spread out over the city. 
+For comparision purpose, we collaged 6 screen shots of regions with both static sensors and mobile sensors. We see a over all trend that many sensors have largely increased value of radiation around 12pm on April 9. We assume that is the time when radioatctive contamination started to spread out over the city.
 
 ![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/overall.png)
 
@@ -85,7 +85,7 @@ For comparision purpose, we collaged 6 screen shots of regions with both static 
 
 #### a. Compare uncertainty of the static sensors to the mobile sensors. What anomalies can you see? Are there sensors that are too uncertain to trust?
 
-By comparing the static sensors with mobile sensors in all the regions, we find that static sensor 11 in region 9 has very different, or even opposit readings from the mobile sensors. By comparing this static sensor to static sensors in other regions, we find that this static sensor might not be reliable. Becaue other static sensors have similar trends in the change of radiation value over time. 
+By comparing the static sensors with mobile sensors in all the regions, we find that static sensor 11 in region 9 has very different, or even opposit readings from the mobile sensors. By comparing this static sensor to static sensors in other regions, we find that this static sensor might not be reliable. Because other static sensors have similar trends in the change of radiation value over time.
 
 
 ![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/heatmap_reigon9.png)
