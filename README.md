@@ -119,28 +119,29 @@ THe radiation measurements in region 9 could be a concern because the static sen
 
 From the map, we asuume that first, once there is a leak, region 4 is the first region to be contaminated because the nuclear plant is in this region. Then, other possible regions that might be contaminated could be its neighboourhood regions: region3, 14, 18, 19, 12, and 13. And all the cars with mobile sensor in region 4 have high possibility of being contaminated by the coolant leak. With this in mind, we explored and found that:
 
-The car with mobile sensor 43 has been contaminated, and brought the contamination to region 19, this can be verified by comparing the line chart, heatmap and its route on the map. 
+The car with mobile sensor 43 has been contaminated in region 4, and brought the contamination to region 19, this can be verified by comparing the line chart, heatmap and its route on the map. 
 
-Line chart and heatmap shows that the car with mobile sensor 43 started to have continous high values since Apr 6 at 12pm, and this value was much higher than many other sensors:
+Line chart and heatmap in region 4 shows that the car with mobile sensor 43 started to have continous high values since Apr 6 at 12pm, and this value was much higher than many other sensors:
 
-![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/heatmap_reigon9.png)
+![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/4_43_line.png)
 
-![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/heatmap_reigon9.png)
+![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/4_43_heatmap.png)
 
 To further verify our assumption, we looked at mobile sensor 43's route on map, and found that it has been to region 4, and then stayed mostly in region 19.
-![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/heatmap_reigon9.png)
+![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/43_route.png)
 
 
-Then we looked at region 19's line chart and heatmap, found that 
+Then we looked at region 19's line chart and heatmap, found that this sensor still has high value in region 19. 
 
-![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/heatmap_reigon9.png)
-![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/heatmap_reigon9.png)
+![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/19_43_line.png)
+![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/19_43_heatmap.png)
 
-
+This fact verified our guess that car with mobile sensor 43 was contaminated in region 4, and brought the contamination in region 19. 
 
 ### 4. Summarize the state of radiation measurements at the end of the available period. Use your novel visualizations and analysis approaches to suggest a course of action for the city. Use visual analytics to compare the static sensor network to the mobile sensor network. What are the strengths and weaknesses of each approach? How do they support each other?
 Limit your response to 6 images and 800 words.
 
+The strength of mobile sensors is that they are moving constantely and can dymanicly monitor the radiation in differernt regions. 
 
 
 ### 5. The data for this challenge can be analyzed either as a static collection or as a dynamic stream of data, as it would occur in a real emergency. Describe how you analyzed the data - as a static collection or a stream. How do you think this choice affected your analysis? Limit your response to 200 words and 3 images.
