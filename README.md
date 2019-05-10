@@ -85,7 +85,7 @@ For comparision purpose, we collaged 6 screen shots of regions with both static 
 
 #### a. Compare uncertainty of the static sensors to the mobile sensors. What anomalies can you see? Are there sensors that are too uncertain to trust?
 
-By comparing the static sensors with mobile sensors in all the regions, we find that the static sensor in region 9 has very different, or even opposit readings from the mobile sensors. By comparing this static sensor to static sensors in other regions, we find that this static sensor might not be reliable. Becaue other static sensors have similar trends in the increase of radiation value over time. 
+By comparing the static sensors with mobile sensors in all the regions, we find that static sensor 11 in region 9 has very different, or even opposit readings from the mobile sensors. By comparing this static sensor to static sensors in other regions, we find that this static sensor might not be reliable. Becaue other static sensors have similar trends in the change of radiation value over time. 
 
 
 ![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/images/heatmap_reigon9.png)
@@ -97,9 +97,11 @@ Another anomaly we observed is in region 3. Being a region that shares the borde
 
 #### b. Which regions of the city have greater uncertainty of radiation measurement? Use visual analytics to explain your rationale.
 
+As we explained above, region 3, region 9 have greater uncertainty of radiation measurement.
 
 #### c. What effects do you see in the sensor readings after the earthquake and other major events? What effect do these events have on uncertainty?
-Limit your responses to 12 images and 1000 words.
+
+
 
 ### 3. Given the uncertainty you observed in question 2, are the radiation measurements reliable enough to locate areas of concern?
 
