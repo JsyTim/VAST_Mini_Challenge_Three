@@ -104,57 +104,6 @@ var sensorR4;
 var sensorR5;
 var marker;
 
-function Initial(){
-  sensorId = 1;
-  date = ['06', '07', '08', '09', '10'];
-  route = [];
-  for(i = 0; i < date.length; i++){
-      day = date[i];
-      route = route.concat(sensorRoute[sensorId][day]['location']);
-  }
-  sensorRouteDay1 = sensorRoute[sensorId]['06']['location'];
-  sensorRouteDay2 = sensorRoute[sensorId]['07']['location'];
-  sensorRouteDay3 = sensorRoute[sensorId]['08']['location'];
-  sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
-  sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
-  marker = L.Marker.movingMarker(route, 99999999);
-  sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'});
-  sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'});
-  sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'});
-  sensorR4 = L.polyline(sensorRouteDay4, {color: '#33CCCC'});
-  sensorR5 = L.polyline(sensorRouteDay5, {color: '#0000CC'});
-  map.addLayer(sensorR1);
-  map.addLayer(sensorR2);
-  map.addLayer(sensorR3);
-  map.addLayer(sensorR4);
-  map.addLayer(sensorR5);
-  var taxiIcon = L.icon({
-    iconUrl:'data/Icon/car_sensor.svg',
-    iconSize: [15, 30], // size of the icon
-    popupAnchor: [0, -5]
-  });
-  marker.once('click', function () {
-      marker.start();
-      marker.closePopup();
-      marker.unbindPopup();
-      marker.on('click', function() {
-          if (marker.isRunning()) {
-              marker.pause();
-          } else {
-              marker.start();
-          }
-      });
-      setTimeout(function() {
-          marker.bindPopup('<b>sensor-'+sensorId+'</b>').openPopup();
-      }, 0);
-  });
-  marker.options.icon = taxiIcon;
-  marker.openPopup('<b>sensor-'+sensorId+'</b>');
-  map.addLayer(marker);
-}
-
-Initial()
-
 //add sensor route
 function drawSensorRoute(sensorId){
   date = ['06', '07', '08', '09', '10'];
@@ -168,7 +117,7 @@ function drawSensorRoute(sensorId){
   sensorRouteDay3 = sensorRoute[sensorId]['08']['location'];
   sensorRouteDay4 = sensorRoute[sensorId]['09']['location'];
   sensorRouteDay5 = sensorRoute[sensorId]['10']['location'];
-  marker = L.Marker.movingMarker(route, 100000);
+  marker = L.Marker.movingMarker(route, 50000);
   sensorR1 = L.polyline(sensorRouteDay1, {color: '#CC0000'});
   sensorR2 = L.polyline(sensorRouteDay2, {color: '#FF3300'});
   sensorR3 = L.polyline(sensorRouteDay3, {color: '#330033'});
@@ -179,7 +128,6 @@ function drawSensorRoute(sensorId){
   map.addLayer(sensorR3);
   map.addLayer(sensorR4);
   map.addLayer(sensorR5);
-  // map.fitBounds(route);
   var taxiIcon = L.icon({
     iconUrl:'data/Icon/car_sensor.svg',
     iconSize: [15, 30], // size of the icon
@@ -224,31 +172,6 @@ function showSensorRoute(){
   highlightSensor(targetText);
 }
 
-// function highlightFeature(e) {
-//     var layer = e.target;
-//     //on hover change color from what was defined in function style(feature)
-//     style_override = {
-//         weight: 2,
-//         fillColor:"grey",
-//         fillOpacity: 0.4
-//     }
-//     geojson.resetStyle(e.target);
-//
-//     if (!L.Browser.ie && !L.Browser.opera) {
-//         layer.bringToFront();
-//     }
-//
-//      //on hover change infobox
-//     // info.update(layer.feature.properties);
-// }
-//
-// //reset highlight when hovering out
-// function resetHighlight(e) {
-//     style_override = {};
-//     geojson.resetStyle(e.target);
-//     // info.update();
-// }
-
 function showGraph(e){
   var layer = e.target;
   var region_id = layer.feature.properties.Id;
@@ -263,8 +186,6 @@ function showGraph(e){
 
 function onEachFeature(feature, layer) {
     layer.on({
-        // mouseover: highlightFeature,
-        // mouseout: resetHighlight,
         click: showGraph
     });
 }
@@ -376,5 +297,18 @@ for(var i = 1; i < 51; i++){
     .text(i.toString())
 }
 
+
+function Initial(){
+  let sensorId = 9;
+	let regionId = 5;
+	$('#region_name').children().remove();
+	var html = '<span id="region_name" style="text-align: center; display: block; ">Region: Southwest</span>'
+	$('#region_name').append(html);
+	draw_heatmap(alldata[regionId-1]);
+	drawTimeSeries(tsfiles[regionId-1]);
+	drawSensorRoute(sensorId);
+}
+
+Initial()
 });	// in Promise all end
 }); // out Promise all end
