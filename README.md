@@ -141,8 +141,15 @@ This fact verified our guess that car with mobile sensor 43 was contaminated in 
 ### 4. Summarize the state of radiation measurements at the end of the available period. Use your novel visualizations and analysis approaches to suggest a course of action for the city. Use visual analytics to compare the static sensor network to the mobile sensor network. What are the strengths and weaknesses of each approach? How do they support each other?
 Limit your response to 6 images and 800 words.
 
-The strength of mobile sensors is that they are moving constantely and can dymanicly monitor the radiation in differernt regions. 
+The strength of mobile sensors are that they are moving constantly so they can monitor a larger range of area. They can dymanicly monitor the radiation in differernt regions.
 
+The drawback of mobile sensors are that once they are contaminated, they will bring the contamination to unaffected areas and spread the contamination. And their readings might be affected by many external factors such as the condition of the cars, roads, etc.
+
+The strenth of static sensors are that their locations are fixed, their performance are less likely to be affected by extenal conditions. 
+
+The draw back of static sensors are that their coverage is limited. 
+
+Our suggestion is that the city can further analyze the route of the mobile sensors, find their most frequently visited areas, and if there are regions not coverd by the mobiles sensors, we can set some static sensors in that area.
 
 ### 5. The data for this challenge can be analyzed either as a static collection or as a dynamic stream of data, as it would occur in a real emergency. Describe how you analyzed the data - as a static collection or a stream. How do you think this choice affected your analysis? Limit your response to 200 words and 3 images.
 
