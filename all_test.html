@@ -21,11 +21,49 @@
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />-->
     <!--<link rel="stylesheet" href="css/main.css">-->
 </head>
+
+<style>
+    body{
+        height:100%;
+        width:100%;
+        font-family: "Calibri Light", sans-serif;
+        /*padding:10px;*/
+        background:lightgrey;
+    }
+
+    .optionContainer{
+        width: 50%;
+        height: 50%;
+        background: white;
+    }
+
+
+
+
+
+
+
+</style>
 <body>
 
 <div class="visContainer">
-    <div class="optionContainer"></div>
-    <div class="mapContainer"></div>
+    <div class="optionContainer">
+        <div class="sensorOption">
+            <h5>sensors</h5>
+                <input type="checkbox" name="mobileSelect" id="mobile" onclick=selectAllMobile(this)>Select All mobile sensors<br>
+                <input type="checkbox" name="staticSelect" id="static" onclick=selectAllStatic(this)>Select All static sensors<br>
+                <br>
+        </div>
+        <div class="regionOption"></div>
+            <h5>region</h5>
+        <div class="userIdOption"></div>
+            <h5>userId</h5>
+
+    </div>
+
+    <div class="mapContainer">
+
+    </div>
     <div class="timeseriesContainer"></div>
 
 
@@ -34,38 +72,7 @@
 
 </div>
 
-<!-- Navigation -->
-<!--<nav class="navbar navbar-default" role="navigation">-->
-    <!--<div class="container-fluid">-->
-        <!--<div class="navbar-header my-header">VAST MINI CHALLENGE TWO</div>-->
-    <!--</div>-->
-<!--</nav>-->
 
-<!--<div class="container-fluid">-->
-    <!--<div class="row">-->
-        <!--<div class="col-md-5">-->
-            <!--<span id="map_title">StHimark Map</span>-->
-            <!--<div id="map"></div>-->
-            <!--<div id='dot'>-->
-                <!--<span id="mobile_title">Mobile Route</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-7">-->
-            <!--<div class="region_name" id="region_name"></div>-->
-            <!--&lt;!&ndash;time series container&ndash;&gt;-->
-            <!--<div id="timeSeries"></div>-->
-            <!--<script src="js/ts.js"></script>-->
-            <!--&lt;!&ndash;select/clear button&ndash;&gt;-->
-            <!--&lt;!&ndash; <div id="option">-->
-              <!--<input name="updateButton" type="button" value="Select/Clear all lines" />-->
-            <!--</div> &ndash;&gt;-->
-
-            <!--<div id="heatmap"></div>-->
-            <!--<script src="js/heatmap.js"></script>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-<!--<script src="js/map.js"></script>-->
 
 
 </body>
