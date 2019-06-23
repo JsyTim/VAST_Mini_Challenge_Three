@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>VAST_mini_challenge_two</title>
-    <!--<script src="https://d3js.org/d3.v5.min.js"></script>-->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
     <!--<script src="https://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.js"></script>-->
@@ -24,23 +25,91 @@
 
 <style>
     body{
-        height:100%;
-        width:100%;
-        font-family: "Calibri Light", sans-serif;
-        /*padding:10px;*/
-        background:lightgrey;
+        font-family: Arial, sans-serif, "Calibri Light";
+        /*background:lightgrey;*/
     }
 
     .optionContainer{
         width: 50%;
-        height: 50%;
+        height: 30%;
         background: white;
     }
 
 
 
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: grey;
+        stroke-width: 1;
+        shape-rendering: crispEdges;
+    }
+
+    .axis--grid .domain {
+        fill: #bfbfbf;
+        opacity: 0.75;
+        stroke: none;
+    }
+
+    .axis--x .domain,
+    .axis--grid .tick line {
+        stroke: #fff;
+        stroke-dasharray: 0;
+        stroke-width: 1px;
+    }
+
+    .axis--x .tick line {
+        stroke: #bfbfbf;
+        stroke-dasharray: 0;
+        stroke-opacity: 1;
+    }
+
+    .axis--grid .tick--minor line {
+        stroke-opacity: .5;
+        stroke-width: 0.5px;
+    }
 
 
+    .legend {
+        font-size: 12px;
+        font-weight: bold;
+        text-anchor: middle;
+    }
+
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1px;
+    }
+
+    .zoom{
+        cursor:move;
+        fill:none;
+        pointer-events: all;
+    }
+
+    .brush .extent {
+        stroke: #fff;
+        fill-opacity: .125;
+        shape-rendering: crispEdges;
+    }
+
+    div.tooltip {
+        position: absolute;
+        text-align: center;
+        padding: 5px;
+        font: 12px sans-serif;
+        background: black;
+        color: white;
+        border: 1px;
+        border-radius: 4px;
+        pointer-events: none;
+    }
+
+    button{
+        position: relative;
+        left: 310px;
+    }
 
 
 </style>
@@ -48,29 +117,88 @@
 
 <div class="visContainer">
     <div class="optionContainer">
-        <div class="sensorOption">
-            <h5>sensors</h5>
-                <input type="checkbox" name="mobileSelect" id="mobile" onclick=selectAllMobile(this)>Select All mobile sensors<br>
-                <input type="checkbox" name="staticSelect" id="static" onclick=selectAllStatic(this)>Select All static sensors<br>
-                <br>
+        <div id="mobileOption">
+            <h5>Select mobile sensor</h5>
+                <input type="checkbox" name="mobileSelect" id="allMobile" onclick=selectAllMobile(this) checked="true">Select All mobile sensors
         </div>
-        <div class="regionOption"></div>
-            <h5>region</h5>
-        <div class="userIdOption"></div>
-            <h5>userId</h5>
+        <div id="staticOption">
+            <h5>Select static sensor</h5>
+                <input type="checkbox" name="staticSelect" id="allStatic" onclick=selectAllStatic(this) checked="true">Select All static sensors
+
+        </div>
+        <div class="regionOption">
+            <h5>Select region</h5>
+                <div id="regionDropdown"></div>
+        </div>
+        <div class="userIdOption">
+            <h5>Select user ID</h5>
+                <input type="checkbox" name="userIdSelect" id="allId" onclick=selectAllID(this)>Select All user IDs<br>
+        </div>
 
     </div>
 
-    <div class="mapContainer">
+    <div id="mapContainer">
+
 
     </div>
-    <div class="timeseriesContainer"></div>
+
+    <div id="timeseriesContainer">
+        <script src="js/time_series.js"></script>
+    </div>
 
 
 
 
 
 </div>
+
+<script>
+
+// checkbox test
+//     const mobiles = ["mobile 1", "mobile 2", "mobile 3"];
+//     const mobileOptions = d3.select("#mobileOption");
+//     mobileOptions.append("label")
+//         .datum(mobiles);
+//     mobileOptions.append("input")
+//         .attr("type","checkbox")
+//         .attr("name","mobileSelection")
+//         // .attr("id",removeWhitespace);
+//         // .on("click",changeChartDisplay)
+//     mobileOptions.append("text")
+//         .text(d=>d)
+//     mobileOptions.append("br");
+//
+// function selectAllMobile(this){
+//      d3.selectAll('input').property('checked', true);
+// }
+
+// =======dropdown test========
+    const regions = ["region 1","region 2","region 3"];
+    const regionDropdown = d3.select("#regionDropdown")
+        .insert("select", "svg");
+        // .on("change",changeRegion);
+    regionDropdown.selectAll("option")
+        .data(regions)
+        .enter().append("option")
+        .attr("value", d=>d)
+        .text(d=>d);
+
+//==============================
+
+
+//========map test===========
+const mymap = L.map('#mapComtainer').setView([37.8, -96], 4)
+
+
+
+
+
+//===========================
+
+
+</script>
+
+
 
 
 
