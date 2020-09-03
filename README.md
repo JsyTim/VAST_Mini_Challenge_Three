@@ -22,7 +22,7 @@ Siyuan Jiang (Github Name: JsyTim): Created StHimark Map as the center controlle
 
 ## Web link:
 
-[VAST Mini challenge 2](https://jsytim.github.io/VAST_Mini_Challenge_Two/index.html)
+[VAST Mini challenge 2](https://tim-siyuan.github.io/VAST_Mini_Challenge_Two/)
 
 ![alt text](https://github.com/JsyTim/VAST_Mini_Challenge_Two/blob/master/data/P3.Guo.Li.Jiang.gif)
 
